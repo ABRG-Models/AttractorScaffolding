@@ -2,6 +2,9 @@ add_executable(evolve evolve.cpp)
 add_executable(evolve_ff0 evolve.cpp)
 target_compile_definitions(evolve_ff0 PUBLIC USE_FITNESS_0)
 
+add_executable(evolve_withf_ff0 evolve.cpp)
+target_compile_definitions(evolve_withf_ff0 PUBLIC USE_FITNESS_0 RECORD_ALL_FITNESS N_Generations=100000)
+
 add_executable(drift drift.cpp)
 add_executable(drift_ff0 drift.cpp)
 target_compile_definitions(drift_ff0 PUBLIC USE_FITNESS_0)

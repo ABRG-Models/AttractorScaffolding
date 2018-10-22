@@ -31,7 +31,9 @@ using namespace std;
 
 // The number of generations to evolve for. 20000000 takes roughly 30
 // seconds on an Intel Core i9-8950HK CPU.
-#define N_Generations 100000000
+#ifndef N_Generations
+# define N_Generations   100000000
+#endif
 // How often to make a message print out about progress. Make 10 or
 // 100 times smaller than N_Generations.
 #define N_Genview       1000000
@@ -85,9 +87,14 @@ int main (int argc, char** argv)
 
 #ifdef RECORD_ALL_FITNESS
     // Records the evolution of the fitness of a genome. Fig 3. The
-    // (abs) generation for each fitness is recorded along with
-    // the floating point fitness value.
-    vector<pair<unsigned int, float> > fitness;
+    // (abs) generation for each fitness is recorded along with the
+    // floating point fitness value. Record this in a vector of
+    // vectors, with one vector for each evolution towards F=1
+    vector<vector<pair<unsigned int, float> > > fitness;
+    vector<array<genosect_t, N_Genes> > fitgenomes;
+
+    vector<pair<unsigned int, float> > fv0;
+    fitness.push_back (fv0);
 #endif
 
     // Holds the genome and a copy of it.
@@ -99,6 +106,7 @@ int main (int argc, char** argv)
     // maximally fit state of 1.
     unsigned int gen = 0;
     unsigned int lastgen = 0;
+
     while (gen < N_Generations) {
 
         // At the start of the loop, and every time fitness of 1.0 is
@@ -129,19 +137,18 @@ int main (int argc, char** argv)
 
             if (gen >= N_Generations) {
                 break;
-
             }
             float b = evaluate_fitness (newg);
             if (a > b) {
                 // New fitness <= old fitness
                 // Record _existing_ fitness f, not new fitness.
 #ifdef RECORD_ALL_FITNESS
-                fitness.push_back (make_pair(gen, a));
+                fitness.back().push_back (make_pair(gen, a));
 #endif
             } else {
 #ifdef RECORD_ALL_FITNESS
                 // Record new fitness
-                fitness.push_back (make_pair(gen, b));
+                fitness.back().push_back (make_pair(gen, b));
 #endif
                 // Copy new fitness to ref
                 a = b;
@@ -149,6 +156,11 @@ int main (int argc, char** argv)
                 copy_genome (newg, refg);
             }
         }
+#ifdef RECORD_ALL_FITNESS
+        fitgenomes.push_back (refg);
+        vector<pair<unsigned int, float> > fv;
+        fitness.push_back (fv);
+#endif
     }
 
     LOG ("Generations size: " << generations.size());
@@ -157,7 +169,10 @@ int main (int argc, char** argv)
     ofstream f;
     stringstream pathss;
     pathss << "./data/evolve_";
-    pathss << "a" << target_ant << "_p" << target_pos << "_";
+#ifdef RECORD_ALL_FITNESS
+    pathss << "withf_";
+#endif
+    pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
     pathss << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
 
     f.open (pathss.str().c_str());
@@ -171,19 +186,44 @@ int main (int argc, char** argv)
     f.close();
 
 #ifdef RECORD_ALL_FITNESS
-    stringstream pathss2;
-    pathss2 << "./data/evolve_";
-    pathss2 << "a" << target_ant << "_p" << target_pos << "_";
-    pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn << ".csv";
-    f.open (pathss2.str().c_str());
-    if (!f.is_open()) {
-        cerr << "Error opening " << pathss2.str() << endl;
-        return 1;
-    }
+    // Preprocess the vector of vectors.
+
+    // Find longest vector of fitnesses
+    int maxevol = 0;
+    int fs = 0;
     for (unsigned int i = 0; i < fitness.size(); ++i) {
-        f << fitness[i].first << "," << fitness[i].second << endl;
+        maxevol = ((fs = fitness[i].size()) > maxevol) ? fs : maxevol;
     }
-    f.close();
+
+    for (unsigned int i = 0; i < fitness.size(); ++i) {
+        if (!fitness[i].empty()) {
+            // Open file
+            stringstream pathss2;
+            pathss2 << "./data/evolve_withf_";
+            pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
+            pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
+                    << "_genome_" << genome_id(fitgenomes[i]) << ".csv";
+            f.open (pathss2.str().c_str());
+            if (!f.is_open()) {
+                cerr << "Error opening " << pathss2.str() << endl;
+                return 1;
+            }
+
+            // Output here
+            int lendiff = maxevol - fitness[i].size();
+            for (int counter = 1-maxevol; counter <= lendiff-maxevol; ++counter) {
+                f << counter << ",0.0" << endl;
+            }
+            int lastgen = 0;
+
+            lastgen = static_cast<int>(fitness[i].back().first);
+            for (unsigned int j = 0; j < fitness[i].size(); ++j) {
+                f << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second << endl;
+            }
+
+            f.close();
+        }
+    }
 #endif
 
     return 0;

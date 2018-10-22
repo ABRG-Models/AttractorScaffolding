@@ -349,9 +349,9 @@ genome_id (const array<genosect_t, N_Genes>& genome)
     for (unsigned int i = 0; i<N_Genes; ++i) {
         if (first) {
             first = false;
-            ss << genome[i];
+            ss << (genome[i] & genosect_mask);
         } else {
-            ss << "-" << genome[i];
+            ss << "-" << (genome[i] & genosect_mask);
         }
     }
     ss << dec;
