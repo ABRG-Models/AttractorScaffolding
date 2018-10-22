@@ -1,0 +1,29 @@
+add_executable(statechange statechange.cpp)
+add_test(statechange statechange)
+
+add_executable(hamming hamming.cpp)
+add_test(hamming hamming)
+
+add_executable(hamming_genome hamming_genome.cpp)
+add_test(hamming_genome hamming_genome)
+
+add_executable(genome2str genome2str.cpp)
+add_test(genome2str genome2str)
+
+add_executable(tstr2genome str2genome.cpp)
+add_test(tstr2genome tstr2genome)
+
+add_executable(testfit testfit.cpp)
+# Sample genomes and fitnesses provided by Dan Whiteley
+add_test(testfit1 testfit 01110110100110011000100110111010111001001001010101110110100001100001000111101101 0.5)
+add_test(testfit2 testfit 11101111100100110010100010100010011000101101011101110110100000010001000111001001 0.5)
+add_test(testfit3 testfit 01100000100100110001100010101010011100101011010001110110100000010001000111101001 0.7)
+add_test(testfit4 testfit 01100000100100110001100010101000011100101011010001110110100000010000000111101001 0.7)
+add_test(testfit5 testfit 01100000000100100001100010101001011100101111010001111110000000010000000111101001 0.5)
+add_test(testfit6 testfit 01111010110100010001100010001001011100111011110001110110100000010000000111101001 0)
+add_test(testfit7 testfit 01110000100100110001101010101000011100111011010000110110101100011000000011101001 0)
+add_test(testfit8 testfit 01100010100000110001101010101000010100101011010000110100100000010000100111101001 0.7)
+
+add_executable(test_fitness test_fitness.cpp)
+target_link_libraries (test_fitness facto)
+add_test(test_fitness test_fitness)
