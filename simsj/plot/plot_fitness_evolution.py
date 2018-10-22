@@ -79,8 +79,9 @@ for f in files:
     if fcount > 9:
         break
     A = readDataset(f)
-    f1.plot (A[:,0],A[:,1],'-',linewidth=1, color=cols1[fcount])
-    fcount = fcount + 1
+    if A[-5000,1] < 0.2:
+        f1.plot (A[:,0],A[:,1],'-',linewidth=3, color=cols1[fcount])
+        fcount = fcount + 1
 
 f1.set_xlim([-5000, 0])
 f1.set_xlabel('Generation (F=1 achieved at generation 0)');
