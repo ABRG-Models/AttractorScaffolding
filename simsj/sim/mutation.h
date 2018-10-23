@@ -34,8 +34,8 @@ num_fit_mutations (const array<genosect_t, N_Genes>& genome, unsigned int h)
 
     // Setup combo for the initial combination - first h bits set to
     // 1. Set everything else to 0
-    for (int i = 0; i < h; ++i) { combo[i] = i; }
-    for (int i = h; i < l_genome; ++i) { combo[i] = 0; }
+    for (int i = 0; i < static_cast<int>(h); ++i) { combo[static_cast<unsigned int>(i)] = i; }
+    for (unsigned int i = h; i < l_genome; ++i) { combo[i] = 0; }
 
     // Generate and evaluate all the combinations
     bool finished = false;
@@ -48,7 +48,8 @@ num_fit_mutations (const array<genosect_t, N_Genes>& genome, unsigned int h)
         // Work out flipped_genome[i]s and then compute fitness
         for (unsigned int i = 0; i < N_Genes; ++i) {
             for (unsigned int j = 0; j < h; ++j) {
-                if (combo[j] >= (i*(1<<N_Ins)) && combo[j] < (i+1)*(1<<N_Ins)) {
+                if (combo[j] >= static_cast<int>(i*(1<<N_Ins))
+                    && combo[j] < static_cast<int>((i+1)*(1<<N_Ins))) {
                     // Then combo[j] is an index that is in genosect[i] so flip this bit.
                     unsigned int bit_to_flip = combo[j] - (i*(1<<N_Ins));
                     flipped_genome[i] ^= (0x1 << bit_to_flip);

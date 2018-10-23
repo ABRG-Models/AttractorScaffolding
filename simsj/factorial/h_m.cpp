@@ -27,7 +27,6 @@ int main(int argc, char** argv)
     // Compute h(m) from the paper
     ulong N = nGenes * (1<<(nGenes-1));
     cerr << "N bits: " << N << endl;
-    ulong k = 6;
 
     Xint N_minus_k_fac;
     Xint N_minus_m_fac;

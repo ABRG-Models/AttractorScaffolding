@@ -31,9 +31,6 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    state_t state_a = 0x10; // 10000
-    state_t state_b = 0x11; // 10001 hamming dist 1 away from state_a
-
     array<genosect_t, N_Genes> g1 = selected_genome1();
     array<genosect_t, N_Genes> g2 = selected_genome1();
     g2[0] += 1;

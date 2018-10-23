@@ -108,7 +108,7 @@ static slong xPrimeSieve(ulong** Primes, ulong n, int plist)
             for (k = (s + s2); k < max; k += inc) { SET_COMPOSITE(k); }
         }
 
-        if (toggle = ~toggle) { s += d2; d1 += 16; p1 += 2; p2 += 2; s2 = p2; }
+        if ((toggle = ~toggle)) { s += d2; d1 += 16; p1 += 2; p2 += 2; s2 = p2; }
         else { s += d1; d2 += 8; p1 += 2; p2 += 6; s2 = p1; }
         p++;
     }

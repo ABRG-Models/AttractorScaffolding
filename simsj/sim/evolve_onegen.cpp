@@ -40,7 +40,7 @@ int main (int argc, char** argv)
 
     // Seed the RNG
     unsigned int seed = mix(clock(), time(NULL), getpid());
-    srand (4/*seed*/);
+    srand (seed);
 
     //probability of flipping
     pOn = 0.5;
