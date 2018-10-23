@@ -1,0 +1,2 @@
+LOG: For 6 genes, there were 10974568 fit genomes out of 100000000 of which 212 had F=1
+LOG: That's 0.109746 and 2.12e-06 as proportions.
