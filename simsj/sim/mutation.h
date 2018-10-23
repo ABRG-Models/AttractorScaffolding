@@ -6,6 +6,8 @@
 #ifndef _MUTATION_H_
 #define _MUTATION_H_
 
+#include <math.h>
+
 #ifndef __FITNESS_FUNCTION__
 #error "#include a fitness.h before #including mutations.h to ensure evaluate_fitness() is available"
 #endif

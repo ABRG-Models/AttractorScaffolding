@@ -231,6 +231,10 @@ compute_next (array<genosect_t, N_Genes>& genome, state_t& state)
     }
 }
 
+/*!
+ * Generate a string representation of the state. Something like "1 0 1
+ * 1 1" or "0 0 1 1 0".
+ */
 string
 state_str (const state_t& state)
 {
@@ -243,6 +247,9 @@ state_str (const state_t& state)
     return ss.str();
 }
 
+/*!
+ * Output a text representation of the state to stdout.
+ */
 void
 show_state (const state_t& state)
 {
@@ -253,7 +260,7 @@ show_state (const state_t& state)
     cout << state_str (state) << endl;
 }
 
-/*
+/*!
  * For mixing up bits of three args; used to generate a good random
  * seed using time() getpid() and clock().
  */
@@ -272,7 +279,7 @@ mix (unsigned int a, unsigned int b, unsigned int c)
     return c;
 }
 
-/*
+/*!
  * Convert from my array of genosect_t form for genome to the long
  * double form used by Stuart's code. Untested; no idea if it works.
  */
@@ -306,6 +313,10 @@ genome2str (array<genosect_t, N_Genes>& genome)
     return rtn.str();
 }
 
+/*!
+ * Take a string of 1s and 0s and convert this into an
+ * array<genosect_t, N_Genes>.
+ */
 array<genosect_t, N_Genes>
 str2genome (const string& s)
 {
@@ -338,7 +349,8 @@ str2genome (const string& s)
 }
 
 /*
- * Output genome in hex.
+ * Output the genome in a string containing hex representations of the
+ * N_Genes genosects.
  */
 string
 genome_id (const array<genosect_t, N_Genes>& genome)
@@ -634,13 +646,15 @@ next_combination (int comb[], int k, int n)
         ++comb[i];
     }
 
-    if (comb[0] > n - k) /* Combination (n-k, n-k+1, ..., n) reached */
+    if (comb[0] > n - k) { /* Combination (n-k, n-k+1, ..., n) reached */
         return 0; /* No more combinations can be generated */
+    }
 
     /* comb now looks like (..., x, n, n, n, ..., n).
     Turn it into (..., x, x + 1, x + 2, ...) */
-    for (i = i + 1; i < k; ++i)
+    for (i = i + 1; i < k; ++i) {
         comb[i] = comb[i - 1] + 1;
+    }
 
     return 1;
 }
@@ -651,11 +665,12 @@ next_combination (int comb[], int k, int n)
 void
 printc (int comb[], int k)
 {
-    printf("{");
+    printf ("{");
     int i;
-    for (i = 0; i < k; ++i)
+    for (i = 0; i < k; ++i) {
         printf("%d, ", comb[i] + 1);
-    printf("\b\b}\n");
+    }
+    printf ("\b\b}\n");
 }
 
 #endif // __LIB_H__
