@@ -147,7 +147,7 @@ int main (int argc, char** argv)
 #endif
             } else {
 #ifdef RECORD_ALL_FITNESS
-                // Record new fitness
+                // Record new fitness, even if a==b - this is the "drift case".
                 fitness.back().push_back (make_pair(gen, b));
 #endif
                 // Copy new fitness to ref
