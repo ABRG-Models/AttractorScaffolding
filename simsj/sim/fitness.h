@@ -37,6 +37,11 @@ enum endpoint_t {
 // Another fitness function, explored by Seb
 # include "fitness3.h"
 
+#elif defined USE_FITNESS_4
+// Stuart's breakthrough fitness function, considering limit cycle as
+// defining "proportional expression".
+# include "fitness4.h"
+
 #else
 // The fitness function created by Dan Whiteley
 # include "fitness1.h"
