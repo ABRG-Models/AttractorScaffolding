@@ -25,9 +25,18 @@ enum endpoint_t {
 
 // The default is fitness1.h; pass -DUSE_FITNESS_0 in compiler command
 // line to select fitness0.h.
-#ifdef USE_FITNESS_0
+#if defined USE_FITNESS_0
 // The fitness function created by Stuart Wilson
 # include "fitness0.h"
+
+#elif defined USE_FITNESS_2
+// Another fitness function, explored by Seb James
+# include "fitness2.h"
+
+#elif defined USE_FITNESS_3
+// Another fitness function, explored by Seb
+# include "fitness3.h"
+
 #else
 // The fitness function created by Dan Whiteley
 # include "fitness1.h"

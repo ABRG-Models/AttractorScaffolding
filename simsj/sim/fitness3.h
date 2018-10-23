@@ -1,39 +1,34 @@
 /*
- * This defines Stuart Wilson's original fitness function described in
- * the associated paper.
+ * This defines a fitness function described in the associated
+ * paper. See the code comment for evaluate_fitness() for a
+ * description of the fitness function.
  */
 
 #ifndef __FITNESS_FUNCTION__
 #define __FITNESS_FUNCTION__
 
-#include <math.h>
 #include <set>
-#include <map>
-#include <vector>
+#include "basins.h"
 
 using namespace std;
 
-#define FF_NAME "ff0"
-
-#include "basins.h"
+#define FF_NAME "ff3"
 
 /*!
  * For the passed-in genome, find its final state, starting from the
- * anterior state initial_ant and the posterior state
- * initial_pos. Return a fitness specifier for the genome.
+ * anterior state initial_ant and the posterior state initial_pos
+ * (stored in global variables). Return a fitness specifier for the
+ * genome.
  *
- * This fitness specifier requires anterior and posterior starting
- * states to be within different basins of attraction, each ending in
- * either a fixed point attractor or a limit cycle. The fitness is
- * then computed according to:
+ * This function requires that IF both targets are on the same
+ * attractor network, then they must both be in the same limit cycle
+ * to have non-zero fitness. Otherwise, the fitness is computed as for
+ * fitness function 0; it's the number of steps to the limit plus the
+ * size of the limit - 1.
+ *
+ * The fitness is then computed according to:
  *
  * f = 1 - S/(2 * 2^N_Genes)
- *
- * Where S is the number of steps it takes to go from the anterior
- * target state to its attractor plus the number of steps it takes to
- * go from the posterior target state to its attractor IF the
- * attractor also includes the initial_pos state (and not the
- * initial_ant state).
  *
  * Returns fitness in range 0 to 1.0
  *
@@ -49,7 +44,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     // exist for the given genome, starting from every possible start
     // point.
     vector<BasinOfAttraction> basins;
-    int brtn = find_basins_of_attraction (genome, basins, true); // true to exit early from finding basins if F will be 0
+    int brtn = find_basins_of_attraction (genome, basins, false);
     if (brtn == -1) {
         // In find_basins_of_attraction it was determined that the fitness will be 0.
         return fitness;
@@ -96,6 +91,8 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
         }
 
         if (bi->nodes.count (target_pos)) {
+
+            // This basin contains the posterior target state
             bi->flags |= CONTAINS_TARGET_POS;
             if (bi->nodes.count (initial_pos)) {
                 bi->flags |= CONTAINS_INITIAL_POS;
@@ -130,11 +127,18 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     }
 
     // Finally, compute fitness.
-    if (separate_attractors == true
-        && ant_basin != basins.end()
-        && pos_basin != basins.end()) {
-        fitness = 1.0f - (ant_basin->dist_to_ant + pos_basin->dist_to_pos)/static_cast<float>(1<<(N_Genes+1));
-    } // else fitness is 0.
+    if (separate_attractors == true) {
+        if (ant_basin != basins.end() && pos_basin != basins.end()) {
+            fitness = 1.0f - (ant_basin->dist_to_ant + pos_basin->dist_to_pos)/static_cast<float>(1<<(N_Genes+1));
+        } // else fitness is 0.
+    } else {
+        // Attractors on same basin. fitness _may_ be non-zero
+        if (ant_basin != basins.end() && pos_basin != basins.end()) {
+            if (ant_basin->endpoint == ENDPOINT_LIMIT  /* && pos_basin->endpoint == ENDPOINT_LIMIT */) {
+                fitness = 1.0f - (ant_basin->dist_to_ant + pos_basin->dist_to_pos)/static_cast<float>(1<<(N_Genes+1));
+            }
+        }
+    }
 
 #ifdef DEBUG
     if (fitness == 1.0f) {

@@ -1,7 +1,12 @@
-add_executable(evolve evolve.cpp)
+add_executable(evolve evolve.cpp) # Uses 'fitness function 1' by default
 add_executable(evolve_ff0 evolve.cpp)
 target_compile_definitions(evolve_ff0 PUBLIC USE_FITNESS_0)
+add_executable(evolve_ff2 evolve.cpp)
+target_compile_definitions(evolve_ff2 PUBLIC USE_FITNESS_2)
+add_executable(evolve_ff3 evolve.cpp)
+target_compile_definitions(evolve_ff3 PUBLIC USE_FITNESS_3)
 
+# Like the evolve programs, but saving every fitness value at every generation.
 add_executable(evolve_withf_ff0 evolve.cpp)
 target_compile_definitions(evolve_withf_ff0 PUBLIC USE_FITNESS_0 RECORD_ALL_FITNESS N_Generations=100000)
 
@@ -16,10 +21,16 @@ target_compile_definitions(drift_ff0 PUBLIC USE_FITNESS_0)
 add_executable(evolve_onegen evolve_onegen.cpp)
 add_executable(evolve_onegen_ff0 evolve_onegen.cpp)
 target_compile_definitions(evolve_onegen_ff0 PUBLIC USE_FITNESS_0)
+add_executable(evolve_onegen_ff2 evolve_onegen.cpp)
+target_compile_definitions(evolve_onegen_ff2 PUBLIC USE_FITNESS_2)
+add_executable(evolve_onegen_ff3 evolve_onegen.cpp)
+target_compile_definitions(evolve_onegen_ff3 PUBLIC USE_FITNESS_3)
 
 add_executable(evolve_fit_genome evolve_fit_genome.cpp)
 add_executable(evolve_fit_genome_ff0 evolve_fit_genome.cpp)
 target_compile_definitions(evolve_fit_genome_ff0 PUBLIC USE_FITNESS_0)
+add_executable(evolve_fit_genome_ff2 evolve_fit_genome.cpp)
+target_compile_definitions(evolve_fit_genome_ff2 PUBLIC USE_FITNESS_2)
 
 add_executable(onestate onestate.cpp)
 add_executable(onestate_ff0 onestate.cpp)
