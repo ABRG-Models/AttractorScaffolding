@@ -21,19 +21,17 @@ if [ ! -d ${HN} ]; then
     fi
 fi
 
-echo "Using build directory ${HN} for executables"
-
-# Run several evolves in parallel.
-./${HN}/sim/evolve 0.05 &
-./${HN}/sim/evolve 0.1 &
-./${HN}/sim/evolve 0.15 &
-./${HN}/sim/evolve 0.2 &
-./${HN}/sim/evolve 0.25 &
-./${HN}/sim/evolve 0.3 &
-./${HN}/sim/evolve 0.35 &
-./${HN}/sim/evolve 0.4 &
-./${HN}/sim/evolve 0.45 &
-./${HN}/sim/evolve 0.5 &
+# Run several mutations in parallel.
+./${HN}/sim/mutation4_ff1 01 &
+./${HN}/sim/mutation4_ff1 02 &
+./${HN}/sim/mutation4_ff1 03 &
+./${HN}/sim/mutation4_ff1 04 &
+./${HN}/sim/mutation4_ff1 05 &
+./${HN}/sim/mutation4_ff1 06 &
+./${HN}/sim/mutation4_ff1 07 &
+./${HN}/sim/mutation4_ff1 08 &
+./${HN}/sim/mutation4_ff1 09 &
+./${HN}/sim/mutation4_ff1 10 &
 
 wait
 popd

@@ -22,16 +22,16 @@ if [ ! -d ${HN} ]; then
 fi
 
 # Run several mutations in parallel.
-./${HN}/sim/mutation6 01 &
-./${HN}/sim/mutation6 02 &
-./${HN}/sim/mutation6 03 &
-./${HN}/sim/mutation6 04 &
-./${HN}/sim/mutation6 05 &
-./${HN}/sim/mutation6 06 &
-./${HN}/sim/mutation6 07 &
-./${HN}/sim/mutation6 08 &
-./${HN}/sim/mutation6 09 &
-./${HN}/sim/mutation6 10 &
+./${HN}/sim/mutation6_ff1 01 &
+./${HN}/sim/mutation6_ff1 02 &
+./${HN}/sim/mutation6_ff1 03 &
+./${HN}/sim/mutation6_ff1 04 &
+./${HN}/sim/mutation6_ff1 05 &
+./${HN}/sim/mutation6_ff1 06 &
+./${HN}/sim/mutation6_ff1 07 &
+./${HN}/sim/mutation6_ff1 08 &
+./${HN}/sim/mutation6_ff1 09 &
+./${HN}/sim/mutation6_ff1 10 &
 
 wait
 popd
