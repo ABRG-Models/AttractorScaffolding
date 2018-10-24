@@ -36,6 +36,7 @@ using namespace std;
 int main (int argc, char** argv)
 {
     // Seed the RNG
+#define PROPERLY_RANDOM_SEED
 #ifdef PROPERLY_RANDOM_SEED
     unsigned int seed = mix(clock(), time(NULL), getpid());
 #else
@@ -48,7 +49,7 @@ int main (int argc, char** argv)
     //target_pos = 0x11; // 10001
 
     // probability of flipping
-    pOn = 0.5;
+    pOn = 0.2;
 
     if (argc > 1) {
         stringstream poss;
