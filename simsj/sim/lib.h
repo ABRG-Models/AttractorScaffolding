@@ -148,8 +148,8 @@ masks_init (void)
 array<genosect_t, N_Genes>
 selected_genome (void)
 {
-    // The one we'll use in the paper (currently)
-    array<genosect_t, N_Genes> genome = {{ 0x8a3b, 0x467e, 0xdba0, 0x6253, 0xe0f }};
+    // The one we'll use in the paper
+    array<genosect_t, N_Genes> genome = {{ 0xa3bc, 0x927f, 0x7b84, 0xf57d, 0xecdc }};
     return genome;
 }
 

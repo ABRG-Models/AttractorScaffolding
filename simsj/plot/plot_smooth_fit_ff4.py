@@ -147,16 +147,16 @@ recompute=False
 if recompute:
     # Read all the data into m.
     genes = 4
-    m4ff4 = readDataset (genes, '_ff4')
+    m4 = readDataset (genes, '_ff4')
     genes = 5
-    m5ff4 = readDataset (genes, '_ff4')
+    m5 = readDataset (genes, '_ff4')
     genes = 6
-    m6ff4 = readDataset (genes, '_ff4')
+    m6 = readDataset (genes, '_ff4')
 
     # Compute bootstraps
-    m4_ff4_final = comp_bootstrap (4, m4ff4)
-    m5_ff4_final = comp_bootstrap (5, m5ff4)
-    m6_ff4_final = comp_bootstrap (6, m6ff4)
+    m4_ff4_final = comp_bootstrap (4, m4)
+    m5_ff4_final = comp_bootstrap (5, m5)
+    m6_ff4_final = comp_bootstrap (6, m6)
 
     # Save bootstrap results
     np.savetxt('tmp/m4_ff4_final.txt', m4_ff4_final, fmt='%f')
@@ -198,24 +198,22 @@ matplotlib.rc('font', **fnt)
 f1 = plt.figure(figsize=(8,8))
 #f1, axs = pl1.subplots(nrows=2, ncols=2, sharex=True)
 #ax1 = axs[0]
-ms1 = 6
-ms2 = 6
-lw1 = 1
-lw2 = 1
+ms1 = 8
+lw1 = 2
 
-logplot = True
+logplot = False
 if logplot:
-    m4ff4y = np.log(m4_ff4_final[:,1])
-    m5ff4y = np.log(m5_ff4_final[:,1])
-    m6ff4y = np.log(m6_ff4_final[0::4,1])
+    m4y = np.log(m4_ff4_final[:,1])
+    m5y = np.log(m5_ff4_final[0::2,1])
+    m6y = np.log(m6_ff4_final[0::4,1])
 else:
-    m4ff4y = m4_ff4_final[:,1]
-    m5ff4y = m5_ff4_final[:,1]
-    m6ff4y = m6_ff4_final[0::4,1]
+    m4y = m4_ff4_final[:,1]
+    m5y = m5_ff4_final[0::2,1]
+    m6y = m6_ff4_final[0::4,1]
 
-plt.errorbar (m4_ff4_final[:,0]/32, m4ff4y, yerr=m4_ff4_final[:,2], fmt='.',  marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
-plt.errorbar (m5_ff4_final[:,0]/80, m5ff4y, yerr=m5_ff4_final[:,2], fmt='.',  marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
-plt.errorbar (m6_ff4_final[0::4,0]/192, m6ff4y, yerr=m6_ff4_final[0::4,2], fmt='.',  marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
+plt.errorbar (m4_ff4_final[:,0]/32, m4y, yerr=m4_ff4_final[:,2], fmt='.',  marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+plt.errorbar (m5_ff4_final[0::2,0]/80, m5y, yerr=m5_ff4_final[0::2,2], fmt='.',  marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2], fmt='.',  marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
 showhm_fit=False
 if showhm_fit:

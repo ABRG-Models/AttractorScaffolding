@@ -47,6 +47,8 @@ int main (int argc, char** argv)
     array<genosect_t, N_Genes> genome = selected_genome();
     float f = evaluate_fitness (genome);
     show_genome (genome);
+    LOG ("Alternative format for genome:");
+    cout << genome2str (genome) << endl;
     LOG ("The fitness of the selected genome is " << f);
 
     return 0;

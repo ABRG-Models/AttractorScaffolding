@@ -47,7 +47,6 @@ files = [
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_4bb2-88b5-429c-91d9-d50c.csv',
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_8362-8fb5-deab-30da-1514.csv',
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a0ae-5637-2bbc-d511-eddc.csv',
-'../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a3bc-927f-7b84-f57d-ecdc.csv',
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a3fe-1c4d-ea8e-d0f3-4f8e.csv',
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a936-1547-ae36-561f-9f5e.csv',
 '../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a9eb-c60d-2e9b-6135-3ecf.csv',
@@ -58,8 +57,7 @@ files = [
 ]
 
 # Font size for plotting
-fs=20
-fs2=18 # for axes tick labels
+fs2=22 # for axes tick labels
 
 # Set a default fontsize for matplotlib:
 fnt = {'family' : 'DejaVu Sans',
@@ -67,20 +65,26 @@ fnt = {'family' : 'DejaVu Sans',
        'size'   : fs2}
 matplotlib.rc('font', **fnt)
 
-F1 = plt.figure (figsize=(12,12))
+F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot(1,1,1)
 
 fcount=0
 for f in files:
-    if fcount > 9:
+    if fcount > 8:
         break
+    #print ('{0}: colour: {1}'.format(f, fcount))
     A = readDataset(f)
-    if A[-5000,1] < 0.2:
-        f1.plot (A[:,0],A[:,1],'-',linewidth=3, color=cols1[fcount])
+    if A[-10000,1] < 0.2:
+        f1.plot (A[:,0]/10000,A[:,1],'-',linewidth=2, color=cols1[fcount])
         fcount = fcount + 1
 
-f1.set_xlim([-5000, 0])
-f1.set_xlabel('Generation (F=1 achieved at generation 0)');
-f1.set_ylabel('Fitness');
-plt.savefig ('fitness_evolution_ff4.png')
+specialfile='../data/evolve_withf_a21_p10_ff4_100000_fitness_0.1_genome_a3bc-927f-7b84-f57d-ecdc.csv'
+A = readDataset(specialfile)
+f1.plot (A[:,0]/10000,A[:,1],'-',linewidth=5, color=col.navy)
+
+f1.set_xlim([-1, 0.01])
+f1.set_xlabel('10K generations');
+f1.set_ylabel('fitness');
+F1.tight_layout()
+plt.savefig ('evolution_boolean_ff4.png')
 plt.show()

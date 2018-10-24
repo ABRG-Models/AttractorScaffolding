@@ -1,5 +1,5 @@
 /*
- * Tests the genome to Dan string format conversion
+ * Tests the "genome in Dan string format" conversion
  *
  * Author: S James
  * Date: October 2018.
