@@ -1,4 +1,5 @@
 add_executable(statechange statechange.cpp)
+target_compile_definitions(statechange PUBLIC USE_FITNESS_1)
 add_test(statechange statechange)
 
 add_executable(hamming hamming.cpp)
@@ -14,6 +15,7 @@ add_executable(tstr2genome str2genome.cpp)
 add_test(tstr2genome tstr2genome)
 
 add_executable(testfit testfit.cpp)
+target_compile_definitions(testfit PUBLIC USE_FITNESS_1)
 # Sample genomes and fitnesses provided by Dan Whiteley
 add_test(testfit1 testfit 01110110100110011000100110111010111001001001010101110110100001100001000111101101 0.5)
 add_test(testfit2 testfit 11101111100100110010100010100010011000101101011101110110100000010001000111001001 0.5)
@@ -25,5 +27,6 @@ add_test(testfit7 testfit 011100001001001100011010101010000111001110110100001101
 add_test(testfit8 testfit 01100010100000110001101010101000010100101011010000110100100000010000100111101001 0.7)
 
 add_executable(test_fitness test_fitness.cpp)
+target_compile_definitions(test_fitness PUBLIC USE_FITNESS_1)
 target_link_libraries (test_fitness facto)
 add_test(test_fitness test_fitness)

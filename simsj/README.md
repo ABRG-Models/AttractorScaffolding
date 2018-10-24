@@ -1,6 +1,23 @@
 # Implementation coded by Seb James
 
-This code builds using cmake.
+This implementation of the model is written in C++, writing out data
+in text files (comma separated values). It has some python scripts for
+data visualisation.
+
+The code is written in a "procedural C++ style". I've used global
+function definitions and few classes. I use some global variables
+without apology. I chose this approach as the program is not large and
+I consider it to be maintainable in this form.
+
+The state space is represented by the type state_t (which is an
+unsigned char). This contains sufficient bits for 4, 5 or 6 genes. The
+genome space is represented by a fixed size array of genosect_t (which
+is an unsigned int). There are N_Genes genosect_t variables in a full
+genome, but not all bits of each genosect_t may be used. 2^(N_Genes-1)
+bits are required in each genosect_t (That's 8 for N_Genes=4, 16 for
+N_Genes=5 and 32 for N_Genes=6).
+
+The code builds using cmake.
 
 Program code is in the directory sim/. There are some CTests in
 tests/. Results are written into data/. There are python scripts in
