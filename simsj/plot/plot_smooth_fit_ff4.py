@@ -182,13 +182,12 @@ cols = np.array([c.darkviolet,
                  c.crimson,
                  c.orange,
                  c.goldenrod1])
-fs = 28
-fs2 = 18
+fs = 22
 
 # Set a default fontsize for matplotlib:
 fnt = {'family' : 'DejaVu Sans',
        'weight' : 'regular',
-       'size'   : fs2}
+       'size'   : fs}
 matplotlib.rc('font', **fnt)
 
 # What's the poosible number of states for Hamming = h away from a fit state in a genome for n genes? It's:
@@ -212,40 +211,55 @@ else:
     m6y = m6_ff4_final[0::4,1]
 
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,2],
-              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
 plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,2],
-              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
 plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2],
               fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
-showhm_fit=False
-if showhm_fit:
-    # The fit lines:
-    k=5
-    h_tmp = h4_m[h4_m[:,0]==float(k)]
-    plt.plot(h_tmp[:,1]/32,
-             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.mediumpurple1)
-    k=2
-    h_tmp = h5_m[h5_m[:,0]==float(k)]
-    plt.plot(h_tmp[:,1]/80,
-             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkorchid2)
-    k=2
-    h_tmp = h6_m[h6_m[:,0]==float(k)]
-    plt.plot(h_tmp[:,1]/192,
-             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.indigo)
+# Best ks for h(m,k) fits:
+k4=10
+k5=17
+k6=25
 
-f1.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs2)
+showhm_fit=True
+if showhm_fit and False:
+    # The fit lines:
+    h_tmp = h4_m[h4_m[:,0]==float(k4)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/32,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.mediumpurple1)
+    else:
+        plt.plot(h_tmp[:,1]/32,
+                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.mediumpurple1)
+    h_tmp = h5_m[h5_m[:,0]==float(k5)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/80,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkorchid2)
+    else:
+        plt.plot(h_tmp[:,1]/80,
+                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.darkorchid2)
+    h_tmp = h6_m[h6_m[:,0]==float(k6)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/192,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.indigo)
+    else:
+        plt.plot(h_tmp[:,1]/192,
+                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.indigo)
+
+
+f1.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs)
 if logplot:
-    f1.axes[0].set_ylabel('log(proportion of $f>0$ genomes)',fontsize=fs2)
-    f1.axes[0].set_ylim([-1.4,0])
+    f1.axes[0].set_ylabel('log (proportion of $f>0$ genomes)',fontsize=fs)
+    #f1.axes[0].set_ylim([-1.4,0])
 else:
-    f1.axes[0].set_ylabel('proportion of $f>0$ genomes',fontsize=fs2)
+    f1.axes[0].set_ylabel('proportion of $f>0$ genomes',fontsize=fs)
     #f1.axes[0].set_ylim([-1.4,0])
 
 f1.axes[0].set_xlim([0,0.5])
 #plt.xticks(np.arange(0, 0.65, 0.05))
 
-plt.legend(('$N=4$','$N=5$','N=6'),frameon=False)
+plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 
 f1.tight_layout()
 
@@ -267,22 +281,49 @@ else:
     m5y = m5_ff4_final[0::2,7]
     m6y = m6_ff4_final[0::4,7]
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,8],
-              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+              fmt='.', marker='s', markersize=ms1, linestyle='None', linewidth=lw1, color=c.mediumpurple1)
 plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,8],
-              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+              fmt='.', marker='o', markersize=ms1, linestyle='None', linewidth=lw1, color=c.darkorchid2)
 plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,8],
-              fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
+              fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
 
-f2.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs2)
+if showhm_fit:
+    # The fit lines:
+    h_tmp = h4_m[h4_m[:,0]==float(k4)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/32,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.mediumpurple1)
+    else:
+        plt.plot(h_tmp[:,1]/32,
+                 h_tmp[:,2],'-',marker='None',linewidth=2,color=c.mediumpurple1)
+
+    h_tmp = h5_m[h5_m[:,0]==float(k5)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/80,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkorchid2)
+    else:
+        plt.plot(h_tmp[:,1]/80,
+                 h_tmp[:,2],'-',marker='None',linewidth=2,color=c.darkorchid2)
+
+    h_tmp = h6_m[h6_m[:,0]==float(k6)]
+    if logplot:
+        plt.plot(h_tmp[:,1]/192,
+                 np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.indigo)
+    else:
+        plt.plot(h_tmp[:,1]/192,
+                 h_tmp[:,2],'-',marker='None',linewidth=2,color=c.indigo)
+
+
+f2.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs)
 if logplot:
-    f2.axes[0].set_ylabel('log(mean fitness ($f$) for $f>0$ genomes)',fontsize=fs2)
+    f2.axes[0].set_ylabel('log (mean fitness ($f$) for $f>0$ genomes)',fontsize=fs)
     #f2.axes[0].set_ylim([-1.4,0])
 else:
-    f2.axes[0].set_ylabel('mean fitness ($f$) for $f>0$ genomes',fontsize=fs2)
+    f2.axes[0].set_ylabel('mean fitness ($f$) for $f>0$ genomes',fontsize=fs)
 
 f2.axes[0].set_xlim([0,0.5])
 
-plt.legend(('$N=4$','$N=5$','N=6'),frameon=False)
+plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 f2.tight_layout()
 
 if logplot:

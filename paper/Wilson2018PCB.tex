@@ -236,7 +236,7 @@ Adding such constraints vastly reduced the search space for candidate networks. 
 
 \section*{Models}
 
-If we describe the expression level of a gene as being either high ($1$) or low ($0$), then the pattern of gene expression levels produced by a network of $n$ interacting genes may at any instance adopt one of $2^n$ possible states. As the genes interact with one another their relative expression levels will change, and thus the network will transition through a series of states. We can model the interactions that give rise to these state transitions using the Boolean networks formalism \cite{Kauffman1993}. Accordingly, transitioning from one network state to the next requires evaluating for each gene the expression levels of the $n-1$ other genes. Thus, associated with each gene is a truth table which specifies whether each of the $2^{n-1}$ possible combinations of `input' registered by that gene will cause its `output' expression level to next be $1$ or $0$. Specifying the output for every possible combination of inputs, for all genes in the network,  requires a `genome' of $N=n2^{n-1}$ binary variables. Hence the space of possible gene interaction networks is of size $2^N$, which corresponds to the number of possible genomes. In this $2^N$-- dimensional `binary genome space', we are interested in those genomes that specify the developmental dynamics observed in mice, wherein differential expression of one gene (Fgf8) leads to a cascade of gene interactions that results in the emergence of a persistent pattern of opposing expression gradients (see Figure 1). %We will later be representing evolution by natural selection as a directed walk through genome space.
+If we describe the expression level of a gene as being either high ($1$) or low ($0$), then the pattern of gene expression levels produced by a network of $n$ interacting genes may at any instance adopt one of $2^n$ possible states. As the genes interact with one another their relative expression levels will change, and thus the network will transition through a series of states. We can model the interactions that give rise to these state transitions using the Boolean networks formalism \cite{Kauffman1993}. Accordingly, transitioning from one network state to the next requires evaluating for each gene the expression levels of the $n-1$ other genes. Thus, associated with each gene is a truth table which specifies whether each of the $2^{n-1}$ possible combinations of `input' registered by that gene will cause its `output' expression level to next be $1$ or $0$. Specifying the output for every possible combination of inputs, for all genes in the network,  requires a `genome' of $N=n2^{n-1}$ binary variables. Hence the space of possible gene interaction networks is of size $2^N$, which corresponds to the number of possible genomes. In this $2^N$-- dimensional `binary genome space', we are interested in those genomes that specify the developmental dynamics observed in mice, wherein differential expression of one gene (Fgf8) leads to a cascade of gene interactions that results in the emergence of a persistent pattern of opposing expression gradients (see Fig.~1). %We will later be representing evolution by natural selection as a directed walk through genome space.
 
 \vspace{1em}\emph{\noindent Please insert Figure 1 about here.}\vspace{1em}
 
@@ -265,7 +265,7 @@ First we consider a simple network of $n=3$ interacting genes. In this example, 
 
 Next we consider networks of $n=4$ genes and the corresponding genome space which comprises $2^{32}=4,294,967,296$ possible genomes. In this case the problem is to find networks where the initial anterior state $1000$ and the initial posterior state $0000$ lead to the corresponding target states $1010$ and $0101$. Knowing that in such networks iterating the target states $1010$ and $0101$ must transition directly to those same two states again allows a motif of $2n=8$ of the 32 variables in the genome to be set, and thus the genome space can be exhaustively searched by mapping out the attractor landscapes of only $2^{32-8}=16,777,216$ candidate networks. An exhaustive search of this genome (sub-) space identified $475,122$ successful networks, i.e., 0.011\%.
 
-For $n=5$ genes there are $2^{80}$ possible genomes. The goal is to find networks where initial states 16 ($10000$) and 0 ($00000$) lead to the corresponding target states 21 ($10101$) and 10 ($01010$) as the only states occupying the limit cycle of separate attractors. Figure 2 shows the attractor landscape in one example of a maximally fit network of $n=5$ interacting genes. Knowing that iterating the target states $10101$ and $01010$ must lead directly to those two states again allows a motif of $2n=10$ of the 80 variables in the genome to be set, and thus for the attractor landscapes of only $2^{70}$ networks to be mapped out by iterating their dynamics in full. Nonetheless an exhaustive search is not feasible. Instead we generated $2^{32}$ random genomes (for comparison with the $n=4$ case), and discovered $59,088$ maximally fit networks, i.e., 0.0014\%. Therefore, we estimate that the baseline rate at which maximally fit networks should be discovered by blind search for networks of $n=5$ genes is between 1 and 2 in every $100,000$ generations.
+For $n=5$ genes there are $2^{80}$ possible genomes. The goal is to find networks where initial states 16 ($10000$) and 0 ($00000$) lead to the corresponding target states 21 ($10101$) and 10 ($01010$) as the only states occupying the limit cycle of separate attractors. Fig.~2 shows the attractor landscape in one example of a maximally fit network of $n=5$ interacting genes. Knowing that iterating the target states $10101$ and $01010$ must lead directly to those two states again allows a motif of $2n=10$ of the 80 variables in the genome to be set, and thus for the attractor landscapes of only $2^{70}$ networks to be mapped out by iterating their dynamics in full. Nonetheless an exhaustive search is not feasible. Instead we generated $2^{32}$ random genomes (for comparison with the $n=4$ case), and discovered $59,088$ maximally fit networks, i.e., 0.0014\%. Therefore, we estimate that the baseline rate at which maximally fit networks should be discovered by blind search for networks of $n=5$ genes is between 1 and 2 in every $100,000$ generations.
 
 \vspace{1em}\emph{\noindent Please insert Figure 2 about here.}\vspace{1em}
 
@@ -281,12 +281,12 @@ f=1-\left(d_{10}+d_{21}\right)/2^{n+1},
 
 \noindent or else $f=0$. To simulate evolution in this model, we maintain a single genome, and in each generation flip each binary variable with a fixed probability $p\in\{0,0.5\}$, and survive the modified genome into the next generation only if the fitness was increased as a result ($\Delta f>0$).
 
-This simple evolutionary procedure was iterated for a total of ten million generations at each of three mutation rates ($p=0.3$, $p=0.35$, $p=0.4$), with a new random genome generated following the discovery of each maximally fit network ($f=1$). The resulting evolutionary dynamics are displayed in Figure 3, which shows the discovery of ten maximally fit networks. The evolution reveals a dynamics similar to `punctuated equilibria', in which increasingly long periods of stasis ($\Delta f=0$) are punctuated by increments in fitness \cite{Gould1977,Bak1996}.
+This simple evolutionary procedure was iterated for a total of ten million generations at each of three mutation rates ($p=0.3$, $p=0.35$, $p=0.4$), with a new random genome generated following the discovery of each maximally fit network ($f=1$). The resulting evolutionary dynamics are displayed in Fig.~3, which shows the discovery of ten maximally fit networks. The evolution reveals a dynamics similar to `punctuated equilibria', in which increasingly long periods of stasis ($\Delta f=0$) are punctuated by increments in fitness \cite{Gould1977,Bak1996}.
 
 \vspace{1em}\emph{\noindent Please insert Figure 3 about here.}\vspace{1em}
 
 The number of maximally fit networks that were discovered in this way, as a proportion of the number of generations simulated, was more than double the baseline discovery rate of $1.4\times 10^{-5}$ previously established: $3.4\times 10^{-5}$ for $p=0.3$, $3.8\times 10^{-5}$ for $p=0.35$, and $3.1\times 10^{-5}$ for $p=0.4$. %of 0.0014\% previously established: 0.0034\% for $p=0.3$, 0.0038\% for $p=0.35$, and 0.0031\% for $p=0.4$. %Thus, selecting for point attractors with states at the limit cycle that are closer (smaller Hamming distance) from the target states reveals a smoothness to the distribution of fit genomes in genome space that can be exploited to accelerate their discovery by natural selection.
-Histograms, $y(x)$, constructed for the number of generations taken to discover maximally fit genomes ($x$) in Figure 4 reveal that discovery rates are distributed according to an exponential relationship. Curves fitted by linear regression to the model $\log y(x)=\alpha x+\beta$ yield similar estimates of the exponent at each mutation rate: $\alpha=-3.23\times 10^{-5}$ for $p=0.3$,  $\alpha=-3.86\times 10^{-5}$ for $p=0.35$, and $\alpha=-2.70\times 10^{-5}$ for $p=0.4$. %, with exponents X for $p=0.3$, Y for $p=0.35$, and Z for $p=0.4$.
+Histograms, $y(x)$, constructed for the number of generations taken to discover maximally fit genomes ($x$) in Fig.~4 reveal that discovery rates are distributed according to an exponential relationship. Curves fitted by linear regression to the model $\log y(x)=\alpha x+\beta$ yield similar estimates of the exponent at each mutation rate: $\alpha=-3.23\times 10^{-5}$ for $p=0.3$,  $\alpha=-3.86\times 10^{-5}$ for $p=0.35$, and $\alpha=-2.70\times 10^{-5}$ for $p=0.4$. %, with exponents X for $p=0.3$, Y for $p=0.35$, and Z for $p=0.4$.
 
 \vspace{1em}\emph{\noindent Please insert Figure 4 about here.}\vspace{1em}
 
@@ -294,17 +294,17 @@ These results together confirm our hypothesis that the genotype (the specificati
 
 \subsection*{Smoothing the fitness landscape}
 
-To visualise the fitness landscape, two approaches were taken. First we computed the average fitness at each generation across all maximally fit genomes discovered, after re-aligning the evolutionary trajectories in each case to the generation at which the maximally fit network was discovered. A profile of fitness rising towards the fitness peaks obtained by this method suggests that the fitness increases approximately exponentially, in a manner that is robust to the mutation rate $p$ as the only free parameter of the model (Supplementary Figure S3). However, the portrait of the fitness landscape revealed by averaging in this way is difficult to reconcile with the punctuated equilibria seen in individual evolutionary trajectories, and may be misleading as a potential artefact of averaging over evolutionary trajectories that increase rapidly from zero to non-zero fitness at intervals distributed exponentially. Therefore we also profiled the fitness landscape by measuring the reduction in fitness after successive mutations of a sample of maximally fit genomes, by looking at \emph{all} genomes at a given Hamming distance (number of mutations) from these fitness peaks. Figure 5 suggests that the proportion of networks with non-zero fitness (i.e., those in which the initial and complementary mature expression patterns correctly occupy distinct attractors) decreases approximately exponentially with the number of mutations $m$ of the maximally fit genome.
+To visualise the fitness landscape, two approaches were taken. First we computed the average fitness at each generation across all maximally fit genomes discovered, after re-aligning the evolutionary trajectories in each case to the generation at which the maximally fit network was discovered. A profile of fitness rising towards the fitness peaks obtained by this method suggests that the fitness increases approximately exponentially, in a manner that is robust to the mutation rate $p$ as the only free parameter of the model (Supplementary Figure S3). However, the portrait of the fitness landscape revealed by averaging in this way is difficult to reconcile with the punctuated equilibria seen in individual evolutionary trajectories, and may be misleading as a potential artefact of averaging over evolutionary trajectories that increase rapidly from zero to non-zero fitness at intervals distributed exponentially. Therefore we also profiled the fitness landscape by measuring the reduction in fitness after successive mutations of a sample of maximally fit genomes, by looking at \emph{all} genomes at a given Hamming distance (number of mutations) from these fitness peaks. Fig.~5 suggests that the proportion of networks with non-zero fitness (i.e., those in which the initial and complementary mature expression patterns correctly occupy distinct attractors) decreases approximately exponentially with the number of mutations $m$ of the maximally fit genome.
 
-\vspace{1em}\emph{\noindent Please insert Figure 5 about here.}\vspace{1em}
+\vspace{1em}\emph{\noindent Please insert Fig.~5 about here.}\vspace{1em}
 
 This decrease is what might be expected if a constant number of variables in the genome, $k$, define a specific motif that must be present in order for fitness to be non-zero. For example, we have already noted that specification of $2n$ specific variables is required if the two target states are to transition into themselves indefinitely. Genomes with positive fitness less than 1 need not contain this particular $2n$ motif, but if they are genomes that do not mutate $k$ immutable variables, then the number of genomes with non-zero fitness should be ${{N-k}\choose{m}}$ out of a total ${{N}\choose{m}}$ possible genomes at $m$ mutations from a maximally fit genome, or
 
 \begin{equation}
-h(m)=\frac{(N-k)! (N-m)!}{N!(N-k-m)}.
+h(m,k)=\frac{(N-k)! (N-m)!}{N!(N-k-m)!}.
 \end{equation}
 
-This function correctly predicts an approximately exponential decrease in the proportion of genomes with non-zero fitness as a maximally fit genome is mutated (i.e., it can be rewritten as a combination of gamma functions), and provides a good approximation to the empirically derived proportions shown in Figure 5, assuming $k\approx 14$ for networks of $n=4$ genes (i.e., a motif of 14 out of 32, or 44\%, immutable variables), and assuming $k\approx 26$ for networks of $n=5$ genes (i.e., an ensemble of 26 out of 80, or 33\%, immutable variables). However, by inspection we could find no such fixed motif amongst genomes with fitness $0<f<1$. Therefore we conclude that networks with non-zero fitness are specified by an ensemble of boolean \emph{interactions}, the complexity of which is determined by the relationship between a constant number of binary variables.
+This function correctly predicts an approximately exponential decrease in the proportion of genomes with non-zero fitness as a maximally fit genome is mutated (i.e., it can be rewritten as a combination of gamma functions), and provides a good approximation to the empirically derived proportions shown in Fig.~5, assuming $k\approx 14$ for networks of $n=4$ genes (i.e., a motif of 14 out of 32, or 44\%, immutable variables), and assuming $k\approx 26$ for networks of $n=5$ genes (i.e., an ensemble of 26 out of 80, or 33\%, immutable variables). However, by inspection we could find no such fixed motif amongst genomes with fitness $0<f<1$. Therefore we conclude that networks with non-zero fitness are specified by an ensemble of boolean \emph{interactions}, the complexity of which is determined by the relationship between a constant number of binary variables.
 
 %We therefore accept this ensemble hypothesis, and suggest that the particular smoothness of the fitness landscape around the fitness peaks reflects a significant genetic redundancy in the specification of the required developmental dynamics.
 
@@ -317,9 +317,9 @@ This function correctly predicts an approximately exponential decrease in the pr
 %h(m)=\frac{k!(N-m)!}{N!(k-m)!}.
 %\end{equation}
 
-%This function correctly predicts an approximately exponential decrease in the proportion of genomes with non-zero fitness (i.e., it can be rewritten as a combination of gamma functions), and provides a good approximation to the empirically derived proportions shown in Figure 5, assuming $k\approx18$ for networks of $n=4$ genes (i.e., an ensemble of 18 out of 32, or 56\%, redundant variables), and assuming $k\approx55$ for networks of $n=5$ genes (i.e., an ensemble of 55 out of 80, or 69\%, redundant variables). We therefore accept this ensemble hypothesis, and suggest that the particular smoothness of the fitness landscape around the fitness peaks reflects a significant genetic redundancy in the specification of the required developmental dynamics.
+%This function correctly predicts an approximately exponential decrease in the proportion of genomes with non-zero fitness (i.e., it can be rewritten as a combination of gamma functions), and provides a good approximation to the empirically derived proportions shown in Fig.~5, assuming $k\approx18$ for networks of $n=4$ genes (i.e., an ensemble of 18 out of 32, or 56\%, redundant variables), and assuming $k\approx55$ for networks of $n=5$ genes (i.e., an ensemble of 55 out of 80, or 69\%, redundant variables). We therefore accept this ensemble hypothesis, and suggest that the particular smoothness of the fitness landscape around the fitness peaks reflects a significant genetic redundancy in the specification of the required developmental dynamics.
 
-Figure 6 confirms that the average fitness for genomes with non-zero fitness decreases linearly with the number of mutations, which allows the evolutionary search to progress incrementally towards peak fitness. Together these results confirm an approximately exponential portrait of the fitness landscape on the approach to the fitness peaks.
+Fig.~6 confirms that the average fitness for genomes with non-zero fitness decreases linearly with the number of mutations, which allows the evolutionary search to progress incrementally towards peak fitness. Together these results confirm an approximately exponential portrait of the fitness landscape on the approach to the fitness peaks.
 
 \vspace{1em}\emph{\noindent Please insert Figure 6 about here.}\vspace{1em}
 
@@ -430,7 +430,28 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=1.0\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/Fig1.png}\caption{\emph{Modelling cortical development}. A network of $n=5$ interacting genes are shown labelled $a$--$e$. These correspond to genes Fgf8, Emx2, Pax6, Coup-tf1, and Sp8. For each gene a schematic depicting the E8 gene expression pattern observed in the forebrain of mice at embryonic day E8 is shown (with only Fgf8 expressed in only the anterior), as well as the direction of the gradient in the expression of each that develops with respect to the anterior--posterior axis. In this model,  development is represented by the dynamics of a Boolean network, with the `output' expression level of each gene affected by the pattern of $n-1$ `input' expression levels from the other genes, here labelled i--iv. The table on the right specifies, for each of $2^{n-1}=16$ possible input patterns, what the output of each gene will be, i.e., the expression level on the next iteration of the dynamics. The $N=n2^{n-1}=80$ coloured elements of the table are thus the binary variables that constitute the genome for this network, reproduced as a one-dimensional bit-string below. The particular genome specified here is one of $2^N$ possibilities, and for illustration purposes is chosen to correspond to a maximally fit genome.}
+\includegraphics[width=1.0\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/Fig1.png}
+\caption{\emph{Modelling cortical
+    development}. A network of $n=5$ interacting genes are shown
+  labelled $a$--$e$. These correspond to genes Fgf8, Emx2, Pax6,
+  Coup-tf1, and Sp8. For each gene a schematic depicting the E8 gene
+  expression pattern observed in the forebrain of mice at embryonic
+  day E8 is shown (with only Fgf8 expressed in only the anterior), as
+  well as the direction of the gradient in the expression of each that
+  develops with respect to the anterior--posterior axis. In this
+  model,  development is represented by the dynamics of a Boolean
+  network, with the `output' expression level of each gene affected by
+  the pattern of $n-1$ `input' expression levels from the other genes,
+  here labelled i--iv. The table on the right specifies, for each of
+  $2^{n-1}=16$ possible input patterns, what the output of each gene
+  will be, i.e., the expression level on the next iteration of the
+  dynamics. The $N=n2^{n-1}=80$ coloured elements of the table are
+  thus the binary variables that constitute the genome for this
+  network, reproduced as a one-dimensional bit-string below. The
+  particular genome specified here is one of $2^N$ possibilities, and
+  for illustration purposes is chosen to correspond to a maximally fit
+  genome.}
+\label{fig:modelling}
 \end{center}
 \end{figure}
 \clearpage}
@@ -438,7 +459,33 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/Fig2.pdf}\caption{\emph{Development of a Boolean network model of cortical gene-network interactions}. State transition diagram for a network of $n=5$ genes that successfully maps the initial gene expression levels in the anterior (blue dot) and posterior (red dot) to the corresponding target expression levels in anterior (blue star) and posterior (red star) after several iterations of the gene-network dynamics. Each point is a state (a configuration of binary expression levels for $n=5$ genes) and all $2^n$ states are shown. Lines connect states that are separated by one iteration of the Boolean operations specified by this particular genome. States $s$ are ordered on the y-axis by the number of transitions that occur before the limit cycle is reached, $d_s$, hence states that are further from the limit cycle transition into states that are closer to the limit cycle, development proceeds through states at incrementally smaller distances from the limit cycle, and states at a distance of 0 correspond to point attractors. States are separated on the x-axis into three attractors (the right-most point is an attractor comprising a single state), and within each attractor the states are ordered (arbitrarily) by increasing binary index. This particular network is considered maximally fit, because the initial states $10000$ and $00000$ map to corresponding mature states $10101$ and $01010$ as the only states occupying the limit cycle of separate point attractors. Between 1 and 2 in every 100,000 possible networks is estimated to satisfy these criteria.}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm
+  0cm]{Figures/Fig2.pdf}\caption{\emph{Development of a Boolean
+    network model of cortical gene-network interactions}. State
+  transition diagram for a network of $n=5$ genes that successfully
+  maps the initial gene expression levels in the anterior (blue dot)
+  and posterior (red dot) to the corresponding target expression
+  levels in anterior (blue star) and posterior (red star) after
+  several iterations of the gene-network dynamics. Each point is a
+  state (a configuration of binary expression levels for $n=5$ genes)
+  and all $2^n$ states are shown. Lines connect states that are
+  separated by one iteration of the Boolean operations specified by
+  this particular genome. States $s$ are ordered on the y-axis by the
+  number of transitions that occur before the limit cycle is reached,
+  $d_s$, hence states that are further from the limit cycle transition
+  into states that are closer to the limit cycle, development proceeds
+  through states at incrementally smaller distances from the limit
+  cycle, and states at a distance of 0 correspond to point
+  attractors. States are separated on the x-axis into three attractors
+  (the right-most point is an attractor comprising a single state),
+  and within each attractor the states are ordered (arbitrarily) by
+  increasing binary index. This particular network is considered
+  maximally fit, because the initial states $10000$ and $00000$ map to
+  corresponding mature states $10101$ and $01010$ as the only states
+  occupying the limit cycle of separate point attractors. Between 1
+  and 2 in every 100,000 possible networks is estimated to satisfy
+  these criteria.}
+\label{fig:development_boolean}
 \end{center}
 \end{figure}
 \clearpage}
@@ -446,7 +493,26 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/evolution_boolean_ff4.png}\caption{\emph{Evolution of a Boolean network model of cortical gene-network interactions}. The discovery of ten maximally fit genomes is shown. According to the fitness function (Equation 1), a genome has non-zero fitness if proceeding from the initial states $10000$ and $00000$ at some point reaches corresponding target states $10101$ and $01010$ on different attractors, and fitness increases as the combined distance of the two target mature states from the limit cycle decreases. Traces are aligned so that the generations at which maximally fit genomes (fitness $f=1$) are first discovered are plotted at generation zero on the right hand side. Evolution in each case proceeds from left to right. The characteristic shape of each trace indicates that evolution in this model is predicted to proceed via long periods of stasis that are punctuated by sharp increases in fitness. Thus the evolutionary dynamics predicted by this model may be described as `punctuated equilibria'. The trace highlighted with a thicker line shows the evolution of the maximally fit network whose developmental interactions are represented in Figure 2.}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/evolution_boolean_ff4.png}
+\caption{\emph{Evolution
+    of a Boolean network model of cortical gene-network
+    interactions}. The discovery of ten maximally fit genomes is
+  shown. According to the fitness function (Equation 1), a genome has
+  non-zero fitness if proceeding from the initial states $10000$ and
+  $00000$ at some point reaches corresponding target states $10101$
+  and $01010$ on different attractors, and fitness increases as the
+  combined distance of the two target mature states from the limit
+  cycle decreases. Traces are aligned so that the generations at which
+  maximally fit genomes (fitness $f=1$) are first discovered are
+  plotted at generation zero on the right hand side. Evolution in each
+  case proceeds from left to right. The characteristic shape of each
+  trace indicates that evolution in this model is predicted to proceed
+  via long periods of stasis that are punctuated by sharp increases in
+  fitness. Thus the evolutionary dynamics predicted by this model may
+  be described as `punctuated equilibria'. The trace highlighted with
+  a thicker line shows the evolution of the maximally fit network
+  whose developmental interactions are represented in Figure 2.}
+\label{fig:evolution_boolean}
 \end{center}
 \end{figure}
 \clearpage}
@@ -455,7 +521,53 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/Fig4.pdf}\caption{\emph{Distribution of evolutionary periods between the discovery of maximally fit networks}. The evolution of networks was continued for a total of 10,000,000 generations. Each time a maximally fit network was discovered the genome was randomised and the number of generations between the discovery of maximally fit networks was recorded. The process was repeated for mutation rates of $p=0.3$, $p=0.35$, and $p=0.40$, and in each case the distribution was well approximated by a straight line on a logarithmic plot, indicating an exponential relationship. The slope of the fit was similar over the range of mutation rates shown, indicating a robustness of the exponent to the free parameters of the system (in this case the mutation rate $p$).}%, which is a hallmark of criticality.}
+  \includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/distribution_evolutionary_histo_ff4.png}
+  \caption{\emph{Distribution of evolutionary periods between the
+      discovery of maximally fit networks}. The evolution of networks
+    was continued for a total of 100,000,000 generations. Each time a
+    maximally fit network was discovered the genome was randomised and
+    the number of generations between the discovery of maximally fit
+    networks was recorded. Here we plot the log of the histogram (with
+    50 bins) of the number of generations taken to evolve $f=1$
+    networks. The process was repeated for mutation rates between
+    $p=0.05$ and $p=0.50$, and in each case the logarithmic
+    distribution was well approximated by a straight line, indicating
+    an exponential relationship. The slope of the fit varied
+    approximately linearly over most of the range of mutation rates
+    shown (see Fig.~\ref{fig:distribution_evolutionary_slope_vs_p}).}
+  \label{fig:distribution_evolutionary_histo}
+\end{center}
+\end{figure}
+\clearpage}
+
+\afterpage{
+\begin{figure}
+\begin{center}
+  \includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/distribution_evolutionary_slope_vs_p_ff4.png}
+  \caption{ \emph{The rate of evolution is dependent on the rate of
+      mutation}.  The slopes of the linear fits shown in
+    Fig.~\ref{fig:distribution_evolutionary_histo} are plotted vs.~the
+    mutation rate, $p$, which is the probability of flipping each bit
+    of the genome when evolving from one generation to the
+    next. Larger and more negative slopes indicate faster evolution
+    and so it can be seen that the rate of evolution increases
+    approximately linearly with increasing $p$. However, the evolution
+    rate must return to zero for $p=0$ and this tendency is seen as
+    $p\rightarrow 0$. The hexagonal point for $p=0.05$ was excluded when
+    creating the black linear fit line.}
+  \label{fig:distribution_evolutionary_slope_vs_p}
+\end{center}
+\end{figure}
+\clearpage}
+
+\afterpage{
+\begin{figure}
+\begin{center}
+  \includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/distribution_evolutionary_mean_vs_p_ff4.png}
+\caption{\emph{Mean
+    number of evolutionary periods between the discovery of maximally
+    fit networks} Add extended description.}
+\label{fig:distribution_evolutionary_mean_vs_p}
 \end{center}
 \end{figure}
 \clearpage}
@@ -464,7 +576,15 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/smooth_fit_ff4.png}\caption{\emph{A smooth fitness landscape.} The average proportion of genomes with non-zero fitness, accounting for all genomes at a Hamming distance of $m$ mutations away from a sample of ten maximally fit genomes is shown for networks of $n=4$ genes (squares indicate means, and error bars indicate standard deviation across fitness peaks) and for networks of $n=5$ genes (circles). A good fit to the function $h(m)$, plotted as solid and dashed curves, suggests that the smoothness of the fitness landscape reflects that genomes with non-zero fitness comprise a certain set of boolean interactions that are specified by a constant a constant number of binary variables ($k\approx 14$ and $k\approx 26$ for $n=4$ and $n=5$ respectively).}%an ensemble comprising a constant number of redundant variables in genomes with non-zero fitness.}%an exponential decay model. Fitted curves are of the form $y(x)=\alpha 2^{-\beta x}$, where $y(x)$ is the proportion of genomes that yield a non-zero fitness.}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/smooth_fit_ff4.png}
+\caption{\emph{A smooth fitness landscape.} The average proportion of
+  genomes with non-zero fitness, accounting for all genomes at a
+  Hamming distance of $m$ mutations away from a sample of ten
+  maximally fit genomes is shown for networks of $n=4$ genes (squares
+  indicate means, and error bars indicate standard error of the mean
+  across fitness peaks), for networks of $n=5$ genes (circles) and
+  $n=6$ genes (triangles).}
+\label{fig:smooth_fit}
 \end{center}
 \end{figure}
 \clearpage}
@@ -472,7 +592,20 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/Fig6.pdf}\caption{\emph{Fitness increases gradually towards the fitness peaks.} The average fitness of genomes with non-zero fitness decreases linearly with each mutation of the genome $m$. Thus, once evolution has entered the vicinity of a fitness peak by un-directed search, a constant gradient is available to guide evolution directly to the maximally fit configuration of the genome.}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../simsj/plot/fitness_increases_gradually_ff4.png}
+\caption{\emph{Fitness
+    increases gradually towards the fitness peaks.} The average
+  fitness of genomes with non-zero fitness decreases linearly with
+  each mutation of the genome $m$. Thus, once evolution has entered
+  the vicinity of a fitness peak by un-directed search, a constant
+  gradient is available to guide evolution directly to the maximally
+  fit configuration of the genome. A good fit to the function $h(m,k)$, plotted
+  as solid curves, suggests that the smoothness of the
+  fitness landscape reflects that genomes with non-zero fitness
+  comprise a certain set of boolean interactions that are specified by
+  a constant a constant number of binary variables ($k\approx 10$,
+  $k\approx 17$ and $k\approx 25$ for $n=4$, $n=5$ and $n=6$, respectively).}
+\label{fig:fitness_increases}
 \end{center}
 \end{figure}
 \clearpage}
@@ -481,7 +614,31 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/S2.pdf}\caption{\emph{Supplementary Figure S2: Networks of $n=3$ genes cannot map states 100 and 000 to point attractor states 101 and 010.} \textbf{A} Consider that in maximally fit networks, the anterior target state $101$ must transition next to state $101$ again. Thus for any solution, expression levels of 0 and 1 in genes $b$ and $c$ must lead next to an expression level of 1 in gene $a$, levels $a=1$ and $c=1$ must lead next to $b=0$ and levels $a=1$ and $b=0$ must lead next to $c=1$, thereby fixing three binary variables in the genome of any solution (blue). Three other variables are fixed by the constraint that the posterior target state $010$ must also transition into itself (red). \textbf{B} Fixing this motif of $2n=6$ variables accordingly, determines that state $010$ can only be reached directly from states $000$, $011$, and $110$, and likewise that the target state $101$ can only be reached directly by states $001$, $100$, and $111$. \textbf{C} Linking any one of these states directly to its reachable target state makes the other target reachable from only the orthogonal state (e.g., a genome that transitions to $010$ from $000$ can only transition to state $101$ from state $111$). \textbf{D} However, specifying any of these three possibilities makes those two states (e.g., $000$ and $111$) unreachable from any other, hence it follows that both initial states cannot reach their corresponding target states in any $n=3$ network.}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/S2.pdf}
+\caption{\emph{Supplementary Figure S2: Networks of $n=3$ genes cannot
+    map states 100 and 000 to point attractor states 101 and 010.}
+  \textbf{A} Consider that in maximally fit networks, the anterior
+  target state $101$ must transition next to state $101$ again. Thus
+  for any solution, expression levels of 0 and 1 in genes $b$ and $c$
+  must lead next to an expression level of 1 in gene $a$, levels $a=1$
+  and $c=1$ must lead next to $b=0$ and levels $a=1$ and $b=0$ must
+  lead next to $c=1$, thereby fixing three binary variables in the
+  genome of any solution (blue). Three other variables are fixed by
+  the constraint that the posterior target state $010$ must also
+  transition into itself (red). \textbf{B} Fixing this motif of $2n=6$
+  variables accordingly, determines that state $010$ can only be
+  reached directly from states $000$, $011$, and $110$, and likewise
+  that the target state $101$ can only be reached directly by states
+  $001$, $100$, and $111$. \textbf{C} Linking any one of these states
+  directly to its reachable target state makes the other target
+  reachable from only the orthogonal state (e.g., a genome that
+  transitions to $010$ from $000$ can only transition to state $101$
+  from state $111$). \textbf{D} However, specifying any of these three
+  possibilities makes those two states (e.g., $000$ and $111$)
+  unreachable from any other, hence it follows that both initial
+  states cannot reach their corresponding target states in any $n=3$
+  network.}
+\label{fig:supp2}
 \end{center}
 \end{figure}
 \clearpage}
@@ -489,7 +646,22 @@ Kauffman SA (1993) The origins of order: {S}elf-organization and selection in
 \afterpage{
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/S3.pdf}\caption{\emph{Supplementary Figure S3}. At each of three mutation rates $p=0.30$, $p=0.35$ and $p=0.4$ the fitnesses in the generations proceeding the discovery of maximally fit genomes were averaged across all successful trajectories discovered within ten million generations. The resulting smooth plots reveal that incremental ascent of the fitness landscape in this model is possible. By comparison, un-directed search for fit genomes is a `needle-in-a-haystack' problem where peaks in the fitness landscape are sparse and isolated. Although no individual evolutionary simulation proceeds by incrementing fitness in such a continuous manner (see Figure 3), this visualisation clearly indicates that the progression towards peak fitness is incremental, and that the increment varies systematically with the free parameter of the model ($p$).}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{Figures/S3.pdf}
+\caption{\emph{Supplementary Figure S3}. At each of three mutation
+  rates $p=0.30$, $p=0.35$ and $p=0.4$ the fitnesses in the
+  generations proceeding the discovery of maximally fit genomes were
+  averaged across all successful trajectories discovered within ten
+  million generations. The resulting smooth plots reveal that
+  incremental ascent of the fitness landscape in this model is
+  possible. By comparison, un-directed search for fit genomes is a
+  `needle-in-a-haystack' problem where peaks in the fitness landscape
+  are sparse and isolated. Although no individual evolutionary
+  simulation proceeds by incrementing fitness in such a continuous
+  manner (see Figure 3), this visualisation clearly indicates that the
+  progression towards peak fitness is incremental, and that the
+  increment varies systematically with the free parameter of the model
+  ($p$).}
+\label{fig:supp3}
 \end{center}
 \end{figure}
 \clearpage}
