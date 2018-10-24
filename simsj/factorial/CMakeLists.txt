@@ -6,8 +6,5 @@ target_link_libraries(facto mpir mpirxx)
 add_executable(testfac testfac.cpp)
 target_link_libraries(testfac facto)
 
-add_executable(h_m h_m.cpp)
-target_link_libraries(h_m facto)
-
 add_executable(facs facs.cpp)
 target_link_libraries(facs facto)

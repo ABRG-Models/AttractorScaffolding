@@ -147,3 +147,7 @@ target_compile_definitions(mutatestream PUBLIC USE_FITNESS_1)
 # This accepts a string version of the genome (in 1s and 0s) and
 # displays the genome in tabular form.
 add_executable(str2genome str2genome.cpp)
+
+# This computes a function h(m) which may be discussed in the paper.
+add_executable(h_m h_m.cpp)
+target_link_libraries(h_m facto)

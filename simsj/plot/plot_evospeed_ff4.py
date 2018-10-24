@@ -16,16 +16,16 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-files = ['../data/evolve_a21_p10_ff4_10000000_gens_0.05.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.1.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.15.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.2.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.25.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.3.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.35.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.4.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.45.csv',
-         '../data/evolve_a21_p10_ff4_10000000_gens_0.5.csv']
+files = ['../data/evolve_a21_p10_ff4_100000000_gens_0.05.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.1.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.15.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.2.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.25.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.3.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.35.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.4.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.45.csv',
+         '../data/evolve_a21_p10_ff4_100000000_gens_0.5.csv']
 
 lbls = ['p=0.05',
         'p=0.10',
@@ -73,7 +73,7 @@ f1 = F1.add_subplot(121)
 M = np.zeros([nf,2])
 
 # Global choice of nbins
-nbins_g = 20
+nbins_g = 50
 
 # Plot the lines. These are what will appear in the legend
 for y,file in enumerate(files):
@@ -108,7 +108,7 @@ for y,file in enumerate(files):
 
 f1.legend(lbls,frameon=False)
 
-f1.set_ylabel(r'$\log(Histogram frequency)$',fontsize=fs)
+f1.set_ylabel(r'$\log(frequency)$',fontsize=fs)
 f1.set_xlabel('10K generations',fontsize=fs)
 #f1.set_aspect(np.diff(f1.get_xlim())/np.diff(f1.get_ylim()))
 f1.set_axisbelow(True)

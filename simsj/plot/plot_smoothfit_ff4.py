@@ -142,7 +142,7 @@ h5_m = readhm ("../data/h5_m.csv")
 h6_m = readhm ("../data/h6_m.csv")
 
 # Set recompute to False to switch off bootstrap computation of stderrs
-recompute=True
+recompute=False
 if recompute:
     # Read all the data into m.
     m4 = np.zeros([1,8])
@@ -174,9 +174,9 @@ if recompute:
     np.savetxt('m5_ff4_final.txt', m5_ff4_final, fmt='%f')
     np.savetxt('m6_ff4_final.txt', m6_ff4_final, fmt='%f')
 else:
-    m4_final = np.loadtxt('m4_final.txt')
-    m5_final = np.loadtxt('m5_final.txt')
-    m6_final = np.loadtxt('m6_final.txt')
+    m4_final = np.loadtxt('m4_ff0_final.txt')
+    m5_final = np.loadtxt('m5_ff0_final.txt')
+    m6_final = np.loadtxt('m6_ff0_final.txt')
     m4_ff4_final = np.loadtxt('m4_ff4_final.txt')
     m5_ff4_final = np.loadtxt('m5_ff4_final.txt')
     m6_ff4_final = np.loadtxt('m6_ff4_final.txt')
