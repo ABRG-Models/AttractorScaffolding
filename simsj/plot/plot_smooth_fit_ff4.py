@@ -21,10 +21,11 @@ import sys
 import csv
 
 # Read the fitness vs. Hamming mutation distance data
-def readDataset (genes, m):
+def readDataset (genes, ff_name):
+    m = np.zeros([1,8])
     rn = 0 # rownum - accumulates through all 10 files that are read
     for i in range(1,11):
-        filepath = '../data/mutations_n{:1d}_{:02d}.csv'.format(genes,i)
+        filepath = '../data/mutations{0}_n{1:1d}_{2:02d}.csv'.format(ff_name,genes,i)
         with open (filepath, 'r') as csvfile:
             rdr = csv.DictReader (csvfile)
             for row in rdr:
@@ -78,9 +79,9 @@ def comp_bootstrap (genes, m):
     m_final[0,10] = 1
     m_final = np.append (m_final, np.zeros([1, 11]), 0)
 
-    for h in range (1, 1+genes*pow(2,genes-1)):
+    for h in range (1, 1+int(genes*pow(2,genes-1)/2  )):
         # Get all from m for which col 0 is equal to h.
-        m_h = m[m[:,0]==h] # not right
+        m_h = m[m[:,0]==h]
         #themean = np.mean(m_h[:,3])
         #print ('Hamming {0} has mean {1}'.format (h, themean))
         # Compute bootstrapped estimate of the standard error of the mean
@@ -145,27 +146,26 @@ h6_m = readhm ("../data/h6_m.csv")
 recompute=False
 if recompute:
     # Read all the data into m.
-    m4 = np.zeros([1,8])
     genes = 4
-    m4 = readDataset (genes, m4)
-    m5 = np.zeros([1,8])
+    m4ff4 = readDataset (genes, '_ff4')
     genes = 5
-    m5 = readDataset (genes, m5)
-    m6 = np.zeros([1,8])
+    m5ff4 = readDataset (genes, '_ff4')
     genes = 6
-    m6 = readDataset (genes, m6)
+    m6ff4 = readDataset (genes, '_ff4')
+
     # Compute bootstraps
-    m4_final = comp_bootstrap (4, m4)
-    m5_final = comp_bootstrap (5, m5)
-    m6_final = comp_bootstrap (6, m6)
+    m4_ff4_final = comp_bootstrap (4, m4ff4)
+    m5_ff4_final = comp_bootstrap (5, m5ff4)
+    m6_ff4_final = comp_bootstrap (6, m6ff4)
+
     # Save bootstrap results
-    np.savetxt('m4_final.txt', m4_final, fmt='%f')
-    np.savetxt('m5_final.txt', m5_final, fmt='%f')
-    np.savetxt('m6_final.txt', m6_final, fmt='%f')
+    np.savetxt('tmp/m4_ff4_final.txt', m4_ff4_final, fmt='%f')
+    np.savetxt('tmp/m5_ff4_final.txt', m5_ff4_final, fmt='%f')
+    np.savetxt('tmp/m6_ff4_final.txt', m6_ff4_final, fmt='%f')
 else:
-    m4_final = np.loadtxt('m4_final.txt')
-    m5_final = np.loadtxt('m5_final.txt')
-    m6_final = np.loadtxt('m6_final.txt')
+    m4_ff4_final = np.loadtxt('tmp/m4_ff4_final.txt')
+    m5_ff4_final = np.loadtxt('tmp/m5_ff4_final.txt')
+    m6_ff4_final = np.loadtxt('tmp/m6_ff4_final.txt')
 
 # Save m4/5/6_finals here and call this a pre-processing step.
 
@@ -198,33 +198,59 @@ matplotlib.rc('font', **fnt)
 f1 = plt.figure(figsize=(8,8))
 #f1, axs = pl1.subplots(nrows=2, ncols=2, sharex=True)
 #ax1 = axs[0]
-k=5
-h_tmp = h4_m[h4_m[:,0]==float(k)]
-#plt.plot(np.log(h_tmp[:,1]/32),
-#         np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.slateblue2)
-plt.errorbar (np.log(m4_final[:,0]/32), np.log(m4_final[:,1]), yerr=m4_final[:,2], fmt='.', markersize=12, linestyle='None', color=c.slateblue2)
-#plt.plot(np.log(m4_final[m4_final[:,10]==1,0]/32), np.log(m4_final[m4_final[:,10]==1,1]), marker='.', markersize=19, linestyle='None', color=c.black)
+ms1 = 6
+ms2 = 6
+lw1 = 1
+lw2 = 1
 
-k=9
-h_tmp = h5_m[h5_m[:,0]==float(k)]
-#plt.plot(np.log(h_tmp[:,1]/80),
-#         np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkviolet)
-plt.errorbar (np.log(m5_final[:,0]/80), np.log(m5_final[:,1]), yerr=m5_final[:,2], fmt='.', markersize=12, linestyle='None', color=c.darkviolet)
+logplot = True
+if logplot:
+    m4ff4y = np.log(m4_ff4_final[:,1])
+    m5ff4y = np.log(m5_ff4_final[:,1])
+    m6ff4y = np.log(m6_ff4_final[0::4,1])
+else:
+    m4ff4y = m4_ff4_final[:,1]
+    m5ff4y = m5_ff4_final[:,1]
+    m6ff4y = m6_ff4_final[0::4,1]
 
+plt.errorbar (m4_ff4_final[:,0]/32, m4ff4y, yerr=m4_ff4_final[:,2], fmt='.',  marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+plt.errorbar (m5_ff4_final[:,0]/80, m5ff4y, yerr=m5_ff4_final[:,2], fmt='.',  marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+plt.errorbar (m6_ff4_final[0::4,0]/192, m6ff4y, yerr=m6_ff4_final[0::4,2], fmt='.',  marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
-k=35
-h_tmp = h6_m[h6_m[:,0]==float(k)]
-#plt.plot(np.log(h_tmp[:,1]/80),
-#         np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.magenta)
-plt.errorbar (np.log(m6_final[:,0]/192), np.log(m6_final[:,1]), yerr=m6_final[:,2], fmt='.', markersize=12, linestyle='None', color=c.magenta)
+showhm_fit=False
+if showhm_fit:
+    # The fit lines:
+    k=5
+    h_tmp = h4_m[h4_m[:,0]==float(k)]
+    plt.plot(h_tmp[:,1]/32,
+             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.mediumpurple1)
+    k=2
+    h_tmp = h5_m[h5_m[:,0]==float(k)]
+    plt.plot(h_tmp[:,1]/80,
+             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkorchid2)
+    k=2
+    h_tmp = h6_m[h6_m[:,0]==float(k)]
+    plt.plot(h_tmp[:,1]/192,
+             np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.indigo)
 
+f1.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs2)
+if logplot:
+    f1.axes[0].set_ylabel('log(proportion of $f>0$ genomes)',fontsize=fs2)
+    f1.axes[0].set_ylim([-1.4,0])
+else:
+    f1.axes[0].set_ylabel('proportion of $f>0$ genomes',fontsize=fs2)
+    #f1.axes[0].set_ylim([-1.4,0])
 
-#f1.axes[0].set_title('Proportion of states that are fit',fontsize=fs)
-f1.axes[0].set_xlabel('Proportional Hamming distance (m/N) from F=1 genome',fontsize=fs2)
-f1.axes[0].set_ylabel('Proportion of possible states that are fit',fontsize=fs2)
-#f1.axes[0].set_xlim([0,0.6])
+f1.axes[0].set_xlim([0,0.5])
 #plt.xticks(np.arange(0, 0.65, 0.05))
-plt.legend(('h(m), k=5, N=32','h(m), k=9, N=80','h(m), k=35, N=192','4 genes','5 genes','6 genes'),frameon=False)
-plt.savefig('smoothfitness.png')
+
+plt.legend(('$N=4$','$N=5$','N=6'),frameon=False)
+
+f1.tight_layout()
+
+if logplot:
+    plt.savefig('smooth_fit_log_ff4.png')
+else:
+    plt.savefig('smooth_fit_ff4.png')
 
 plt.show()
