@@ -203,19 +203,19 @@ lw1 = 2
 logplot = False
 if logplot:
     m4y = np.log(m4_ff4_final[:,1])
-    m5y = np.log(m5_ff4_final[0::2,1])
-    m6y = np.log(m6_ff4_final[0::4,1])
+    m5y = np.log(m5_ff4_final[:,1])
+    m6y = np.log(m6_ff4_final[:,1])
 else:
     m4y = m4_ff4_final[:,1]
-    m5y = m5_ff4_final[0::2,1]
-    m6y = m6_ff4_final[0::4,1]
+    m5y = m5_ff4_final[:,1]
+    m6y = m6_ff4_final[:,1]
 
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,2],
-              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
-plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,2],
-              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
-plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2],
-              fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
+              fmt='.', marker='s', markersize=ms1, linestyle='None', linewidth=lw1, color=c.mediumpurple1)
+plt.errorbar (m5_ff4_final[:,0]/80,  m5y, yerr=m5_ff4_final[:,2],
+              fmt='.', marker='o', markersize=ms1, linestyle='None', linewidth=lw1, color=c.darkorchid2)
+plt.errorbar (m6_ff4_final[:,0]/192, m6y, yerr=m6_ff4_final[:,2],
+              fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
 
 # Best ks for h(m,k) fits:
 k4=10
@@ -256,7 +256,7 @@ else:
     f1.axes[0].set_ylabel('proportion of $f>0$ genomes',fontsize=fs)
     #f1.axes[0].set_ylim([-1.4,0])
 
-f1.axes[0].set_xlim([0,0.5])
+f1.axes[0].set_xlim([-0.01,0.5])
 #plt.xticks(np.arange(0, 0.65, 0.05))
 
 plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
