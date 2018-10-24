@@ -43,7 +43,7 @@ def readDataset (genes, ff_name):
                 m[rn, 5] = float(row['TotalFit'])
                 # TotalFit / SampledStates
                 m[rn, 6] = float(row['FitPerState'])
-                # Last is deprecated.
+                # TotalFit/NumFit used in Fig 6.
                 if float(row['NumFit']) > 0:
                     m[rn, 7] = float(row['TotalFit'])/float(row['NumFit'])
                 else :
@@ -90,8 +90,8 @@ def comp_bootstrap (genes, m):
         nRows = sz[1]
         nSamp = 1000
         bmeans_3 = np.zeros ([nSamp,1]) # means of num with >0 fit
-        bmeans_6 = np.zeros ([nSamp,1]) # means of total fitness/numstates
-        bmeans_7 = np.zeros ([nSamp,1]) # means of total fitness/numfit
+        bmeans_6 = np.zeros ([nSamp,1]) # means of total fitness/number of states
+        bmeans_7 = np.zeros ([nSamp,1]) # means of total fitness/number of fit states
         #print ('bmeans shape: {0}'.format (np.shape(bmeans_3)))
         for s in range (0, nSamp):
             bs = bootstrap_sample (nRows)
@@ -211,9 +211,12 @@ else:
     m5y = m5_ff4_final[0::2,1]
     m6y = m6_ff4_final[0::4,1]
 
-plt.errorbar (m4_ff4_final[:,0]/32, m4y, yerr=m4_ff4_final[:,2], fmt='.',  marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
-plt.errorbar (m5_ff4_final[0::2,0]/80, m5y, yerr=m5_ff4_final[0::2,2], fmt='.',  marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
-plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2], fmt='.',  marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
+plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,2],
+              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,2],
+              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2],
+              fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
 showhm_fit=False
 if showhm_fit:
@@ -250,5 +253,41 @@ if logplot:
     plt.savefig('smooth_fit_log_ff4.png')
 else:
     plt.savefig('smooth_fit_ff4.png')
+
+#
+# Second figure produced by this script is "Fitness increases.." current Fig. 6.
+#
+f2 = plt.figure(figsize=(8,8))
+if logplot:
+    m4y = np.log(m4_ff4_final[:,7])
+    m5y = np.log(m5_ff4_final[0::2,7])
+    m6y = np.log(m6_ff4_final[0::4,7])
+else:
+    m4y = m4_ff4_final[:,7]
+    m5y = m5_ff4_final[0::2,7]
+    m6y = m6_ff4_final[0::4,7]
+plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,8],
+              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
+plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,8],
+              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
+plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,8],
+              fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
+
+f2.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs2)
+if logplot:
+    f2.axes[0].set_ylabel('log(mean fitness ($f$) for $f>0$ genomes)',fontsize=fs2)
+    #f2.axes[0].set_ylim([-1.4,0])
+else:
+    f2.axes[0].set_ylabel('mean fitness ($f$) for $f>0$ genomes',fontsize=fs2)
+
+f2.axes[0].set_xlim([0,0.5])
+
+plt.legend(('$N=4$','$N=5$','N=6'),frameon=False)
+f2.tight_layout()
+
+if logplot:
+    plt.savefig('fitness_increases_gradually_log_ff4.png')
+else:
+    plt.savefig('fitness_increases_gradually_ff4.png')
 
 plt.show()
