@@ -2,6 +2,8 @@
 
 These scripts are used to plot some of the figures for the paper.
 
+Fig 2: plot_states.py (generates states.png)
+
 Fig 3: plot_evolution_boolean_ff4.py (generates
 evolution_boolean_ff4.png)
 
