@@ -44,7 +44,7 @@ I compiled mpir like this:
 sudo apt install libtool autoconf yasm texinfo # Required only for the mpir build
 git clone git://github.com/wbhart/mpir.git
 cd mpir
-autoconf # I ignored a couple of warnings here
+autoreconf -is # I ignored a couple of warnings here
 ./configure --enable-cxx --prefix=/usr/local
 make -j6 # or however many cores you have
 sudo make install
