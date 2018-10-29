@@ -30,7 +30,7 @@ command on your computer.
 
 cmake, a c++ compiler and the library mpir are required. On Ubuntu or Debian:
 
-```
+```bash
 sudo apt install cmake build-essential
 ```
 Ensures you have a compiler and cmake.
@@ -40,7 +40,7 @@ git://github.com/wbhart/mpir.git (see also http://mpir.org)
 
 
 I compiled mpir like this:
-```
+```bash
 sudo apt install libtool autoconf yasm # Required only for the mpir build
 git clone git://github.com/wbhart/mpir.git
 cd mpir
@@ -55,7 +55,7 @@ sudo make install
 You should create a sub-directory called build (or alternatively with
 the name of your computer's hostname).
 
-```
+```bash
 pushd build
 cmake ..
 make -j6 # or however many cores you have
