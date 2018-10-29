@@ -125,12 +125,12 @@ target_compile_definitions(mutation6_ff4 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(mutation6_ff4 facto)
 
 # Find the proportion of random genomes with F=1, F>0; fitness function 0
-add_executable(proprandom_fit0_4 proprandomfits.cpp)
-target_compile_definitions(proprandom_fit0_4 PUBLIC N_Genes=4 USE_FITNESS_0)
-add_executable(proprandom_fit0_5 proprandomfits.cpp)
-target_compile_definitions(proprandom_fit0_5 PUBLIC N_Genes=5 USE_FITNESS_0)
-add_executable(proprandom_fit0_6 proprandomfits.cpp)
-target_compile_definitions(proprandom_fit0_6 PUBLIC N_Genes=6 USE_FITNESS_0)
+add_executable(proprandom4_ff0 proprandomfits.cpp)
+target_compile_definitions(proprandom4_ff0 PUBLIC N_Genes=4 USE_FITNESS_0)
+add_executable(proprandom5_ff0 proprandomfits.cpp)
+target_compile_definitions(proprandom5_ff0 PUBLIC N_Genes=5 USE_FITNESS_0)
+add_executable(proprandom6_ff0 proprandomfits.cpp)
+target_compile_definitions(proprandom6_ff0 PUBLIC N_Genes=6 USE_FITNESS_0)
 
 # Find the proportion of random genomes with F=1, F>0; fitness function 1
 add_executable(proprandom4_ff1 proprandomfits.cpp)
@@ -139,6 +139,14 @@ add_executable(proprandom5_ff1 proprandomfits.cpp)
 target_compile_definitions(proprandom5_ff1 PUBLIC N_Genes=5 USE_FITNESS_1)
 add_executable(proprandom6_ff1 proprandomfits.cpp)
 target_compile_definitions(proprandom6_ff1 PUBLIC N_Genes=6 USE_FITNESS_1)
+
+# Find the proportion of random genomes with F=1, F>0; fitness function 4
+add_executable(proprandom4_ff4 proprandomfits.cpp)
+target_compile_definitions(proprandom4_ff4 PUBLIC N_Genes=4 USE_FITNESS_4)
+add_executable(proprandom5_ff4 proprandomfits.cpp)
+target_compile_definitions(proprandom5_ff4 PUBLIC N_Genes=5 USE_FITNESS_4)
+add_executable(proprandom6_ff4 proprandomfits.cpp)
+target_compile_definitions(proprandom6_ff4 PUBLIC N_Genes=6 USE_FITNESS_4)
 
 # This executable displays the genome as it is mutated in a stream of text.
 add_executable(mutatestream mutatestream.cpp)
@@ -151,3 +159,6 @@ add_executable(str2genome str2genome.cpp)
 # This computes a function h(m) which may be discussed in the paper.
 add_executable(h_m h_m.cpp)
 target_link_libraries(h_m facto)
+
+# Combinations
+add_executable(combos combos.cpp)

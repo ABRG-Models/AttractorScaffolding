@@ -11,6 +11,7 @@
 #include <bitset>
 #include <array>
 #include <iostream>
+#include <sstream>
 #include <stdlib.h>
 
 using namespace std;
@@ -81,8 +82,12 @@ genosect_t genosect_mask;
  * Set the global target states for anterior and posterior positions.
  */
 //@{
-#if N_Genes < 4
-#error "You'll need to set up target_ant/target_pos suitably for N_Genes < 4"
+#if N_Genes < 3
+#error "You'll need to set up target_ant/target_pos suitably for N_Genes < 3"
+#endif
+#if N_Genes == 3
+state_t target_ant = 0x5; // 101 or 5 dec
+state_t target_pos = 0x2; // 010 or 2 dec
 #endif
 #if N_Genes == 4
 state_t target_ant = 0xa; // 1010 or 10 dec
@@ -97,7 +102,7 @@ state_t target_ant = 0x2a; // 101010
 state_t target_pos = 0x15; // 010101
 #endif
 #if N_Genes > 6
-#error "You'll need to set up target_ant/target_pos suitably for N_Genes > 6"
+#error "You'll need to set up target_ant/target_pos suitably for N_Genes > 6 (and also consider the type for genosect_t)"
 #endif
 //@}
 
@@ -629,6 +634,8 @@ compute_hamming (const array<genosect_t, N_Genes>& g1,
  * next_combination (int comb[], int k, int n)
  *  Generates the next combination of n elements as k after comb
  *
+ *  I.e. produces n choose k combinations.
+ *
  *  comb => the previous combination ( use (0, 1, 2, ..., k) for first)
  *  k => the size of the subsets to generate
  *  n => the size of the original set
@@ -671,6 +678,31 @@ printc (int comb[], int k)
         printf("%d, ", comb[i] + 1);
     }
     printf ("\b\b}\n");
+}
+
+string
+uint_str (const unsigned int& ui, int len)
+{
+    stringstream ss;
+    // Count down from N_Genes, to output bits in order MSB to LSB.
+    for (unsigned int i = len; i > 0; --i) {
+        unsigned int j = i-1;
+        ss << ((ui & (0x1<<j)) >> j);
+    }
+    return ss.str();
+}
+
+/*!
+ * Prints out a combination in binary format, like: {001, 010}
+ * etc. Could count zeros in cols and print out here.
+ */
+void
+printc_binary (int comb[], int k, int w)
+{
+    for (int i = 0; i < k; ++i) {
+        cout << uint_str (comb[i], w) << "\n";
+    }
+    cout << "---\n";
 }
 
 #endif // __LIB_H__
