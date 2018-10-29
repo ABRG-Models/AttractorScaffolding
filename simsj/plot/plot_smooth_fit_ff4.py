@@ -203,49 +203,57 @@ lw1 = 2
 logplot = False
 if logplot:
     m4y = np.log(m4_ff4_final[:,1])
-    m5y = np.log(m5_ff4_final[:,1])
-    m6y = np.log(m6_ff4_final[:,1])
+    m5y = np.log(m5_ff4_final[0::2,1])
+    m6y = np.log(m6_ff4_final[0::4,1])
 else:
     m4y = m4_ff4_final[:,1]
-    m5y = m5_ff4_final[:,1]
-    m6y = m6_ff4_final[:,1]
+    m5y = m5_ff4_final[0::2,1]
+    m6y = m6_ff4_final[0::4,1]
 
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,2],
               fmt='.', marker='s', markersize=ms1, linestyle='None', linewidth=lw1, color=c.mediumpurple1)
-plt.errorbar (m5_ff4_final[:,0]/80,  m5y, yerr=m5_ff4_final[:,2],
+plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,2],
               fmt='.', marker='o', markersize=ms1, linestyle='None', linewidth=lw1, color=c.darkorchid2)
-plt.errorbar (m6_ff4_final[:,0]/192, m6y, yerr=m6_ff4_final[:,2],
+plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2],
               fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
 
 # Best ks for h(m,k) fits:
-k4=10
-k5=17
-k6=25
+k4 = 21
+nf4 = 0.304 # proportion that are fit for randomly selected genomes. proprandom4_ff4
+
+k5 = 33
+nf5 = 0.371 # Computed by proprandom5_ff4
+
+k6 = 45
+nf6 = 0.4746 # Computed by proprandom6_ff4
 
 showhm_fit=True
-if showhm_fit and False:
+if showhm_fit:
     # The fit lines:
     h_tmp = h4_m[h4_m[:,0]==float(k4)]
+    h_mk = nf4 + (h_tmp[:,2] * (1-nf4))
     if logplot:
         plt.plot(h_tmp[:,1]/32,
                  np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.mediumpurple1)
     else:
         plt.plot(h_tmp[:,1]/32,
-                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.mediumpurple1)
+                 h_mk,'-',marker='None',linewidth=2,color=c.mediumpurple1)
     h_tmp = h5_m[h5_m[:,0]==float(k5)]
+    h_mk = nf5 + (h_tmp[:,2] * (1-nf5))
     if logplot:
         plt.plot(h_tmp[:,1]/80,
                  np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.darkorchid2)
     else:
         plt.plot(h_tmp[:,1]/80,
-                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.darkorchid2)
+                 h_mk,'-',marker='None',linewidth=2,color=c.darkorchid2)
     h_tmp = h6_m[h6_m[:,0]==float(k6)]
+    h_mk = nf6 + (h_tmp[:,2] * (1-nf6))
     if logplot:
         plt.plot(h_tmp[:,1]/192,
                  np.log(h_tmp[:,2]),'-',marker='None',linewidth=1,color=c.indigo)
     else:
         plt.plot(h_tmp[:,1]/192,
-                 h_tmp[:,2],'-',marker='None',linewidth=1,color=c.indigo)
+                 h_mk,'-',marker='None',linewidth=2,color=c.indigo)
 
 
 f1.axes[0].set_xlabel('Prop. Hamming distance ($m/N$) from $f=1$ genome',fontsize=fs)
@@ -287,6 +295,10 @@ plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,8],
 plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,8],
               fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
 
+# Best ks for h(m,k) fits:
+k4=10
+k5=17
+k6=25
 if showhm_fit:
     # The fit lines:
     h_tmp = h4_m[h4_m[:,0]==float(k4)]
