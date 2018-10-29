@@ -28,14 +28,27 @@ command on your computer.
 
 ## Prerequisites:
 
-On Ubuntu or Debian:
+cmake, a c++ compiler and the library mpir are required. On Ubuntu or Debian:
 
 ```
 sudo apt install cmake build-essential
 ```
+Ensures you have a compiler and cmake.
 
 You will then need to obtain, build and install mpir from github:
 git://github.com/wbhart/mpir.git (see also http://mpir.org)
+
+
+I compiled mpir like this:
+```
+sudo apt install libtool autoconf yasm # Required only for the mpir build
+git clone git://github.com/wbhart/mpir.git
+cd mpir
+autoconf # I ignored a couple of warnings here
+./configure --enable-cxx --prefix=/usr/local
+make -j6 # or however many cores you have
+sudo make install
+```
 
 ## Compiling
 
