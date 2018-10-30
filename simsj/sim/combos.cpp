@@ -20,6 +20,11 @@ int main (int argc, char** argv)
     int n = (1<<ngenes); // The size of the set; for {0, 1, 2, 3} it's 4
     int k = atoi(argv[2]); // The size of the subsets; for {0, 1}, {0, 3}, etc... it's 2
 
+    int zmask = 0;
+    if (argc > 3) {
+        zmask = atoi(argv[3]);
+    }
+
     int comb[n]; // comb[i] is the index of the i-th element in the combination
 
     // Initialise comb to zero
@@ -38,7 +43,9 @@ int main (int argc, char** argv)
     cout.fill('0');
     cout.width(2);
     cout << combo_count++ <<  endl;
-    printc_binary (comb, k, ngenes);
+
+    int zs = 0;
+    zs += printc_binary (comb, k, ngenes, zmask);
     printc (comb, k);
 
     // Generate and print all the other combinations
@@ -47,10 +54,13 @@ int main (int argc, char** argv)
         cout.fill('0');
         cout.width(2);
         cout << combo_count++ <<  endl;
-        printc_binary (comb, k, ngenes);
+        zs += printc_binary (comb, k, ngenes, zmask);
         printc (comb, k);
         cout << "---\n";
     }
+
+    cout << "Number of zs is " << zs << endl;
+    cout << "zmask was " << zmask << endl;
 
     return 0;
 }

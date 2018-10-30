@@ -705,4 +705,27 @@ printc_binary (int comb[], int k, int w)
     cout << "---\n";
 }
 
+/*!
+ * This counts the zeros in the column(s) indicated by show_zeros_mask
+ * and returns 1 if there were all zeros on those column(s)
+ */
+int
+printc_binary (int comb[], int k, int w, int show_zeros_mask)
+{
+    int rtn = 0;
+    int zeros = 0;
+    for (int i = 0; i < k; ++i) {
+        if (((comb[i] ^ show_zeros_mask) & show_zeros_mask) == show_zeros_mask) {
+            zeros++;
+        }
+        cout << uint_str (comb[i], w) << "\n";
+    }
+    if (zeros == k) {
+        cout << "Had all zeros in col(s): " << uint_str(show_zeros_mask, w) << endl;
+        rtn = 1;
+    }
+    cout << "---\n";
+    return rtn;
+}
+
 #endif // __LIB_H__
