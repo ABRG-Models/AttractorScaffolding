@@ -9,6 +9,7 @@
 
 using namespace std;
 
+#define SCSZ 64
 int main (int argc, char** argv)
 {
     if (argc < 3) {
@@ -44,8 +45,14 @@ int main (int argc, char** argv)
     cout.width(2);
     cout << combo_count++ <<  endl;
 
+    int scores[SCSZ];
+    for (unsigned int i = 0; i<SCSZ; ++i) {
+        scores[i] = 0;
+    }
+    int score = 0;
     int zs = 0;
-    zs += printc_binary (comb, k, ngenes, zmask);
+    zs += printc_binary (comb, k, ngenes, zmask, score);
+    scores[score]++;
     printc (comb, k);
 
     // Generate and print all the other combinations
@@ -54,13 +61,20 @@ int main (int argc, char** argv)
         cout.fill('0');
         cout.width(2);
         cout << combo_count++ <<  endl;
-        zs += printc_binary (comb, k, ngenes, zmask);
+        zs += printc_binary (comb, k, ngenes, zmask, score);
+        scores[score]++;
         printc (comb, k);
         cout << "---\n";
     }
 
-    cout << "Number of zs is " << zs << endl;
-    cout << "zmask was " << zmask << endl;
+    if (zmask) {
+        cout << "Number of zs is " << zs << endl;
+        cout << "zmask was " << zmask << endl;
+    }
+
+    for (unsigned int i = 0; i<SCSZ; ++i) {
+        cout << "Score " << i << " occured " << scores[i] << " times" << endl;
+    }
 
     return 0;
 }

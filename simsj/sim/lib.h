@@ -710,12 +710,22 @@ printc_binary (int comb[], int k, int w)
  * and returns 1 if there were all zeros on those column(s)
  */
 int
-printc_binary (int comb[], int k, int w, int show_zeros_mask)
+printc_binary (int comb[], int k, int w, int show_zeros_mask, int& score)
 {
     int rtn = 0;
     int zeros = 0;
+    int cols[w];
+    for (unsigned int j = 0; j < w; ++j) {
+        cols[j] = 0;
+    }
+
     for (int i = 0; i < k; ++i) {
-        if (((comb[i] ^ show_zeros_mask) & show_zeros_mask) == show_zeros_mask) {
+        for (unsigned int j = 0; j < w; ++j) {
+            cols[j] += (comb[i] & (1<<j)) >> j;
+            //cout << "cols[" << j << "] = " << cols[j] << endl;
+        }
+        if (show_zeros_mask
+            && ((comb[i] ^ show_zeros_mask) & show_zeros_mask) == show_zeros_mask) {
             zeros++;
         }
         cout << uint_str (comb[i], w) << "\n";
@@ -724,6 +734,11 @@ printc_binary (int comb[], int k, int w, int show_zeros_mask)
         cout << "Had all zeros in col(s): " << uint_str(show_zeros_mask, w) << endl;
         rtn = 1;
     }
+    score = 1;
+    for (unsigned int j = 0; j < w; ++j) {
+        score = score * cols[j];
+    }
+    cout << "score: " << score << endl;
     cout << "---\n";
     return rtn;
 }
