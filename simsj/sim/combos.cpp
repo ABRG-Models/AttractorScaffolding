@@ -3,13 +3,13 @@
  * n.
  */
 #include <iostream>
+#include <map>
 
 #define N_Genes 5 // required for lib.h but unused
 #include "lib.h"
 
 using namespace std;
 
-#define SCSZ 64
 int main (int argc, char** argv)
 {
     if (argc < 3) {
@@ -19,7 +19,7 @@ int main (int argc, char** argv)
 
     int ngenes = atoi(argv[1]);
     int n = (1<<ngenes); // The size of the set; for {0, 1, 2, 3} it's 4
-    int k = atoi(argv[2]); // The size of the subsets; for {0, 1}, {0, 3}, etc... it's 2
+    int l = atoi(argv[2]); // The size of the subsets; for {0, 1}, {0, 3}, etc... it's 2
 
     int zmask = 0;
     if (argc > 3) {
@@ -34,7 +34,7 @@ int main (int argc, char** argv)
     }
 
     // Setup comb for the initial combination
-    for (int i = 0; i < k; ++i) {
+    for (int i = 0; i < l; ++i) {
         comb[i] = i;
     }
 
@@ -45,25 +45,22 @@ int main (int argc, char** argv)
     cout.width(2);
     cout << combo_count++ <<  endl;
 
-    int scores[SCSZ];
-    for (unsigned int i = 0; i<SCSZ; ++i) {
-        scores[i] = 0;
-    }
-    int score = 0;
+    map<float, unsigned int> scores;
+    float score = 0.0f;
     int zs = 0;
-    zs += printc_binary (comb, k, ngenes, zmask, score);
+    zs += printc_binary (comb, l, ngenes, zmask, score);
     scores[score]++;
-    printc (comb, k);
+    printc (comb, l);
 
     // Generate and print all the other combinations
-    while (next_combination(comb, k, n)) {
+    while (next_combination(comb, l, n)) {
         cout << "c";
         cout.fill('0');
         cout.width(2);
         cout << combo_count++ <<  endl;
-        zs += printc_binary (comb, k, ngenes, zmask, score);
-        scores[score]++;
-        printc (comb, k);
+        zs += printc_binary (comb, l, ngenes, zmask, score);
+        scores[score] = scores[score] + 1;
+        printc (comb, l);
         cout << "---\n";
     }
 
@@ -72,9 +69,14 @@ int main (int argc, char** argv)
         cout << "zmask was " << zmask << endl;
     }
 
-    for (unsigned int i = 0; i<SCSZ; ++i) {
-        cout << "Score " << i << " occured " << scores[i] << " times" << endl;
+    auto mi = scores.begin();
+    while (mi != scores.end()) {
+        cout << mi->first << "," << mi->second << endl;
+        ++mi;
     }
+    cout << "Total combinations: " << combo_count << endl;
+    cout << "P(0) = " << (scores[0.0f]/(float)combo_count) << endl;
+    cout << "P(!0) = " << (1.0f - scores[0.0f]/(float)combo_count) << endl;
 
     return 0;
 }
