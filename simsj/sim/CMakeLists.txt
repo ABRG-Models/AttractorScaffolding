@@ -162,3 +162,4 @@ target_link_libraries(h_m facto)
 
 # Combinations
 add_executable(combos combos.cpp)
+target_link_libraries(combos facto)

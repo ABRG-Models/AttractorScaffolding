@@ -8,6 +8,10 @@
 #define N_Genes 5 // required for lib.h but unused
 #include "lib.h"
 
+#include "lmp.h"
+#include <sstream>
+#include <vector>
+
 using namespace std;
 
 int main (int argc, char** argv)
@@ -77,6 +81,39 @@ int main (int argc, char** argv)
     cout << "Total combinations: " << combo_count << endl;
     cout << "P(0) = " << (scores[0.0f]/(float)combo_count) << endl;
     cout << "P(!0) = " << (1.0f - scores[0.0f]/(float)combo_count) << endl;
+
+    // Last thing - compute probability by the theoretical method:
+    Xint half_bitw_ch_l;
+    Xint bitw_ch_l;
+    lmp::InitSetUi(half_bitw_ch_l, 1);
+    lmp::InitSetUi(bitw_ch_l, 1);
+
+    // The x, which I have yet to determine the pattern for.
+    int x = 0.0;
+
+    lmp::BinomialUiUi(half_bitw_ch_l, n>>1, l);
+    cout << (n>>1) << " choose " << l << ": " << half_bitw_ch_l << endl;
+    stringstream ss1;
+    ss1 << half_bitw_ch_l;
+    double half_bitw_ch_l_dbl = 0.0;
+    ss1 >> half_bitw_ch_l_dbl;
+    lmp::BinomialUiUi(bitw_ch_l, n, l);
+    cout << n << " choose " << l << ": " << bitw_ch_l << endl;
+    stringstream ss2;
+    ss2 << bitw_ch_l;
+    double bitw_ch_l_dbl = 0.0;
+    ss2 >> bitw_ch_l_dbl;
+
+    // Compute dependent probabilities
+    vector<double> pzeros;
+    double mustbes = 0.0f;
+    for (unsigned int col = 0; col < ngenes; ++col) {
+        double prob_num = half_bitw_ch_l_dbl - (col*x);
+        double prob_denom = bitw_ch_l_dbl - mustbes;
+        pzeros.push_back (prob_num/prob_denom);
+        cout << "P(ZC"<<(col+1)<<"|!ZC[1->"<<col<<"]) = " << pzeros.back() << endl;
+        mustbes = mustbes - prob_num;
+    }
 
     return 0;
 }
