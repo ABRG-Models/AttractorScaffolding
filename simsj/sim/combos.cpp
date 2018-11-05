@@ -12,6 +12,16 @@
 #include <sstream>
 #include <vector>
 
+double
+xint_to_double (Xint& xi)
+{
+    double d;
+    std::stringstream ss;
+    ss << xi;
+    ss >> d;
+    return d;
+}
+
 using namespace std;
 
 int main (int argc, char** argv)
@@ -90,82 +100,107 @@ int main (int argc, char** argv)
     cout << "Numbers with non-zero score: " << (combo_count - scores[0.0f]) << endl;
     cout << "Sets with zero score given in cols preceding m=" << m << ": " << prec_zcs << endl;
     cout << "Sets with zero score in m=" << m << " (and not zc preceding): " << zcs << endl;
+    cout << "                                             out of " << combo_count - prec_zcs << endl;
     cout << "P(0) = " << (scores[0.0f]/(float)combo_count) << endl;
     cout << "P(!0) = " << (1.0f - scores[0.0f]/(float)combo_count) << endl;
+    cout << "-----------\n\n";
 
-#if 0
-    // Last thing - compute probability by the theoretical method:
-    Xint sets_choose_l;
-    Xint m_choose_i;
-    lmp::InitSetUi(sets_choose_l, 1);
-    lmp::InitSetUi(m_choose_i, 1);
+    cout << "Computing for ngenes: " << ngenes << " and l=" << l << endl;
+    Xint two_to_n_choose_l;
+    Xint two_to_n_over_2_choose_l;
+    lmp::InitSetUi (two_to_n_choose_l, 1);
+    lmp::InitSetUi (two_to_n_over_2_choose_l, 1);
 
-    // The x, which I have yet to determine the pattern for.
-    int x = ngenes - l; // wrong
 
-    lmp::BinomialUiUi(half_bitw_ch_l, n>>1, l);
-    cout << (n>>1) << " choose " << l << ": " << half_bitw_ch_l << endl;
-    stringstream ss1;
-    ss1 << half_bitw_ch_l;
-    double half_bitw_ch_l_dbl = 0.0;
-    ss1 >> half_bitw_ch_l_dbl;
-    lmp::BinomialUiUi(bitw_ch_l, n, l);
-    cout << n << " choose " << l << ": " << bitw_ch_l << endl;
-    stringstream ss2;
-    ss2 << bitw_ch_l;
-    double bitw_ch_l_dbl = 0.0;
-    ss2 >> bitw_ch_l_dbl;
+    double two_to_n_choose_l_d = 0.0;
+    double two_to_n_over_2_choose_l_d = 0.0;
+    double two_to_n_minus_1_over_2i_choose_l_d = 0.0;
+    double two_to_n_over_2i_choose_l_d = 0.0;
+    double m_choose_i_d = 0.0;
+    double numsum_d = 0.0;
+    double denomsum_d = 0.0;
 
-    Xint two_to_m_ch_l;
-    Xint two_to_p_ch_l;
-    lmp::InitSetUi(two_to_m_ch_l, 0);
-    lmp::InitSetUi(two_to_p_ch_l, 0);
-
-    // Compute dependent probabilities
-    vector<double> pzeros;
-    double mustbes = 0.0;
-    double num_offset = 0.0;
     double P0 = 0.0;
-    double PNOT0 = 1.0;
+    double PNOT = 1.0;
 
-    int two_to_m_ch_l_int = 0;
-    int two_to_p_ch_l_int = 0;
+    // Once only:
+    lmp::BinomialUiUi(two_to_n_over_2_choose_l, 1<<(ngenes-1), l);
+    two_to_n_over_2_choose_l_d = xint_to_double (two_to_n_over_2_choose_l);
 
-    for (unsigned int col = 0; col < ngenes; ++col) {
-        cout << "---" << endl;
-        unsigned int m = col; // n cols left
-        unsigned int p = ngenes - col - 1; // n cols right
+    lmp::BinomialUiUi(two_to_n_choose_l, 1<<ngenes, l);
+    two_to_n_choose_l_d = xint_to_double (two_to_n_choose_l);
 
-        lmp::BinomialUiUi (two_to_m_ch_l, (1<<m), l);
-        cout << "(2^m choose l): " << (1<<m) << " choose " << l <<  " = " << two_to_m_ch_l << endl;
-        stringstream ssns;
-        ssns << two_to_m_ch_l;
-        ssns >> two_to_m_ch_l_int;
+    double col0 = two_to_n_over_2_choose_l_d / two_to_n_choose_l_d;
+    PNOT = 1.0-col0;
+    cout << "P(ZC0) = " << col0 << endl;
+    cout << "P(!ZC0) = " << PNOT << endl;
 
-        lmp::BinomialUiUi (two_to_p_ch_l, (1<<p), l);
-        cout << "(2^p choose l): " << (1<<p) << " choose " << l <<  " = " << two_to_p_ch_l << endl;
-        stringstream ssns2;
-        ssns2 << two_to_p_ch_l;
-        ssns2 >> two_to_p_ch_l_int;
+    for (ulong col = 1; col < ngenes; ++col) {
+        numsum_d = 0.0;
+        denomsum_d = 0.0;
+        // Compute numerator sum
+        for (ulong i = 1; i <= col; ++i) {
 
-        num_offset += static_cast<double>(two_to_p_ch_l_int * two_to_m_ch_l_int);
-        cout << "Numerator offset: -" << num_offset << endl;
+            Xint m_choose_i;
+            Xint two_to_n_minus_1_over_2i_choose_l;
+            lmp::InitSetUi (m_choose_i, 1);
+            lmp::InitSetUi (two_to_n_minus_1_over_2i_choose_l, 1);
 
-        double prob_num = half_bitw_ch_l_dbl - num_offset;
-        double prob_denom = bitw_ch_l_dbl + mustbes;
+            lmp::BinomialUiUi(m_choose_i, col, i);
+            m_choose_i_d = xint_to_double (m_choose_i);
+            //cout << col << " choose " << i << " = " << m_choose_i_d << endl; // crash?!
 
-        cout << "numerator: " << prob_num << endl;
-        cout << "denomenator: " << prob_denom << endl;
+            lmp::BinomialUiUi(two_to_n_minus_1_over_2i_choose_l, static_cast<ulong>(1<<(ngenes-1-i)), static_cast<ulong>(l));
 
-        pzeros.push_back (prob_num/prob_denom);
-        cout << "P(ZC"<<(col+1)<<"|!ZC[1->"<<col<<"]) = " << pzeros.back() << endl;
+            //cout << static_cast<ulong>(1<<(ngenes-1-i)) << " choose " << static_cast<ulong>(l) << " = "
+            //     << two_to_n_minus_1_over_2i_choose_l << endl;
+            two_to_n_minus_1_over_2i_choose_l_d = xint_to_double (two_to_n_minus_1_over_2i_choose_l);
+            // +ve for 1, -ve for 2 etc
+            bool negative = (i%2==0);
+            if (negative) {
+                //cout << "numsum_d -= " << m_choose_i_d << " * " << two_to_n_minus_1_over_2i_choose_l_d << endl;
+                numsum_d -= m_choose_i_d * two_to_n_minus_1_over_2i_choose_l_d;
+            } else {
+                //cout << "numsum_d += " << m_choose_i_d << " * " << two_to_n_minus_1_over_2i_choose_l_d << endl;
+                numsum_d += m_choose_i_d * two_to_n_minus_1_over_2i_choose_l_d;
+            }
+            lmp::Clear(m_choose_i);
+            lmp::Clear(two_to_n_minus_1_over_2i_choose_l);
+        }
 
-        mustbes = mustbes - prob_num;
+        // Compute denomenator sum
+        for (ulong i = 1; i <= col; ++i) {
 
-        PNOT0 = PNOT0 * (1.0-pzeros.back());
+            Xint m_choose_i;
+            lmp::InitSetUi (m_choose_i, 1);
+            Xint two_to_n_over_2i_choose_l;
+            lmp::InitSetUi (two_to_n_over_2i_choose_l, 1);
+
+            lmp::BinomialUiUi(m_choose_i, col, i);
+            m_choose_i_d = xint_to_double (m_choose_i);
+            lmp::BinomialUiUi(two_to_n_over_2i_choose_l, static_cast<ulong>(1<<(ngenes-i)), static_cast<ulong>(l));
+            two_to_n_over_2i_choose_l_d = xint_to_double (two_to_n_over_2i_choose_l);
+            // +ve for 1, -ve for 2 etc
+            bool negative = (i%2==0);
+            if (negative) {
+                denomsum_d -= m_choose_i_d * two_to_n_over_2i_choose_l_d;
+                //cout << "denomsum_d -= " << m_choose_i_d << " * " << two_to_n_over_2i_choose_l_d << endl;
+            } else {
+                denomsum_d += m_choose_i_d * two_to_n_over_2i_choose_l_d;
+                //cout << "denomsum_d += " << m_choose_i_d << " * " << two_to_n_over_2i_choose_l_d << endl;
+            }
+            lmp::Clear(m_choose_i);
+            lmp::Clear(two_to_n_over_2i_choose_l);
+        }
+
+        // Compute probability
+        cout << "Probability sum: " << two_to_n_over_2_choose_l_d << " - " <<  numsum_d << " / " << two_to_n_choose_l_d << " - " << denomsum_d << endl;
+        double dd = (two_to_n_over_2_choose_l_d - numsum_d) / (two_to_n_choose_l_d - denomsum_d);
+        cout << "P(ZC"<<(col)<<"|!ZC[1->"<<col<<"]) = " << dd << endl;
+
+        PNOT = PNOT * (1.0-dd);
     }
-    cout << "Calculated P(!0) = " << PNOT0 << endl;
-#endif
 
+    cout << "PNOT0: " << PNOT << endl;
     return 0;
 }
