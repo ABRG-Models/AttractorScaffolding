@@ -404,7 +404,23 @@ $m$ is:
     \end{cases}
 \end{equation}
 
-Compute this for $m=0$ up to $m=n-1$ to be able to compute $P(0)$ and $P(!0)$ using a version of Eq.~\ref{eq:pzero}.
+Compute this for $m=0$ up to $m=n-1$ to be able to compute $P(0)$ and
+$P(!0)$ using a version of Eq.~\ref{eq:pzero}. See
+compute\_pnot0.cpp. Fig.~\ref{fig:p0} shows $P(0)$ and
+$P(!0)$ as a function of $l$ for various values of $n$. Note that this
+is the probability of getting a score of 0 or non-zero in one single
+limit cycle (the paper model multiplies two such probabilities).
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.9\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/p0.png}
+\caption{\emph{Probability of zero/non-zero score.} The probability of
+obtaining a zero or non-zero score for randomly selected limit cycle
+state sets of length $l$ in several systems with $3$--$25$ genes.}
+\label{fig:p0}
+\end{center}
+\end{figure}
+
 
 %
 % BIBLIOGRAPHY
