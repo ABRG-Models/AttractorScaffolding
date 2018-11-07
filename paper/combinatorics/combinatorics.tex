@@ -183,23 +183,25 @@
 
 This is an attempt to describe the scoring system used to determine
 the fitness of the gene system described in the paper ``How self
-organization can guid natural selection''.
+organization can guide natural selection''.
 
-The paper describes a model system (or organism) with $n$ genes, each
-of which contains the code from which a specific protein can be
-created. Each of the $n$ genes has only two `individual gene
-states'; \emph{expressed} (1) or \emph{dormant} (0). In the model, a
-gene which is expressed is being used to create its corresponding
-protein; a gene which is dormant is not.
+The paper describes a model system (representing a part of an
+individual organism) with $n$ genes, each of which contains the code
+from which a specific protein can be created. Each of the $n$ genes
+has only two `individual gene states'; \emph{expressed} (1)
+or \emph{dormant} (0). In the model, a gene which is expressed is
+being used to create its corresponding protein at a fixed rate; a gene
+which is dormant is not.
 
-The overall \emph{gene state} of the organism is given by all of the
-possible individual gene state combinations of its $n$ genes. We can
-write out the possible states in which a 3 gene system can exist; see
+The overall \emph{gene state} of the organism is given by the
+combination of its $n$ individual gene states; as each gene can exist
+in 2 states, the number of gene states is 2$^n$. We can write out the 2$^3$
+possible gene states in which a 3 gene system can exist; see
 Table~\ref{tab:states}.
 
 \begin{table}[h!]
   \begin{center}
-    \caption{The $2^3 = 8$ states of a 3 gene system.}
+    \caption{The 2$^3 = \mathrm{8}$ states of a 3 gene system.}
     \label{tab:states}
     \begin{tabular}{c|c}
       \textbf{State (decimal)} & \textbf{State (binary)} \\
@@ -216,8 +218,8 @@ Table~\ref{tab:states}.
   \end{center}
 \end{table}
 
-In the gene state 0~0~0, none of the three genes are expressed; in the
-state 1~1~1, all three genes are coding for their respective
+In the gene state [0~0~0], none of the three genes are expressed; in the
+state [1~1~1], all three genes are coding for their respective
 proteins. There are 8 gene states ($2^3$) for this 3 gene system and
 $2^n$ states for an $n$ gene system.
 
@@ -236,12 +238,12 @@ limit cycle to a desired target state, $t$. The fitness, $F$ is given
 by:
 %
 \begin{equation}\label{eq:fitness}
-F = \prod_{i=1}^{n} \frac{ \sum_{j=1}^{l} !(s_i \oplus t_i)}{l}
+F = \prod_{i=1}^{n} \frac{ \sum_{j=1}^{l} !(s_{i,j} \oplus t_j)}{l}
 \end{equation}
 
 To understand this, it's best to write out an example in a
 table. Table~\ref{tab:scoring} is a 3 gene example of a limit cycle
-being compared to a target state $t$ = 1~0~1.
+being compared to a target state $t$ = [1~0~1].
 
 \begin{table}[h!]
   \begin{center}
@@ -278,8 +280,8 @@ t_j)$.
 I'll use the following notation:
 
 $P(ZC_0)$ is the probability of having an all-zero column 0 (counting
-columns up from 0). $P(!ZC_0) is the probability of \emph{not} having
-all zeros in column 0. $P(ZC_1|!ZC_0) is the probability of having all
+columns up from 0). $P(!ZC_0)$ is the probability of \emph{not} having
+all zeros in column 0. $P(ZC_1\;|\;!ZC_0)$ is the probability of having all
 zeros in column 1 given that there are not all zeros in column 0.
 
 For an $n=3$ gene system, the probability of a zero score, $P(0)$, is:
@@ -298,7 +300,7 @@ determine which of those have all zeros in the first column. Note that
 it's not actually the \emph{states} in the limit cycle which give the
 score, but the results of XNORing the states with the target. However,
 there are $2^n$ unique states $s_i$ for $n$ genes, and also exactly
-$2^n$ unique results of $!(t \oplus s_i)$, so the probabilities can be
+$2^n$ unique results of $!(s_i \oplus t)$, so the probabilities can be
 determined by considering the number of possible sets of states in the
 limit cycle.
 
@@ -323,7 +325,8 @@ there are 6 state sets out of 28 which have all zeros in the zeroeth
 column. In general,
 
 \begin{equation}
-\mathrm{The~number~of~state~sets~with~all~zeros~in~one~column} = \binom{2^n/2}{l}
+\mathrm{The~number~of~state~sets~with~all~zeros~in~one~column}
+= \binom{2^n/2}{l} = \binom{2^{n-1}}{l}
 \end{equation}
 
 
@@ -366,33 +369,37 @@ column. In general,
 So, finally, we can write down the probability of having all zeros in
 the zeroeth column for $n$ genes forming a limit cycle of length $l$ as:
 \begin{equation}
-P(ZC_0) = \frac{\binom{2^n/2}{l}}{\binom{2^n}{l}}
+P(ZC_0) = \frac{\binom{2^{n-1}}{l}}{\binom{2^n}{l}}
+\end{equation}
+Note also that in the absence of information about the state of any
+other columns,
+\begin{equation}
+P(ZC_0) = P(ZC_1) = P(ZC_m)
 \end{equation}
 
 \subsection{The probability of there being all zeros in subsequent columns}
 
-The probability of there being all zeros in the \emph{first}
-column, \emph{given that} there are \emph{not} all zeros in the
-zeroeth column is a problem of dependent probability. Refer to
+The probability of there being all zeros in
+\emph{column 1}, given that there are \emph{not} all zeros in
+column 0 is a problem of dependent probability. Refer to
 Table~\ref{tab:n3l2}; ss0, ss3, ss4, ss9, ss10 and ss22 have all zeros
-in the second column. The probability of finding all zeros in the
-first column depends on whether or not all zeros have been found in
-the zeroeth column. If we are given that the zeroeth column does not
-contain all zeros, then there are only 5 possible state sets that can
-fulfil this requirement; ss0 has zeros in the first column \emph{and
-also in the zeroth}. The states that we must be drawing from cannot
-include those for which there are all zeros in the zeroeth column. The
-probability is therefore:
+in column 1. The probability of finding all zeros in column 1 depends
+on whether or not all zeros have been found in column 0. If we are
+given that column 0 does not contain all zeros, then there are only 5
+possible state sets that can fulfil this requirement; ss0 has zeros in
+column 1 \emph{and also in column 0}. The states that we must be
+drawing from cannot include those for which there are all zeros in
+column 0. The probability is therefore:
 
 \begin{equation}
-P(ZC_1|!ZC_0) = \frac{6 -1}{28-6} = \frac{5}{22}
+P(ZC_1\;|\;!ZC_0) = \frac{6 -1}{28-6} = \frac{5}{22}
 \end{equation}
 
 A general expression for the probability of there being all zeros in a
 column $m$, given that there are NOT all zeros in columns preceding
 $m$ is:
 
-\begin{equation}
+\begin{equation} \label{eq:pzcm}
   P(ZC_m|!ZC_{0\rightarrow[m-1]}) = \begin{cases}
     \frac
         {\binom{2^n/2}{l} }
@@ -404,12 +411,15 @@ $m$ is:
     \end{cases}
 \end{equation}
 
-Compute this for $m=0$ up to $m=n-1$ to be able to compute $P(0)$ and
-$P(!0)$ using a version of Eq.~\ref{eq:pzero}. See
-compute\_pnot0.cpp. Fig.~\ref{fig:p0} shows $P(0)$ and
-$P(!0)$ as a function of $l$ for various values of $n$. Note that this
-is the probability of getting a score of 0 or non-zero in one single
-limit cycle (the paper model multiplies two such probabilities).
+The sums in the expression for $m>0$ account for the state sets in
+which there are multiple columns contributing a zero to the score.
+
+Compute Eq.~\ref{eq:pzcm} for $m=0$ up to $m=n-1$ to be able to
+compute $P(0)$ and $P(!0)$ using a version of Eq.~\ref{eq:pzero}. See
+compute\_pnot0.cpp. Fig.~\ref{fig:p0} shows $P(0)$ and $P(!0)$ as a
+function of $l$ for various values of $n$. Note that this is the
+probability of getting a score of 0 or non-zero in one single limit
+cycle (the paper model multiplies two such probabilities).
 
 \begin{figure}
 \begin{center}
