@@ -91,10 +91,12 @@ int main (int argc, char** argv)
     // floating point fitness value. Record this in a vector of
     // vectors, with one vector for each evolution towards F=1
     vector<vector<pair<unsigned int, float> > > fitness;
-    vector<array<genosect_t, N_Genes> > fitgenomes;
+    vector<vector<array<genosect_t, N_Genes> > > fitgenomes;
 
     vector<pair<unsigned int, float> > fv0;
     fitness.push_back (fv0);
+    vector<array<genosect_t, N_Genes> > ag0;
+    fitgenomes.push_back (ag0);
 #endif
 
     // Holds the genome and a copy of it.
@@ -144,11 +146,13 @@ int main (int argc, char** argv)
                 // Record _existing_ fitness f, not new fitness.
 #ifdef RECORD_ALL_FITNESS
                 fitness.back().push_back (make_pair(gen, a));
+                fitgenomes.back().push_back (refg);
 #endif
             } else {
 #ifdef RECORD_ALL_FITNESS
                 // Record new fitness, even if a==b - this is the "drift case".
                 fitness.back().push_back (make_pair(gen, b));
+                fitgenomes.back().push_back (newg);
 #endif
                 // Copy new fitness to ref
                 a = b;
@@ -156,14 +160,26 @@ int main (int argc, char** argv)
                 copy_genome (newg, refg);
             }
         }
+
 #ifdef RECORD_ALL_FITNESS
-        fitgenomes.push_back (refg);
-        vector<pair<unsigned int, float> > fv;
-        fitness.push_back (fv);
+        fitness.back().push_back (make_pair(gen, a));
+        fitgenomes.back().push_back (refg);
+        if (gen < N_Generations) {
+            vector<pair<unsigned int, float> > fv;
+            fitness.push_back (fv);
+            vector<array<genosect_t, N_Genes> > ag;
+            fitgenomes.push_back (ag);
+        }
+        // Plus also analyse the basins of attraction and save this
+        // information. The most compact way to save this information
+        // is simply to save the genome.
 #endif
     }
 
     LOG ("Generations size: " << generations.size());
+#ifdef RECORD_ALL_FITNESS
+    LOG ("fitness and fitgenomes sizes: " << fitness.size() << "," << fitgenomes.size());
+#endif
 
     // Save data to file.
     ofstream f;
@@ -195,31 +211,61 @@ int main (int argc, char** argv)
         maxevol = ((fs = fitness[i].size()) > maxevol) ? fs : maxevol;
     }
 
-    for (unsigned int i = 0; i < fitness.size(); ++i) {
+    // Loop through all but the last entry in fitness/fitgenome - these are most likely incomplete.
+    for (unsigned int i = 0; i < (fitness.size()-1); ++i) {
         if (!fitness[i].empty()) {
             // Open file
             stringstream pathss2;
             pathss2 << "./data/evolve_withf_";
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
             pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
-                    << "_genome_" << genome_id(fitgenomes[i]) << ".csv";
+                    << "_genome_" << genome_id(fitgenomes[i].back()) << ".csv";
             f.open (pathss2.str().c_str());
             if (!f.is_open()) {
                 cerr << "Error opening " << pathss2.str() << endl;
                 return 1;
             }
 
-            // Output here
-            int lendiff = maxevol - fitness[i].size();
-            for (int counter = 1-maxevol; counter <= lendiff-maxevol; ++counter) {
-                f << counter << ",0.0" << endl;
-            }
-            int lastgen = 0;
+            // Output here. First we add the "pre-padding" so that all
+            // fitness traces stored in this file have the same
+            // length.
 
+            // First line
+            int counter = 1-maxevol;
+            f << counter << ",0.0";
+            f << "," << genome2str(fitgenomes[i][0]);
+            f << endl;
+
+            // Set up stringstream with the last line before the genome changes
+            stringstream old_genome_ss;
+            int lendiff = maxevol - fitness[i].size();
+            counter = lendiff-maxevol;
+            old_genome_ss << counter << ",0.0";
+            old_genome_ss << "," << genome2str(fitgenomes[i][0]);
+            old_genome_ss << endl;
+
+            int lastgen = 0;
+            float last_fitness = 0.0f;
+            // Now the actual data.
             lastgen = static_cast<int>(fitness[i].back().first);
             for (unsigned int j = 0; j < fitness[i].size(); ++j) {
-                f << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second << endl;
+                if (fitness[i][j].second > last_fitness) {
+                    f << old_genome_ss.str();
+                    // New genome:
+                    f << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second;
+                    f << "," << genome2str(fitgenomes[i][j]);
+                    f << endl;
+                    last_fitness = fitness[i][j].second;
+                }
+
+                old_genome_ss.str("");
+                old_genome_ss.clear();
+                old_genome_ss << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second;
+                old_genome_ss << "," << genome2str(fitgenomes[i][j]);
+                old_genome_ss << endl;
             }
+            //LOG ("Final old_genome: " << old_genome_ss.str());
+            //f << old_genome_ss.str();
 
             f.close();
         }
