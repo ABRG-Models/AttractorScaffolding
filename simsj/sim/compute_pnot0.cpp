@@ -75,7 +75,7 @@ int main (int argc, char** argv)
         //cout << "P(ZC0) = " << col0 << endl;
         //cout << "P(!ZC0) = " << pnot0 << endl;
 
-        for (ulong col = 1; col < ngenes; ++col) {
+        for (ulong col = 1; col < (ulong)ngenes; ++col) {
             numsum_d = 0.0;
             denomsum_d = 0.0;
             // Compute numerator sum

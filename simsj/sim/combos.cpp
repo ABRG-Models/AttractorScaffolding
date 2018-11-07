@@ -120,8 +120,7 @@ int main (int argc, char** argv)
     double numsum_d = 0.0;
     double denomsum_d = 0.0;
 
-    double P0 = 0.0;
-    double PNOT = 1.0;
+    double pnot = 1.0;
 
     // Once only:
     lmp::BinomialUiUi(two_to_n_over_2_choose_l, 1<<(ngenes-1), l);
@@ -131,11 +130,11 @@ int main (int argc, char** argv)
     two_to_n_choose_l_d = xint_to_double (two_to_n_choose_l);
 
     double col0 = two_to_n_over_2_choose_l_d / two_to_n_choose_l_d;
-    PNOT = 1.0-col0;
+    pnot = 1.0-col0;
     cout << "P(ZC0) = " << col0 << endl;
-    cout << "P(!ZC0) = " << PNOT << endl;
+    cout << "P(!ZC0) = " << pnot << endl;
 
-    for (ulong col = 1; col < ngenes; ++col) {
+    for (ulong col = 1; col < (ulong)ngenes; ++col) {
         numsum_d = 0.0;
         denomsum_d = 0.0;
         // Compute numerator sum
@@ -198,9 +197,9 @@ int main (int argc, char** argv)
         double dd = (two_to_n_over_2_choose_l_d - numsum_d) / (two_to_n_choose_l_d - denomsum_d);
         cout << "P(ZC"<<(col)<<"|!ZC[1->"<<col<<"]) = " << dd << endl;
 
-        PNOT = PNOT * (1.0-dd);
+        pnot = pnot * (1.0-dd);
     }
 
-    cout << "PNOT0: " << PNOT << endl;
+    cout << "pnot0: " << pnot << endl;
     return 0;
 }

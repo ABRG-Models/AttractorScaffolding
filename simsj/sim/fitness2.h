@@ -61,8 +61,8 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     // What kind of limit does the network starting with the initial
     // anterior state reach? Also, the same information for the
     // posterior initial state.
-    endpoint_t end_ant = ENDPOINT_UNKNOWN;
-    endpoint_t end_pos = ENDPOINT_UNKNOWN;
+    //endpoint_t end_ant = ENDPOINT_UNKNOWN;
+    //endpoint_t end_pos = ENDPOINT_UNKNOWN;
 
     // For computing the distance from the target state to the limit
     // of the basin of attraction
@@ -83,18 +83,18 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
 #endif
 
     // To record the actual state reached at a fixed point attractor
-    state_t end_ant_state = state_t_unset;
-    state_t end_pos_state = state_t_unset;
+    //state_t end_ant_state = state_t_unset;
+    //state_t end_pos_state = state_t_unset;
 
     // Flag to mark if the target anterior state is found on a limit
     // cycle reached from the anterior initial state.
     bool targ_ant_on_ant_limit = false;
     // Flag to mark if the target posterior state is found on a limit
     // cycle reached from the anterior initial state.
-    bool targ_pos_on_ant_limit = false;
+    //bool targ_pos_on_ant_limit = false;
     // Flag to mark if the target anterior state is found on a limit
     // cycle reached from the posterior initial state.
-    bool targ_ant_on_pos_limit = false;
+    //bool targ_ant_on_pos_limit = false;
     // Flag to mark if the target posterior state is found on a limit
     // cycle reached from the posterior initial state.
     bool targ_pos_on_pos_limit = false;
@@ -138,8 +138,8 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
             if (state_ant == state_ant_last) {
 
                 DBGF ("Point attractor");
-                end_ant = ENDPOINT_POINT;
-                end_ant_state = state_ant;
+                //end_ant = ENDPOINT_POINT;
+                //end_ant_state = state_ant;
 
                 if (state_ant == target_ant) {
                     targ_ant_on_ant_limit = true;
@@ -165,7 +165,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
             } else {
 
                 DBGF ("Limit cycle");
-                end_ant = ENDPOINT_LIMIT;
+                //end_ant = ENDPOINT_LIMIT;
 
                 // Determine size of limit cycle (stored in
                 // dist_to_ant) by going around it once more
@@ -179,7 +179,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
                         DBGF ("Ant LC contains ant target");
                     }
                     if (state_ant == target_pos) {
-                        targ_pos_on_ant_limit = true;
+                        //targ_pos_on_ant_limit = true;
                         DBGF ("Ant LC contains pos target");
                         // maybe: dist_to_ant--;
                     }
@@ -239,8 +239,8 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
             if (state_pos == state_pos_last) {
 
                 DBGF ("Point attractor");
-                end_pos = ENDPOINT_POINT;
-                end_pos_state = state_pos;
+                //end_pos = ENDPOINT_POINT;
+                //end_pos_state = state_pos;
 
                 if (state_pos == target_pos) {
                     targ_pos_on_pos_limit = true;
@@ -267,7 +267,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
             } else {
 
                 DBGF ("Limit cycle");
-                end_pos = ENDPOINT_LIMIT;
+                //end_pos = ENDPOINT_LIMIT;
 
                 // Determine size of limit cycle (stored in
                 // dist_to_pos) by going around it once more
@@ -281,7 +281,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
                         DBGF ("Pos LC contains pos target");
                     }
                     if (state_pos == target_ant) {
-                        targ_ant_on_pos_limit = true;
+                        //targ_ant_on_pos_limit = true;
                         DBGF ("Pos LC contains ant target");
                         // maybe: dist_to_pos--;
                     }

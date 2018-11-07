@@ -733,12 +733,12 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     int rtn = 0;
     int zeros = 0;
     float cols[ng];
-    for (unsigned int c = 0; c < ng; ++c) {
+    for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
         cols[c] = 0;
     }
 
     for (int s = 0; s < l; ++s) {
-        for (unsigned int c = 0; c < ng; ++c) {
+        for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
             cols[c] += (comb[s] & (1<<c)) >> c;
             //cout << "i=" << i << "; cols[" << c << "] = " << cols[c] << endl;
         }
@@ -753,7 +753,7 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
         //cout << "Had all zeros in col(s): " << uint_str(show_zeros_mask, ng) << " for states: | ";
         cout << "ZCol," << uint_str(show_zeros_mask, ng) << ",";
         for (int s = 0; s < l; ++s) {
-            for (unsigned int c = 0; c < ng; ++c) {
+            for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
                 cout << ((comb[s] & (1<<c)) >> c);
             }
             cout << ",";
@@ -766,15 +766,15 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     // in any column up to m.
     score = 1.0f;
     bool incremented_prec_zcs = false;
-    for (unsigned int c = 0; c < ng; ++c) {
+    for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
         cols[c] = cols[c]/(float)l;
         //cout << "score = " << score << " * " << cols[c] << endl;
         score = score * cols[c];
-        if (c < m && cols[c] == 0.0f && !incremented_prec_zcs) {
+        if (c < (unsigned int)m && cols[c] == 0.0f && !incremented_prec_zcs) {
             prec_zcs++;
             incremented_prec_zcs = true;
         }
-        if (c == m && cols[c] == 0.0f && !incremented_prec_zcs) {
+        if (c == (unsigned int)m && cols[c] == 0.0f && !incremented_prec_zcs) {
             zcs++;
         }
     }
