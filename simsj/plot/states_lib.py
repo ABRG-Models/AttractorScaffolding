@@ -46,7 +46,20 @@ def tree (base, graph, cycle, bias, visits):
         yco = graph[c][2][0]*np.sin(np.radians(mid)) + bias
         graph[c][2][3] = xco
         graph[c][2][4] = yco
-        plt.plot(xco,yco,'o',markersize=mrkr1, color=(0,0,0))
+        colo = plt.cm.hsv(c/32)
+        if c%2==0:
+            colo2 = plt.cm.flag(c/32.0)
+        else:
+            colo2 = plt.cm.prism(c/32.0)
+        plt.plot(xco, yco, 'o', markersize=mrkr1, color=colo)
+        if c==21 or c==10:
+            selmarker = 'v'
+        elif c==16 or c==0:
+            selmarker = '*'
+        else:
+            selmarker = 'o'
+        plt.plot (xco, yco, marker=selmarker, markersize=mrkr1-4, color=colo2)
+
         plt.arrow(xco, yco, graph[base][2][3]-xco, graph[base][2][4]-yco, overhang=0, length_includes_head=True, head_width=0.15, head_length=0.5, fc=greycol, ec=greycol)
 
     for z in parents:
@@ -123,7 +136,20 @@ def plot_states (net, ax):
             mid = (graph[x][2][1] + graph[x][2][2])/2.
             graph[x][2][3] = graph[x][2][0]*np.cos(np.radians(mid))
             graph[x][2][4] = graph[x][2][0]*np.sin(np.radians(mid)) + bias
-            plt.plot(graph[x][2][3], graph[x][2][4],'o', color=(0,0,0), markersize=mrkr1)
+            colo = plt.cm.hsv(x/32)
+            if x%2==0:
+                colo2 = plt.cm.flag(x/32.0)
+            else:
+                colo2 = plt.cm.prism(x/32.0)
+            #plt.plot(graph[x][2][3], graph[x][2][4], 'o', color=(0,0,0), markersize=mrkr1)
+            plt.plot(graph[x][2][3], graph[x][2][4], 'o', color=colo, markersize=mrkr1)
+            if x==21 or x==10:
+                selmarker = 'v'
+            elif x==16 or x==0:
+                selmarker = '*'
+            else:
+                selmarker = 'o'
+            plt.plot(graph[x][2][3], graph[x][2][4], marker=selmarker, color=colo2, markersize=mrkr1-4)
 
         for x in base:
             tree (x, graph, base, bias, visits)
@@ -141,12 +167,10 @@ def plot_states (net, ax):
         if node[2][3] > max_x:
             max_x = node[2][3]
 
-    yelcol = (1.0,1.0,0.0)
-    cycol = (0.0,1.0,1.0)
-    plt.plot(graph[21][2][3], graph[21][2][4],'o',color='r', markersize=mrkr1-2) # final ant
-    plt.plot(graph[10][2][3], graph[10][2][4],'o',color=cycol, markersize=mrkr1-2) # final post
-    plt.plot(graph[16][2][3], graph[16][2][4],'*',color='r', markersize=mrkr1) # initial ant
-    plt.plot(graph[0][2][3], graph[0][2][4],'*',color=cycol, markersize=mrkr1) # initial post
+    #plt.plot(graph[21][2][3], graph[21][2][4],'v',color='k', markersize=mrkr1-2) # final ant
+    #plt.plot(graph[10][2][3], graph[10][2][4],'v',color='w', markersize=mrkr1-2) # final post
+    #plt.plot(graph[16][2][3], graph[16][2][4],'*',color='k', markersize=mrkr1-2) # initial ant
+    #plt.plot(graph[0][2][3], graph[0][2][4],'*',color='w', markersize=mrkr1-2) # initial post
 
     # save
     ymin,ymax = plt.ylim()
