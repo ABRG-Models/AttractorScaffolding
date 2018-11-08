@@ -9,6 +9,8 @@
 #include <set>
 #include <vector>
 
+#include "endpoint.h"
+
 using namespace std;
 
 /*!
@@ -92,30 +94,30 @@ public:
     /*!
      * An "output for debugging" method
      */
-    void debug (BasinOfAttraction& bi) {
+    void debug (void) const {
         cout << "----------------------Basin-output-begin---------------------------" << endl;
         cout << "Basin of attraction with the attractor:" << endl;
-        set<state_t>::iterator si = bi.limitCycle.begin();
-        while (si != bi.limitCycle.end()) {
+        set<state_t>::const_iterator si = this->limitCycle.begin();
+        while (si != this->limitCycle.end()) {
             cout << "  " << state_str (*si) << endl;
             si++;
         }
         cout << "Branches:" << endl;
-        map<state_t, StateNode>::const_iterator mi = bi.nodes.begin();
-        while (mi != bi.nodes.end()) {
+        map<state_t, StateNode>::const_iterator mi = this->nodes.begin();
+        while (mi != this->nodes.end()) {
             if (mi->second.parents.empty()) {
                 // Then this is an "outer node" on the basin. Show
                 // its progress to the attractor
                 state_t state = mi->first;
                 StateNode sn = mi->second;
-                while (bi.limitCycle.count(state) == 0) {
+                while (this->limitCycle.count(state) == 0) {
                     cout << " --> " << state_str (state);
                     state = sn.child;
-                    sn = bi.nodes.at (state);
+                    sn = this->nodes.at (state);
                 }
-                set<state_t>::const_iterator si = bi.limitCycle.begin();
+                set<state_t>::const_iterator si = this->limitCycle.begin();
                 cout << " -->* ";
-                while (si != bi.limitCycle.end()) {
+                while (si != this->limitCycle.end()) {
                     cout << state_str (*si) << ":";
                     ++si;
                 }
@@ -126,20 +128,41 @@ public:
         }
         cout << "Contains: ant initial,  ant target, pos initial,  pos target?" << endl;
         cout << "          ";
-        cout << (bi.flags & CONTAINS_INITIAL_ANT ? "Yes          ":"No           ");
-        cout << (bi.flags & CONTAINS_TARGET_ANT ?  "Yes          ":"No           ");
-        cout << (bi.flags & CONTAINS_INITIAL_POS ? "Yes          ":"No           ");
-        cout << (bi.flags & CONTAINS_TARGET_POS ?  "Yes          ":"No           ") << endl;
-        if ((bi.flags & (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)) == (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)
-            && (bi.flags & (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)) != 0) {
-            cout << "Distance from ant target to attractor: " << bi.dist_to_ant << endl;
+        cout << (this->flags & CONTAINS_INITIAL_ANT ? "Yes          ":"No           ");
+        cout << (this->flags & CONTAINS_TARGET_ANT ?  "Yes          ":"No           ");
+        cout << (this->flags & CONTAINS_INITIAL_POS ? "Yes          ":"No           ");
+        cout << (this->flags & CONTAINS_TARGET_POS ?  "Yes          ":"No           ") << endl;
+        if ((this->flags & (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)) == (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)
+            && (this->flags & (CONTAINS_TARGET_ANT | CONTAINS_INITIAL_ANT)) != 0) {
+            cout << "Distance from ant target to attractor: " << this->dist_to_ant << endl;
         }
-        if ((bi.flags & (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)) == (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)
-            && (bi.flags & (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)) != 0) {
-            cout << "Distance from pos target to attractor: " << bi.dist_to_pos << endl;
+        if ((this->flags & (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)) == (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)
+            && (this->flags & (CONTAINS_TARGET_POS | CONTAINS_INITIAL_POS)) != 0) {
+            cout << "Distance from pos target to attractor: " << this->dist_to_pos << endl;
         }
-        cout << "Nodes in basin:" << bi.nodes.size() << endl;
+        cout << "Nodes in basin:" << this->nodes.size() << endl;
+        cout << "Transitions in basin:" << endl;
+        mi = this->nodes.begin();
+        while (mi != this->nodes.end()) {
+            cout << state_str(mi->second.id) << " --> " << state_str(mi->second.child) << endl;
+            ++mi;
+        }
         cout << "-----------------------Basin-output-end----------------------------" << endl;
+    }
+
+    /*!
+     * Return the set of state to state transitions in this basin of attraction.
+     */
+    set<unsigned int> getTransitionSet (void) const {
+        set<unsigned int> transitions;
+         map<state_t, StateNode>::const_iterator mi = this->nodes.begin();
+        while (mi != this->nodes.end()) {
+            unsigned int trans = ((unsigned int)mi->second.id << 16) | (unsigned int)mi->second.child;
+            DBG2 ("Inserting transition 0x" << hex << trans << dec);
+            transitions.insert (trans);
+            ++mi;
+        }
+        return transitions;
     }
 
     /*!
@@ -177,20 +200,11 @@ public:
 
 /*!
  * Find all the basins of attraction for the given genome.
- *
- * Care: exit_early_if_possible is specific to fitness function
- * 0. Best left false. It does speed ff0 up a bit.
- *
- * Return -1 if the function exits early because it has detected that
- * fitness will be zero.
  */
-int
+void
 find_basins_of_attraction (array<genosect_t, N_Genes>& genome,
-                           vector<BasinOfAttraction>& basins,
-                           bool exit_early_if_possible = false)
+                           vector<BasinOfAttraction>& basins)
 {
-    int rtn = 0;
-
     for (state_t s = 0; s < (1<<N_Genes); ++s) {
 
         // First check if s is in any of the basins we already computed.
@@ -217,7 +231,7 @@ find_basins_of_attraction (array<genosect_t, N_Genes>& genome,
         unsigned int saw_flags = 0x0;
 
         for (;;) {
-            // For the current state, st compute what the next state will be.
+            // For the current state, st, compute what the next state will be.
             next_st = st;
             compute_next (genome, next_st);
 
@@ -225,18 +239,8 @@ find_basins_of_attraction (array<genosect_t, N_Genes>& genome,
             // in this sub-section of the basin of attraction.
             if (st == target_ant) {
                 saw_flags |= CONTAINS_TARGET_ANT;
-                if (saw_flags & CONTAINS_TARGET_POS) {
-                    if (exit_early_if_possible) {
-                        return -1;
-                    }
-                }
             } else if (st == target_pos) {
                 saw_flags |= CONTAINS_TARGET_POS;
-                if (saw_flags & CONTAINS_TARGET_ANT) {
-                    if (exit_early_if_possible) {
-                        return -1;
-                    }
-                }
             }
 
             // Create state node
@@ -307,8 +311,49 @@ find_basins_of_attraction (array<genosect_t, N_Genes>& genome,
             basins.push_back (basin);
         }
     }
-
-    return rtn;
 }
+
+/*!
+ * Container class to hold several basins of attraction for a
+ * particular genome and some information that can be obtained from
+ * them.
+ */
+class AllBasins
+{
+public:
+    AllBasins (const array<genosect_t, N_Genes>& g) {
+        this->genome = g;
+        find_basins_of_attraction (this->genome, this->basins);
+        vector<BasinOfAttraction>::const_iterator i = this->basins.begin();
+        while (i != basins.end()) {
+            set<unsigned int> tset = i->getTransitionSet();
+            this->transitions.insert(tset.begin(), tset.end());
+            this->attractorSizes.push_back(i->limitCycle.size());
+            ++i;
+        }
+    }
+    ~AllBasins() {}
+
+    //! The genome for which this was determined
+    array<genosect_t, N_Genes> genome;
+
+    //! All the basins of attraction.
+    vector<BasinOfAttraction> basins;
+
+    unsigned int getNumBasins (void) {
+        return this->basins.size();
+    }
+
+    /*!
+     * Holds a list of the sizes of the attractor limit cycles.
+     */
+    vector<unsigned int> attractorSizes;
+
+    /*!
+     * Holds all the transitions in all the basins. Should have size
+     * exactly 2^N_Genes. Will break for N_Genes > 16.
+     */
+    set<unsigned int> transitions;
+};
 
 #endif // __BASINS_H__

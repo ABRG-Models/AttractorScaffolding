@@ -167,3 +167,6 @@ target_link_libraries(combos facto)
 # Computing Probability of non-zero score by fast, binomials method:
 add_executable(compute_pnot0 compute_pnot0.cpp)
 target_link_libraries(compute_pnot0 facto)
+
+# Analysing the genome and the basins of attraction that they create.
+add_executable(analyse_genome analyse_genome.cpp)

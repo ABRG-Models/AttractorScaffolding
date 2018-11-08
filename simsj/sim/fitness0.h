@@ -49,11 +49,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     // exist for the given genome, starting from every possible start
     // point.
     vector<BasinOfAttraction> basins;
-    int brtn = find_basins_of_attraction (genome, basins, true); // true to exit early from finding basins if F will be 0
-    if (brtn == -1) {
-        // In find_basins_of_attraction it was determined that the fitness will be 0.
-        return fitness;
-    }
+    find_basins_of_attraction (genome, basins);
 
     // Now we have the basins, check through them to see which contain
     // the target states, and if so, work out the distance from the
@@ -146,7 +142,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
         int bcount_ = 0;
         while (bi != basins.end()) {
             LOG ("Basin " << bcount_++);
-            bi->debug (*bi);
+            bi->debug();
             ++bi;
         }
         LOG ("======================================================");
