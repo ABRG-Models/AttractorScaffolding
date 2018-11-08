@@ -77,12 +77,12 @@ f1.plot (A[:,0]/10000,A[:,1],'-',linewidth=5, color=col.navy)
 f1.set_xlim([-1, 0.01])
 f1.set_xlabel('10K generations');
 f1.set_ylabel('fitness');
-F1.tight_layout()
+#F1.tight_layout()
 plt.savefig ('evolution_boolean_ff4.png')
 #plt.show()
 
 # Set a default fontsize for matplotlib:
-fs=14
+fs=12
 fnt = {'family' : 'DejaVu Sans',
        'weight' : 'regular',
        'size'   : fs}
@@ -91,18 +91,24 @@ matplotlib.rc('font', **fnt)
 # For the specialfile, also show its states, using Dan's code.
 import states_lib as sl
 
-nc = 0
-gc = 0
-last_fitness = -1
-F2 = plt.figure (figsize=(25,15))
-for net in nets:
-    if (A[nc,1] > last_fitness):
+fcount = 0
+for f in files:
+    if fcount > 0:
+        break
+    A, nets = readDataset(f)
+    nc = 0
+    gc = 0
+    last_fitness = -1
+    F2 = plt.figure (figsize=(25,15))
+    for net in nets:
+        if (A[nc,1] > last_fitness):
+            last_fitness = A[nc,1]
+            f2 = F2.add_subplot (4,6,gc+1)
+            sl.plot_states (net, f2.axes)
+            f2.axes.set_title('{0}: f={1:.4f}'.format(gc, A[nc,1]))
+            gc = gc + 1
         last_fitness = A[nc,1]
-        f2 = F2.add_subplot (4,6,gc+1)
-        sl.plot_states (net, f2.axes)
-        f2.axes.set_title('{0}: f={1:.4f}'.format(gc, A[nc,1]))
-        gc = gc + 1
-    last_fitness = A[nc,1]
-    nc = nc + 1
+        nc = nc + 1
+    fcount = fcount + 1
 
 plt.show()
