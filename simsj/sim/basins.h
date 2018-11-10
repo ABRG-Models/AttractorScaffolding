@@ -321,8 +321,17 @@ find_basins_of_attraction (array<genosect_t, N_Genes>& genome,
 class AllBasins
 {
 public:
+    AllBasins() {}
     AllBasins (const array<genosect_t, N_Genes>& g) {
+        this->update (g);
+    }
+    ~AllBasins() {}
+
+    void update (const array<genosect_t, N_Genes>& g) {
         this->genome = g;
+        this->basins.clear();
+        this->attractorSizes.clear();
+        this->transitions.clear();
         find_basins_of_attraction (this->genome, this->basins);
         vector<BasinOfAttraction>::const_iterator i = this->basins.begin();
         while (i != basins.end()) {
@@ -332,7 +341,6 @@ public:
             ++i;
         }
     }
-    ~AllBasins() {}
 
     //! The genome for which this was determined
     array<genosect_t, N_Genes> genome;
@@ -349,11 +357,55 @@ public:
      */
     vector<unsigned int> attractorSizes;
 
+    double meanAttractorLength (void) {
+        unsigned int sum = 0.0;
+        for (unsigned int i : this->attractorSizes) {
+            sum += i;
+        }
+        return (static_cast<double>(sum)/static_cast<double>(attractorSizes.size()));
+    }
+
+    unsigned int maxAttractorLength (void) {
+        unsigned int max = 0;
+        for (unsigned int i : this->attractorSizes) {
+            max = i > max ? i : max;
+        }
+        return max;
+    }
+
     /*!
      * Holds all the transitions in all the basins. Should have size
      * exactly 2^N_Genes. Will break for N_Genes > 16.
      */
     set<unsigned int> transitions;
+};
+
+/*!
+ * A class to hold information about one network and its comparison
+ * with any other networks.
+ */
+class NetInfo
+{
+public:
+    NetInfo() {}
+    NetInfo(AllBasins& ab_, unsigned int gen, double fitn) {
+        this->ab = ab_;
+        this->generation = gen;
+        this->fitness = fitn;
+    }
+    void update (void) {
+    }
+    ~NetInfo() {}
+    //! Contains the genome, and information about the attractors in the network.
+    AllBasins ab;
+    //! The evolutionary generation at which this network evolved.
+    unsigned int generation;
+    //! The fitness of the network
+    double fitness = 0.0;
+    //! How much the fitness changed since the last genome
+    double deltaF = 0.0;
+    //! How many transitions (in ab) have changed since the last network.
+    unsigned int numChangedTransitions = 0;
 };
 
 #endif // __BASINS_H__

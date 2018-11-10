@@ -26,6 +26,14 @@ target_compile_definitions(drift_ff1 PUBLIC USE_FITNESS_1)
 add_executable(drift_ff4 drift.cpp)
 target_compile_definitions(drift_ff4 PUBLIC USE_FITNESS_4)
 
+add_executable(drift_withf_ff4 drift.cpp)
+target_compile_definitions(drift_withf_ff4 PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+
+# Null model - repeatedly generate random genomes
+add_executable(null_withf_ff4 nullmodel.cpp)
+target_compile_definitions(null_withf_ff4 PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+
+
 # This is essentially a debugging program, which sets up a random
 # genome, and evolves it one generation only.
 add_executable(evolve_onegen_ff0 evolve_onegen.cpp)

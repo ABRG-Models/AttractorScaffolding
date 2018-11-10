@@ -46,6 +46,11 @@ using namespace std;
 // Common code
 #include "lib.h"
 
+#ifdef RECORD_ALL_FITNESS
+# include "basins.h"
+# include <algorithm>
+#endif
+
 // The fitness function used here
 #include "fitness.h"
 
@@ -90,13 +95,9 @@ int main (int argc, char** argv)
     // (abs) generation for each fitness is recorded along with the
     // floating point fitness value. Record this in a vector of
     // vectors, with one vector for each evolution towards F=1
-    vector<vector<pair<unsigned int, float> > > fitness;
-    vector<vector<array<genosect_t, N_Genes> > > fitgenomes;
-
-    vector<pair<unsigned int, float> > fv0;
-    fitness.push_back (fv0);
-    vector<array<genosect_t, N_Genes> > ag0;
-    fitgenomes.push_back (ag0);
+    vector<vector<NetInfo> > netinfo;
+    vector<NetInfo> ni0;
+    netinfo.push_back (ni0);
 #endif
 
     // Holds the genome and a copy of it.
@@ -119,6 +120,9 @@ int main (int argc, char** argv)
         // Make a copy of the genome, in case evolving it leads to a
         // less fit genome, then evaluate the fitness of the genome.
         float a = evaluate_fitness (refg);
+#ifdef RECORD_ALL_FITNESS
+        AllBasins ab_a (refg);
+#endif
         //LOG ("New random genome generated with fitness:" << a);
         if (gen > 0) {
             generations.push_back (gen-lastgen);
@@ -129,7 +133,17 @@ int main (int argc, char** argv)
         // Test fitness to determine whether we should evolve.
         while (a < 1.0f) {
             copy_genome (refg, newg);
+#ifdef RECORD_ALL_FITNESS
+            AllBasins ab1 (newg);
+#endif
             evolve_genome (newg);
+#ifdef RECORD_ALL_FITNESS
+            AllBasins ab2 (newg);
+            set<unsigned int> diffs;
+            set_difference (ab1.transitions.begin(), ab1.transitions.end(),
+                            ab2.transitions.begin(), ab2.transitions.end(),
+                            inserter(diffs, diffs.begin()));
+#endif
             ++gen;
 
             if (gen > 0 && (gen % N_Genview == 0)) {
@@ -141,34 +155,63 @@ int main (int argc, char** argv)
                 break;
             }
             float b = evaluate_fitness (newg);
-            if (a > b) {
-                // New fitness <= old fitness
+
+// REQUIRED to speed up evolution! In this case, the reference genome
+// is updated when the new genome is only equally fit to the old
+// genome. This means that the evolve_genome is regularly evolving
+// from new, alternative genome starting points. You can imagine that
+// if one genome is evolved 1000 times, and at no time provides an
+// increase in fitness, but on the 1001 time is provides an equal
+// fitness, it may be that the new, equally fit genome could have a
+// higher probability of evolving to a fitter genome than the older
+// equally fit genome. Thus, drift allows "difficult to evolve fitter"
+// genomes to be discarded. This suggests that the "evolvability" of
+// some genomes is higher than for others.
+#define STIPULATE_DRIFT_CASE 1
+
+#ifdef STIPULATE_DRIFT_CASE
+            if (b < a) { // New fitness < old fitness
+#else
+            if (b <= a) { // New fitness <= old fitness
+#endif
                 // Record _existing_ fitness f, not new fitness.
 #ifdef RECORD_ALL_FITNESS
-                fitness.back().push_back (make_pair(gen, a));
-                fitgenomes.back().push_back (refg);
+                NetInfo ni(ab_a, gen, a);
+                ni.deltaF = 0.0;
+                netinfo.back().push_back (ni);
 #endif
             } else {
 #ifdef RECORD_ALL_FITNESS
+                DBG2 ("New fitness is greater than old fitness! Fitness:" << b << " differences since refg: " << diffs.size());
                 // Record new fitness, even if a==b - this is the "drift case".
-                fitness.back().push_back (make_pair(gen, b));
-                fitgenomes.back().push_back (newg);
+                // Also examing the new basins of attraction and then compare ab_a and ab_b.
+                AllBasins ab_b (newg);
+                // Find the difference in the transitions defined by
+                // the two different genomes
+                set<unsigned int> difference;
+                set_difference (ab_a.transitions.begin(), ab_a.transitions.end(),
+                                ab_b.transitions.begin(), ab_b.transitions.end(),
+                                inserter(difference, difference.begin()));
+                NetInfo ni (ab_b, gen, b);
+                ni.numChangedTransitions = difference.size();
+                ni.deltaF = static_cast<double>(b - a);
+                netinfo.back().push_back (ni);
 #endif
                 // Copy new fitness to ref
                 a = b;
                 // Copy new to reference
                 copy_genome (newg, refg);
+#ifdef RECORD_ALL_FITNESS
+                ab_a.update (refg);
+#endif
             }
         }
 
 #ifdef RECORD_ALL_FITNESS
-        fitness.back().push_back (make_pair(gen, a));
-        fitgenomes.back().push_back (refg);
+        netinfo.back().push_back (NetInfo(ab_a, gen, a));
         if (gen < N_Generations) {
-            vector<pair<unsigned int, float> > fv;
-            fitness.push_back (fv);
-            vector<array<genosect_t, N_Genes> > ag;
-            fitgenomes.push_back (ag);
+            vector<NetInfo> vni;
+            netinfo.push_back (vni);
         }
         // Plus also analyse the basins of attraction and save this
         // information. The most compact way to save this information
@@ -177,9 +220,6 @@ int main (int argc, char** argv)
     }
 
     LOG ("Generations size: " << generations.size());
-#ifdef RECORD_ALL_FITNESS
-    LOG ("fitness and fitgenomes sizes: " << fitness.size() << "," << fitgenomes.size());
-#endif
 
     // Save data to file.
     ofstream f;
@@ -207,19 +247,19 @@ int main (int argc, char** argv)
     // Find longest vector of fitnesses
     int maxevol = 0;
     int fs = 0;
-    for (unsigned int i = 0; i < fitness.size(); ++i) {
-        maxevol = ((fs = fitness[i].size()) > maxevol) ? fs : maxevol;
+    for (unsigned int i = 0; i < netinfo.size(); ++i) {
+        maxevol = ((fs = netinfo[i].size()) > maxevol) ? fs : maxevol;
     }
 
-    // Loop through all but the last entry in fitness/fitgenome - these are most likely incomplete.
-    for (unsigned int i = 0; i < (fitness.size()-1); ++i) {
-        if (!fitness[i].empty()) {
+    // Loop through all but the last entry in netinfo - these are most likely incomplete.
+    for (unsigned int i = 0; i < (netinfo.size()-1); ++i) {
+        if (!netinfo[i].empty()) {
             // Open file
             stringstream pathss2;
             pathss2 << "./data/evolve_withf_";
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
             pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
-                    << "_genome_" << genome_id(fitgenomes[i].back()) << ".csv";
+                    << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
             f.open (pathss2.str().c_str());
             if (!f.is_open()) {
                 cerr << "Error opening " << pathss2.str() << endl;
@@ -233,39 +273,57 @@ int main (int argc, char** argv)
             // First line
             int counter = 1-maxevol;
             f << counter << ",0.0";
-            f << "," << genome2str(fitgenomes[i][0]);
+            f << "," << genome2str(netinfo[i][0].ab.genome);
+            f << "," << netinfo[i][0].ab.getNumBasins();
+            f << "," << netinfo[i][0].ab.meanAttractorLength();
+            f << "," << netinfo[i][0].ab.maxAttractorLength();
+            f << "," << netinfo[i][0].numChangedTransitions;
+            f << "," << netinfo[i][0].deltaF;
             f << endl;
 
             // Set up stringstream with the last line before the genome changes
             stringstream old_genome_ss;
-            int lendiff = maxevol - fitness[i].size();
+            int lendiff = maxevol - netinfo[i].size();
             counter = lendiff-maxevol;
             old_genome_ss << counter << ",0.0";
-            old_genome_ss << "," << genome2str(fitgenomes[i][0]);
+            old_genome_ss << "," << genome2str(netinfo[i][0].ab.genome);
+            old_genome_ss << "," << netinfo[i][0].ab.getNumBasins();
+            old_genome_ss << "," << netinfo[i][0].ab.meanAttractorLength();
+            old_genome_ss << "," << netinfo[i][0].ab.maxAttractorLength();
+            old_genome_ss << "," << netinfo[i][0].numChangedTransitions;
+            old_genome_ss << "," << netinfo[i][0].deltaF;
             old_genome_ss << endl;
 
             int lastgen = 0;
             float last_fitness = 0.0f;
             // Now the actual data.
-            lastgen = static_cast<int>(fitness[i].back().first);
-            for (unsigned int j = 0; j < fitness[i].size(); ++j) {
-                if (fitness[i][j].second > last_fitness) {
+            lastgen = static_cast<int>(netinfo[i].back().generation);
+            for (unsigned int j = 0; j < netinfo[i].size(); ++j) {
+                if (netinfo[i][j].fitness > last_fitness) {
                     f << old_genome_ss.str();
                     // New genome:
-                    f << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second;
-                    f << "," << genome2str(fitgenomes[i][j]);
+                    f << static_cast<int>(netinfo[i][j].generation)-lastgen << "," << netinfo[i][j].fitness;
+                    f << "," << genome2str(netinfo[i][j].ab.genome);
+                    f << "," << netinfo[i][j].ab.getNumBasins();
+                    f << "," << netinfo[i][j].ab.meanAttractorLength();
+                    f << "," << netinfo[i][j].ab.maxAttractorLength();
+                    f << "," << netinfo[i][j].numChangedTransitions;
+                    f << "," << netinfo[i][j].deltaF;
                     f << endl;
-                    last_fitness = fitness[i][j].second;
+                    last_fitness = netinfo[i][j].fitness;
                 }
 
                 old_genome_ss.str("");
                 old_genome_ss.clear();
-                old_genome_ss << static_cast<int>(fitness[i][j].first)-lastgen << "," << fitness[i][j].second;
-                old_genome_ss << "," << genome2str(fitgenomes[i][j]);
+                old_genome_ss << static_cast<int>(netinfo[i][j].generation)-lastgen << "," << netinfo[i][j].fitness;
+                old_genome_ss << "," << genome2str(netinfo[i][j].ab.genome);
+                old_genome_ss << "," << netinfo[i][j].ab.getNumBasins();
+                old_genome_ss << "," << netinfo[i][j].ab.meanAttractorLength();
+                old_genome_ss << "," << netinfo[i][j].ab.maxAttractorLength();
+                old_genome_ss << "," << netinfo[i][j].numChangedTransitions;
+                old_genome_ss << "," << netinfo[i][j].deltaF;
                 old_genome_ss << endl;
             }
-            //LOG ("Final old_genome: " << old_genome_ss.str());
-            //f << old_genome_ss.str();
 
             f.close();
         }

@@ -29,14 +29,20 @@ cols1 = np.array([col.darkviolet,
 
 # Read csv files with gen/fitness data in
 def readDataset (filepath):
-    f = np.zeros([1,2])
+    f = np.zeros([1,7])
     nets = []
     with open (filepath, 'r') as csvfile:
             rdr = csv.reader (csvfile)
             for row in rdr:
                 f[-1,0] = float(row[0])
                 f[-1,1] = float(row[1])
-                f = np.append(f, np.zeros([1,2]), 0)
+                f[-1,2] = float(row[3]) # num basins
+                f[-1,3] = float(row[4]) # mean limit cycle length
+                f[-1,4] = float(row[5]) # max limit cycle length
+                f[-1,5] = float(row[6]) # num changed transitions
+                f[-1,6] = float(row[7]) # change in fitness
+
+                f = np.append(f, np.zeros([1,7]), 0)
                 nets.append(row[2])
 
     # Note the -1 as there will be a final, zero line in the array
@@ -103,7 +109,7 @@ for f in files:
     for net in nets:
         if (A[nc,1] > last_fitness):
             last_fitness = A[nc,1]
-            f2 = F2.add_subplot (4,6,gc+1)
+            f2 = F2.add_subplot (5,6,gc+1)
             sl.plot_states (net, f2.axes)
             f2.axes.set_title('{0}: f={1:.4f}'.format(gc, A[nc,1]))
             gc = gc + 1
