@@ -31,7 +31,7 @@ def readDataset (filepath):
 # Set a default fontsize for matplotlib:
 fnt = {'family' : 'DejaVu Sans',
        'weight' : 'regular',
-       'size'   : 18}
+       'size'   : 14}
 matplotlib.rc('font', **fnt)
 
 F1 = plt.figure (figsize=(8,8))
@@ -47,19 +47,19 @@ f1.set_ylabel('fitness');
 f2 = F1.add_subplot(2,2,2)
 f2.plot (A[:,2],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.maroon1)
 f2.set_ylabel('fitness');
-f2.set_xlabel('Num limit cycles');
+f2.set_xlabel('Num limit cycles in system');
 
 # Mean limit cycle length
 f3 = F1.add_subplot(2,2,3)
 f3.plot (A[:,3],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.violetred)
 f3.set_ylabel('fitness');
-f3.set_xlabel('Mean limit cycle');
+f3.set_xlabel('Mean limit cycle size');
 
 # Max limit cycle length
 f4 = F1.add_subplot(2,2,4)
 f4.plot (A[:,4],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.crimson)
 f4.set_ylabel('fitness');
-f4.set_xlabel('Max limit cycle');
+f4.set_xlabel('Max limit cycle size');
 
 #f1.set_xlim([-1, 0.01])
 F1.tight_layout()
