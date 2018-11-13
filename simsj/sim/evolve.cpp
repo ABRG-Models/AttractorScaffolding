@@ -167,12 +167,10 @@ int main (int argc, char** argv)
 // equally fit genome. Thus, drift allows "difficult to evolve fitter"
 // genomes to be discarded. This suggests that the "evolvability" of
 // some genomes is higher than for others.
-#define STIPULATE_DRIFT_CASE 1
-
-#ifdef STIPULATE_DRIFT_CASE
-            if (b < a) { // New fitness < old fitness
+#ifdef STIPULATE_DRIFT_CASE // Set in CMakeLists.txt
+            if (b < a) { // DRIFT. New fitness < old fitness
 #else
-            if (b <= a) { // New fitness <= old fitness
+            if (b <= a) { // NO DRIFT. New fitness <= old fitness
 #endif
                 // Record _existing_ fitness f, not new fitness.
 #ifdef RECORD_ALL_FITNESS
@@ -224,7 +222,11 @@ int main (int argc, char** argv)
     // Save data to file.
     ofstream f;
     stringstream pathss;
+#ifdef STIPULATE_DRIFT_CASE
     pathss << "./data/evolve_";
+#else
+    pathss << "./data/evolve_nodrift_";
+#endif
 #ifdef RECORD_ALL_FITNESS
     pathss << "withf_";
 #endif
@@ -256,7 +258,11 @@ int main (int argc, char** argv)
         if (!netinfo[i].empty()) {
             // Open file
             stringstream pathss2;
+#ifdef STIPULATE_DRIFT_CASE
             pathss2 << "./data/evolve_withf_";
+#else
+            pathss2 << "./data/evolve_nodrift_withf_";
+#endif
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
             pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
