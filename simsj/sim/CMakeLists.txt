@@ -1,15 +1,18 @@
 # The main evolve program, compiled with various fitness functions,
 # but always with N_Genes=5
 add_executable(evolve_ff1 evolve.cpp) # Uses 'fitness function 1' by default
-target_compile_definitions(evolve_ff1 PUBLIC USE_FITNESS_1)
+target_compile_definitions(evolve_ff1 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_1)
 add_executable(evolve_ff0 evolve.cpp)
-target_compile_definitions(evolve_ff0 PUBLIC USE_FITNESS_0)
+target_compile_definitions(evolve_ff0 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_0)
 add_executable(evolve_ff2 evolve.cpp)
-target_compile_definitions(evolve_ff2 PUBLIC USE_FITNESS_2)
+target_compile_definitions(evolve_ff2 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_2)
 add_executable(evolve_ff3 evolve.cpp)
-target_compile_definitions(evolve_ff3 PUBLIC USE_FITNESS_3)
+target_compile_definitions(evolve_ff3 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_3)
 add_executable(evolve_ff4 evolve.cpp)
-target_compile_definitions(evolve_ff4 PUBLIC USE_FITNESS_4)
+target_compile_definitions(evolve_ff4 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
+
+add_executable(evolve_nodrift_ff4 evolve.cpp)
+target_compile_definitions(evolve_nodrift_ff4 PUBLIC USE_FITNESS_4)
 
 # Like the evolve programs, but saving every fitness value at every
 # generation. Again, N_Genes=5.
@@ -178,3 +181,5 @@ target_link_libraries(compute_pnot0 facto)
 
 # Analysing the genome and the basins of attraction that they create.
 add_executable(analyse_genome analyse_genome.cpp)
+
+add_executable(prob_fitinc prob_fitinc.cpp)
