@@ -79,7 +79,7 @@ int main (int argc, char** argv)
     // Alternative target states are set from the command line;
     // otherwise, the targets default to the standard opposing
     // gradeints, as initialised in lib.h.
-    if (argc >= 3) {
+    if (argc >= 4) {
         target_ant = static_cast<state_t>(atoi(argv[2]));
         LOG ("Anterior target: " << target_ant << " which is " << (state_str (target_ant)));
         target_pos = static_cast<state_t>(atoi(argv[3]));
@@ -115,11 +115,10 @@ int main (int argc, char** argv)
         // At the start of the loop, and every time fitness of 1.0 is
         // achieved, generate a random genome starting point.
         random_genome (refg);
-        //LOG ("New random genome:");
-        //show_genome(refg);
+
         // Make a copy of the genome, in case evolving it leads to a
         // less fit genome, then evaluate the fitness of the genome.
-        float a = evaluate_fitness (refg);
+        double a = evaluate_fitness (refg);
 #ifdef RECORD_ALL_FITNESS
         AllBasins ab_a (refg);
 #endif
@@ -131,7 +130,7 @@ int main (int argc, char** argv)
         ++gen;
 
         // Test fitness to determine whether we should evolve.
-        while (a < 1.0f) {
+        while (a < 1.0) {
             copy_genome (refg, newg);
 #ifdef RECORD_ALL_FITNESS
             AllBasins ab1 (newg);
@@ -154,7 +153,7 @@ int main (int argc, char** argv)
             if (gen >= N_Generations) {
                 break;
             }
-            float b = evaluate_fitness (newg);
+            double b = evaluate_fitness (newg);
 
 // REQUIRED to speed up evolution! In this case, the reference genome
 // is updated when the new genome is only equally fit to the old
@@ -178,6 +177,7 @@ int main (int argc, char** argv)
                 ni.deltaF = 0.0;
                 netinfo.back().push_back (ni);
 #endif
+                // ...but otherwise, do nothing.
             } else {
 #ifdef RECORD_ALL_FITNESS
                 DBG2 ("New fitness is greater than old fitness! Fitness:" << b << " differences since refg: " << diffs.size());
@@ -301,7 +301,7 @@ int main (int argc, char** argv)
             old_genome_ss << endl;
 
             int lastgen = 0;
-            float last_fitness = 0.0f;
+            double last_fitness = 0.0;
             // Now the actual data.
             lastgen = static_cast<int>(netinfo[i].back().generation);
             for (unsigned int j = 0; j < netinfo[i].size(); ++j) {
