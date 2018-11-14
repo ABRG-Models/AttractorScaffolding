@@ -6,7 +6,7 @@ import csv
 import sebcolour
 col = sebcolour.Colour
 
-nevolutions = 10000
+nevolutions = 50000
 
 # Read csv files
 def readDataset (filepath):
