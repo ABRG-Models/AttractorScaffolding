@@ -70,10 +70,10 @@ int main (int argc, char** argv)
     cout << "iteration,numfit,numperfect" << endl;
     for (unsigned long long int g = 0; g < nrandoms; ++g) {
         array<genosect_t, N_Genes> genome = random_genome();
-        float f = evaluate_fitness (genome);
-        if (f > 0.0f) {
+        double f = evaluate_fitness (genome);
+        if (f > 0.0) {
             ++numfit;
-            if (f == 1.0f) {
+            if (f == 1.0) {
                 ++numperfect;
             }
         }

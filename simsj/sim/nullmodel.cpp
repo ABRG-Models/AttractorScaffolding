@@ -76,9 +76,9 @@ int main (int argc, char** argv)
     array<genosect_t, N_Genes> genome;
 
     unsigned int lastgen = 0;
-    float f = 0.0f;
+    double f = 0.0;
 #ifdef RECORD_ALL_FITNESS
-    float lastf = 0.0f;
+    double lastf = 0.0;
     AllBasins ab1;
 #endif
 
@@ -110,7 +110,7 @@ int main (int argc, char** argv)
                 vector<NetInfo> vni;
                 netinfo.push_back (vni);
             }
-            lastf = 0.0f;
+            lastf = 0.0;
 #endif
 #ifdef RECORD_ALL_FITNESS
         } else {

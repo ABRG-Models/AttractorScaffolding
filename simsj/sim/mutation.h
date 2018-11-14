@@ -21,7 +21,7 @@ num_fit_mutations (const array<genosect_t, N_Genes>& genome, unsigned int h)
 {
     // Return variables
     unsigned int numfit = 0;
-    double fitness_sum = 0.0f;
+    double fitness_sum = 0.0;
 
     // The length of the genome
     unsigned int l_genome = N_Genes * (1<<N_Ins);
@@ -59,10 +59,10 @@ num_fit_mutations (const array<genosect_t, N_Genes>& genome, unsigned int h)
             }
         }
 
-        float f = evaluate_fitness (flipped_genome);
+        double f = evaluate_fitness (flipped_genome);
         if (f > 0.0) {
             ++numfit;
-            fitness_sum += (double)f;
+            fitness_sum += f;
         }
 
         if (!next_combination (combo, h, l_genome)) {
@@ -83,7 +83,7 @@ num_fit_mutations_sample (const array<genosect_t, N_Genes>& genome,
                           unsigned int hd, unsigned int num_samples)
 {
     unsigned int numfit = 0;
-    double fitness_sum = 0.0f;
+    double fitness_sum = 0.0;
 
     unsigned int n_in_gs = (1 << N_Ins);
     vector<unsigned int> flipbit (hd, 0);
@@ -138,10 +138,10 @@ num_fit_mutations_sample (const array<genosect_t, N_Genes>& genome,
                 flipped_genome[i] ^= flip_mask[i];
             }
             // Now evaluate the fitness
-            float f = evaluate_fitness (flipped_genome);
+            double f = evaluate_fitness (flipped_genome);
             if (f > 0.0) {
                 ++numfit;
-                fitness_sum += (double)f;
+                fitness_sum += f;
             }
         } else {
             // We found a duplicate mask, so decrement s to make sure we do one more random sample.
@@ -164,15 +164,15 @@ evolve_new_genome (void)
     array<genosect_t, N_Genes> newg;
 
     random_genome (refg);
-    float a = evaluate_fitness (refg);
+    double a = evaluate_fitness (refg);
 
     unsigned int gen = 0;
     // Test fitness to determine whether we should evolve.
-    while (a < 1.0f) {
+    while (a < 1.0) {
         copy_genome (refg, newg);
         evolve_genome (newg);
         ++gen;
-        float b = evaluate_fitness (newg);
+        double b = evaluate_fitness (newg);
         if (a > b) {
             // New fitness <= old fitness
         } else {

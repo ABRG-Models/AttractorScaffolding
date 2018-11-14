@@ -65,7 +65,7 @@ int main (int argc, char** argv)
     // Holds the genome. Write to do this 10 times on different F=1 genomes.
     array<genosect_t, N_Genes> genome = evolve_new_genome();
     show_genome (genome);
-    float f = evaluate_fitness (genome);
+    double f = evaluate_fitness (genome);
     LOG ("The fitness of the newly evolved genome is " << f << " (should be 1)");
     return 0;
 }

@@ -54,7 +54,7 @@ int main (int argc, char** argv)
     array<genosect_t, N_Genes> genome;
     for (unsigned int i = 0; i < N_Genomes; ++i) {
         random_genome (genome);
-        float f = evaluate_fitness (genome);
+        double f = evaluate_fitness (genome);
         if (f > 1.0) {
             cerr << "Fitness > 1.0?!? [" << f << "]" << endl;
             return 1;

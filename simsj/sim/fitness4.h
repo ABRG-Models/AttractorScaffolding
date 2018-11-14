@@ -21,10 +21,14 @@ using namespace std;
 
 #define FF_NAME "ff4"
 
-float
+double
 evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 {
-    float score = 0.0f;
+#ifdef DEBUGF
+    DBGF ("Evaluating fitness for initial state " << state_str(state)
+          << " and target state " << state_str (target));
+#endif
+    double score = 0.0;
 
     state_t state_last = state_t_unset;
     set<state_t> visited;
@@ -41,7 +45,7 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
             if (state == state_last) {
                 DBGF ("Point attractor");
                 if (state == target) {
-                    score = 1.0f;
+                    score = 1.0;
                 } // else score is definitely 0.
 
             } else {
@@ -63,19 +67,25 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
                 // Now have the set lc; can work out its score.
 
                 // For tabulating the scores
-                array<float, N_Genes> sc;
-                for (unsigned int j = 0; j < N_Genes; ++j) { sc[j] = 0.0f; }
+                array<double, N_Genes> sc;
+                for (unsigned int j = 0; j < N_Genes; ++j) { sc[j] = 0.0; }
 
                 set<state_t>::const_iterator i = lc.begin();
                 while (i != lc.end()) {
-                    state_t a = (*i) ^ target;
+                    state_t a = ((*i) ^ ~target) & state_mask;
                     for (unsigned int j = 0; j < N_Genes; ++j) {
-                        sc[j] += static_cast<float>((a & (1<<j)) >> j)/static_cast<float>(lc_len);
+                        sc[j] += static_cast<double>( (a >> j) & 0x1 );
                     }
                     ++i;
                 }
-                DBGF("Score:");
+                // Divide down now.
+#pragma omp simd
+                for (unsigned int j = 0; j < N_Genes; ++j) {
+                    sc[j] /= static_cast<double>(lc_len);
+                }
+
 #ifdef DEBUGF
+                DBGF("Score:");
                 cout << sc[0];
 #endif
                 score = sc[0];
@@ -86,6 +96,9 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
                     score = score * sc[j];
                 }
             }
+#ifdef DEBUGF
+            cout << endl;
+#endif
             break;
         }
         visited.insert (state);
@@ -113,28 +126,32 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
  * a0 is the proportion of time during the limit cycle that bit 0 has
  * the state matching the anterior target
  *
- * Returns fitness in range 0 to 1.0
+ * Returns fitness in range 0 to 1.0. Note use of double. The fitness
+ * values can potentially be very small for a long limit cycle. For
+ * example, for a 5 gene LC of size 10, the fitness could be as low as
+ * (1/10)^5 * (1/10)^5 = 1/10^10, which is heading towards what a
+ * single precision float can represent.
  *
  * For further details on this fitness evaluation, please see the
  * associated paper.
  */
-float
+double
 evaluate_fitness (array<genosect_t, N_Genes>& genome)
 {
-    float fitness = 0.0f;
+    double ant_score = evaluate_one (genome, initial_ant, target_ant);
+    double pos_score = evaluate_one (genome, initial_pos, target_pos);
 
-    float ant_score = evaluate_one (genome, initial_ant, target_ant);
-    float pos_score = evaluate_one (genome, initial_pos, target_pos);
-    fitness = ant_score * pos_score;
+    double fitness = ant_score * pos_score;
 
-#ifdef DEBUG
-    if (fitness == 1.0f) {
+#ifdef DEBUGF
+    if (fitness == 1.0) {
         LOG ("F=1 genome found.");
         show_genome (genome);
     }
+    DBGF ("Fitness: " << fitness);
+    cout << genome2str(genome) << ", fitness: " << fitness << endl;
 #endif
 
-    DBGF ("Fitness: " << fitness);
     return fitness;
 }
 

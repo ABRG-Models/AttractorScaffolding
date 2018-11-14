@@ -45,7 +45,6 @@ using namespace std;
 #include "lib.h"
 
 // The fitness function used here
-#define USE_FITNESS_4 1
 #include "fitness.h"
 
 // Perform a loop N_Generations long during which an initially
@@ -80,17 +79,17 @@ int main (int argc, char** argv)
     array<unsigned int, N_Starts> numFitter;
     array<unsigned int, N_Starts> numEqual;
     // Store the fitnesses of all the starting genomes
-    array<float, N_Starts> initialFitness;
+    array<double, N_Starts> initialFitness;
     // Explicitly init to 0
     for (unsigned int g = 0; g < N_Starts; ++g) {
         numFitter[g] = 0;
         numEqual[g] = 0;
-        initialFitness[g] = 0.0f;
+        initialFitness[g] = 0.0;
     }
 
     // Initialise genomes
     for (unsigned int g = 0; g < N_Starts; ++g) {
-        while (initialFitness[g] == 0.0f) {
+        while (initialFitness[g] == 0.0) {
             random_genome (genomes[g]);
             initialFitness[g] = evaluate_fitness (genomes[g]);
         }
@@ -102,7 +101,7 @@ int main (int argc, char** argv)
             array<genosect_t, N_Genes> testg;
             copy_genome (genomes[g], testg);
             evolve_genome (testg);
-            float newf = evaluate_fitness (testg);
+            double newf = evaluate_fitness (testg);
             if (newf > initialFitness[g]) {
                 // Fitness increased
                 ++numFitter[g];

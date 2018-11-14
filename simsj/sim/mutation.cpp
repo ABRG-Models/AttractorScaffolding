@@ -67,7 +67,7 @@ int main (int argc, char** argv)
     // times in parallel.
     array<genosect_t, N_Genes> genome = evolve_new_genome();
 
-    float f = evaluate_fitness (genome);
+    double f = evaluate_fitness (genome);
     show_genome (genome);
     LOG ("The fitness of the newly evolved genome is " << f);
 

@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -77,6 +78,12 @@ unsigned char hi_mask_start;
  * using masks_init().
  */
 genosect_t genosect_mask;
+
+/*!
+ * The mask used to get the significant bits of a state. Set up using
+ * masks_init().
+ */
+state_t state_mask;
 
 /*!
  * Set the global target states for anterior and posterior positions.
@@ -144,6 +151,11 @@ masks_init (void)
         genosect_mask |= (0x1 << i);
     }
     DBG2 ("genosect_mask: 0x" << hex << genosect_mask << dec); // 65535 is 16 bits
+
+    state_mask = 0x0;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        state_mask |= (0x1 << i);
+    }
 }
 
 #if N_Genes == 5
@@ -192,7 +204,7 @@ compute_next_inputs (state_t state)
  * state. This is "develop" rather than "evolve".
  */
 void
-compute_next (array<genosect_t, N_Genes>& genome, state_t& state)
+compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
 {
     array<state_t, N_Genes> inputs;
     state_t lo_mask = lo_mask_start;
@@ -227,7 +239,7 @@ compute_next (array<genosect_t, N_Genes>& genome, state_t& state)
         DBG2 ("iterator into that sect: " << bs_inpit << "...");
 #endif
         state_t num = ((gs & inpit) ? 0x1 : 0x0);
-        DBG2 ("... which gives " << (unsigned int)num);
+        //DBG2 ("... which gives " << (unsigned int)num);
         if (num) {
             state |= (0x1 << (N_Ins-i));
         } else {
@@ -353,6 +365,35 @@ str2genome (const string& s)
     return g;
 }
 
+array<genosect_t, N_Genes>
+vecbool2genome (const vector<bool>& vb)
+{
+    array<genosect_t, N_Genes> g;
+    // Init g
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        g[i] = 0x0;
+    }
+
+    // Check length of vector of bools
+    unsigned int l = vb.size();
+    unsigned int l_genosect = 1 << N_Ins;
+    unsigned int l_genome = N_Genes * l_genosect;
+    if (l == l_genome) {
+        DBG ("Vector has " << l_genome << " bit bools as required...");
+    } else {
+        return g;
+    }
+
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        for (unsigned int j = 0; j < l_genosect; ++j) {
+            if (vb[j + i*l_genosect]) {
+                g[i] |= 0x1 << j;
+            } // else do nothing.
+        }
+    }
+
+    return g;
+}
 /*
  * Output the genome in a string containing hex representations of the
  * N_Genes genosects.
@@ -448,6 +489,15 @@ randFloat (void)
 }
 
 /*!
+ * Return a random double precision number between 0 and 1.
+ */
+double
+randDouble (void)
+{
+    return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+}
+
+/*!
  * Set the genome g to zero.
  */
 void
@@ -484,7 +534,7 @@ evolve_genome (array<genosect_t, N_Genes>& genome)
     for (unsigned int i = 0; i < N_Genes; ++i) {
         genosect_t gsect = genome[i];
         for (unsigned int j = 0; j < (1<<N_Ins); ++j) {
-            if (randFloat() < pOn) {
+            if (randDouble() < pOn) {
                 // Flip bit j
 #ifdef DEBUG
                 ++numflipped;
@@ -497,6 +547,41 @@ evolve_genome (array<genosect_t, N_Genes>& genome)
     DBG ("Num flipped: " << numflipped);
 }
 
+/*!
+ * A version of evolve_genome which adds to a count of the number of
+ * flips made in each genosect. Was used for code verification.
+ */
+void
+evolve_genome (array<genosect_t, N_Genes>& genome, array<unsigned long long int, N_Genes>& flipcount)
+{
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        genosect_t gsect = genome[i];
+        for (unsigned int j = 0; j < (1<<N_Ins); ++j) {
+            if (randFloat() < pOn) {
+                // Flip bit j
+                ++flipcount[i];
+                gsect ^= (0x1 << j);
+            }
+        }
+        genome[i] = gsect;
+    }
+}
+
+// A random genome which makes the same number of calls to the RNG as
+// Stuart Wilson's implementation.
+void
+random_genome_sw (array<genosect_t, N_Genes>& genome) {
+    long int nbits = N_Genes * (1<<N_Ins);
+    vector<bool> G(nbits, false);
+    for(long int i=0;i<nbits;i++){
+        double rd = ((double) rand())/(double)RAND_MAX;
+        G[i] = (rd<0.5) ? true : false;
+        //cout << "rand double = " << rd << "G["<<i<<"]=" << G[i] << endl;
+    }
+    // Now convert G to genome
+    genome = vecbool2genome (G);
+}
+
 void
 random_genome (array<genosect_t, N_Genes>& genome)
 {
@@ -507,6 +592,24 @@ random_genome (array<genosect_t, N_Genes>& genome)
         genome[i] = ((genosect_t) rand()) & genosect_mask;
     }
 }
+
+#if 0
+// Alternative to random_genome()
+void
+random_genome2 (array<genosect_t, N_Genes>& genome)
+{
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        genosect_t gsect = genome[i];
+        for (unsigned int j = 0; j < (1<<N_Ins); ++j) {
+            if (randFloat() < 0.5f) {
+                // Flip bit j
+                gsect ^= (0x1 << j);
+            }
+        }
+        genome[i] = gsect;
+    }
+}
+#endif
 
 /*!
  * Generate a random genome.

@@ -19,7 +19,7 @@ using namespace std;
 
 // Choose debugging level.
 //
-#define DEBUGF 1
+//#define DEBUGF 1
 #define DEBUG 1
 // #define DEBUG2 1
 
@@ -43,7 +43,11 @@ int main (int argc, char** argv)
     srand (seed);
 
     //probability of flipping
-    pOn = 0.5;
+    if (argc > 1) {
+        pOn = atof (argv[1]);
+    } else {
+        pOn = 0.5;
+    }
 
     if (argc > 1) {
         stringstream poss;
@@ -58,7 +62,7 @@ int main (int argc, char** argv)
 
     // Holds the genome
     array<genosect_t, N_Genes> genome = selected_genome();
-    float f = evaluate_fitness (genome);
+    double f = evaluate_fitness (genome);
     LOG ("BEFORE The fitness of the selected genome is " << f);
     show_genome (genome);
 
