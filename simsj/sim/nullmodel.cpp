@@ -99,7 +99,7 @@ int main (int argc, char** argv)
 #endif
 
         // Test fitness to determine whether we should evolve.
-        if (f == 1.0f) {
+        if (f == 1.0) {
             DBG ("Fitness max. F=" << f);
             // Record data
             generations.push_back (gen-lastgen);
