@@ -1,6 +1,6 @@
 /*
- * Evolves genome repeatedly according to the fitness function
- * described in the paper associated with this code.
+ * Takes a genome and evolves it once. Shows an analysis of the
+ * changes in transitions.
  *
  * Author: S James
  * Date: October 2018.
@@ -9,6 +9,8 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define DEBUG 1
 
@@ -28,6 +30,10 @@ using namespace std;
 
 int main (int argc, char** argv)
 {
+    // Seed the RNG.
+    unsigned int seed = mix(clock(), time(NULL), getpid());
+    srand (seed);
+
     // Initialise masks
     masks_init();
 
@@ -47,7 +53,7 @@ int main (int argc, char** argv)
     cout << endl;
 
     // Evolve the genome...
-    pOn = 0.02;
+    pOn = 0.05;
     evolve_genome (genome);
 
     AllBasins ab2 (genome);
