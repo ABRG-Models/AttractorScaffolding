@@ -32,9 +32,10 @@ fnt = {'family' : 'DejaVu Sans',
        'size'   : 14}
 matplotlib.rc('font', **fnt)
 
-for ii in range(1,6):
+flipprobs = [0.02, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5]
+for ii in range(0,7):
 
-    pOn = ii/10.0;
+    pOn = flipprobs[ii];
 
     F1 = plt.figure (figsize=(8,8))
 
