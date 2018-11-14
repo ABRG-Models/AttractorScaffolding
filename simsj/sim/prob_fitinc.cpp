@@ -114,7 +114,7 @@ int main (int argc, char** argv)
     cout << "Collected data; writing out..." << endl;
     ofstream fout;
     stringstream path;
-    path << "data/prob_evolvefitter_" << N_Generations << "_evolutions_pOn_" << pOn << ".csv";
+    path << "data/prob_fitinc_" << N_Generations << "_evolutions_pOn_" << pOn << ".csv";
     fout.open (path.str().c_str(), ios::out|ios::trunc);
     if (!fout.is_open()) {
         cerr << "Failed to open " << path.str() << " for writing." << endl;

@@ -38,7 +38,7 @@ for ii in range(1,6):
 
     F1 = plt.figure (figsize=(8,8))
 
-    readpath = '../data/prob_evolvefitter_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '.csv'
+    readpath = '../data/prob_fitinc_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '.csv'
     A = readDataset(readpath)
 
     # Sort A on col 0.
