@@ -17,9 +17,9 @@ target_compile_definitions(evolve_nodrift_ff4 PUBLIC USE_FITNESS_4)
 # Like the evolve programs, but saving every fitness value at every
 # generation. Again, N_Genes=5.
 add_executable(evolve_withf_ff0 evolve.cpp)
-target_compile_definitions(evolve_withf_ff0 PUBLIC USE_FITNESS_0 RECORD_ALL_FITNESS N_Generations=100000)
+target_compile_definitions(evolve_withf_ff0 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_0 RECORD_ALL_FITNESS N_Generations=100000)
 add_executable(evolve_withf_ff4 evolve.cpp)
-target_compile_definitions(evolve_withf_ff4 PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+target_compile_definitions(evolve_withf_ff4 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
 
 # To generate the data for allowing the genome to drift.
 add_executable(drift_ff0 drift.cpp)
