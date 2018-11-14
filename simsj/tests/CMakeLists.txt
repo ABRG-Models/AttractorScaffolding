@@ -30,3 +30,8 @@ add_executable(test_fitness test_fitness.cpp)
 target_compile_definitions(test_fitness PUBLIC USE_FITNESS_1)
 target_link_libraries (test_fitness facto)
 add_test(test_fitness test_fitness)
+
+# Test FF 4 with 1000 genomes from file
+add_executable(test_thousand test_thousand.cpp)
+target_compile_definitions(test_thousand PUBLIC USE_FITNESS_4)
+add_test(test_thousand test_thousand)
