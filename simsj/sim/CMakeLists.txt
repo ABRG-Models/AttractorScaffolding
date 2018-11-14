@@ -183,3 +183,10 @@ target_link_libraries(compute_pnot0 facto)
 add_executable(analyse_genome analyse_genome.cpp)
 
 add_executable(prob_fitinc prob_fitinc.cpp)
+target_compile_definitions(prob_fitinc PUBLIC N_Genes=5 USE_FITNESS_4)
+
+add_executable(fitness_of_ten fitness_of_ten.cpp)
+target_compile_definitions(fitness_of_ten PUBLIC N_Genes=5 USE_FITNESS_4)
+
+add_executable(flip_stats flip_stats.cpp)
+target_compile_definitions(flip_stats PUBLIC N_Genes=5 N_Generations=100000 USE_FITNESS_4)
