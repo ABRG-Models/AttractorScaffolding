@@ -20,6 +20,7 @@ using namespace std;
 //
 #define DEBUG 1
 // #define DEBUG2 1
+#define DEBUGF 1
 
 // Number of genes in a state is set at compile time.
 #define N_Genes 5
@@ -28,6 +29,8 @@ using namespace std;
 #include "lib.h"
 
 #include "fitness.h"
+
+#include "basins.h"
 
 int main (int argc, char** argv)
 {
@@ -62,8 +65,24 @@ int main (int argc, char** argv)
 
     show_genome (g);
 
-    float f = evaluate_fitness (g);
+    AllBasins ab1 (g);
 
+    cout << "All transitions is a set of size " << ab1.transitions.size() << endl;
+    cout << "Number of basins: " << ab1.getNumBasins() << endl;
+    for (unsigned int ii = 0; ii<ab1.getNumBasins(); ++ii) {
+        ab1.basins[ii].debug();
+    }
+    cout << "Size of attractors: ";
+    vector<unsigned int>::const_iterator i = ab1.attractorSizes.begin();
+    bool first = true;
+    while (i != ab1.attractorSizes.end()) {
+        if (!first) { cout << ","; } else { first = false; }
+        cout << *i;
+        ++i;
+    }
+    cout << endl;
+
+    double f = evaluate_fitness (g);
     LOG ("Fitness (using " << FF_NAME << ") for that genome is " << f);
 
     return 0;
