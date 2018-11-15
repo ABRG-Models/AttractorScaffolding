@@ -1,2 +1,0 @@
-LOG: For 5 genes, there were 17199207 fit genomes out of 100000000 of which 1318 had F=1
-LOG: That's 0.171992 and 1.318e-05 as proportions.
