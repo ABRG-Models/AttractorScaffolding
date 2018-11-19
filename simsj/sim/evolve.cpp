@@ -73,8 +73,9 @@ int main (int argc, char** argv)
     // Obtain pOn from command line.
     if (argc < 2) {
         LOG ("Usage: " << argv[0] << " pOn target_ant target_pos");
+        LOG ("   or: " << argv[0] << " pOn nGenerations");
         LOG ("Supply the probability of flipping a gene during evolution, pOn (float, 0 to 1.0f)");
-        LOG ("Optionally supply the anterior and posterior targets (integer, in range 0 to 31)");
+        LOG ("Optionally supply the anterior and posterior targets (integer, in range 0 to 31) or number of generations to run for.");
         return 1;
     }
     pOn = static_cast<float>(atof (argv[1]));
@@ -86,6 +87,11 @@ int main (int argc, char** argv)
 
     // Initialise masks
     masks_init();
+
+    unsigned long long int nGenerations = N_Generations;
+    if (argc == 3) {
+        nGenerations = static_cast<unsigned long long int>(atoi (argv[2]));
+    }
 
     // Alternative target states are set from the command line;
     // otherwise, the targets default to the standard opposing
@@ -123,7 +129,7 @@ int main (int argc, char** argv)
     unsigned long long int lastgen = 0;
     unsigned long long int lastf1 = 0;
 
-    while (gen < N_Generations) {
+    while (gen < nGenerations) {
 
         // At the start of the loop, and every time fitness of 1.0 is
         // achieved, generate a random genome starting point.
@@ -160,10 +166,10 @@ int main (int argc, char** argv)
 
             if (gen > 0 && (gen % N_Genview == 0)) {
                 LOG ("[pOn=" << pOn << "] That's " << gen/1000000.0 << "M generations (out of "
-                     << N_Generations/1000000.0 << "M) done...");
+                     << nGenerations/1000000.0 << "M) done...");
             }
 
-            if (gen >= N_Generations) {
+            if (gen >= nGenerations) {
                 break;
             }
             double b = evaluate_fitness (newg);
@@ -227,7 +233,7 @@ int main (int argc, char** argv)
 
 #ifdef RECORD_ALL_FITNESS
         netinfo.back().push_back (NetInfo(ab_a, gen, a));
-        if (gen < N_Generations) {
+        if (gen < nGenerations) {
             vector<NetInfo> vni;
             netinfo.push_back (vni);
         }
@@ -258,9 +264,9 @@ int main (int argc, char** argv)
     stringstream pathss1;
     pathss1 << pathss.str();
 
-    pathss << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
+    pathss << FF_NAME << "_" << nGenerations << "_gens_" << pOn << ".csv";
 
-    pathss1 << FF_NAME << "_" << N_Generations << "_gensplus_" << pOn << ".csv";
+    pathss1 << FF_NAME << "_" << nGenerations << "_gensplus_" << pOn << ".csv";
 
     f.open (pathss.str().c_str(), ios::out|ios::trunc);
     if (!f.is_open()) {
@@ -306,7 +312,7 @@ int main (int argc, char** argv)
             pathss2 << "./data/evolutions/evolve_nodrift_withf_";
 #endif
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
-            pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
+            pathss2 << FF_NAME << "_" << nGenerations <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
             f.open (pathss2.str().c_str());
             if (!f.is_open()) {
