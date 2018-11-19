@@ -56,11 +56,11 @@ def tree (base, graph, cycle, bias, visits):
         if c==21 or c==10:
             selmarker = 'v'
         elif c==16 or c==0:
-            print ('Printing star for c={0}'.format(c)) # Note in once case, star is red and BG circle is red.
+            #print ('Printing star for c={0}'.format(c)) # Note in one case, star is red and BG circle is red.
             selmarker = '*'
         else:
             selmarker = 'o'
-        print ('colo={0}, colo2={1}'.format(colo, colo2))
+        #print ('colo={0}, colo2={1}'.format(colo, colo2))
         plt.plot (xco, yco, marker=selmarker, markersize=mrkr1-3, color=colo2)
 
         plt.arrow(xco, yco, graph[base][2][3]-xco, graph[base][2][4]-yco, overhang=0, length_includes_head=True, head_width=0.15, head_length=0.5, fc=greycol, ec=greycol)
@@ -150,8 +150,9 @@ def plot_states (net, ax):
             if x==21 or x==10:
                 selmarker = 'v'
             elif x==16 or x==0:
-                print ('printing selmarker for x(c)={0}'.format(x))
+                #print ('printing selmarker for x(c)={0}'.format(x))
                 selmarker = '*'
+                colo2='b' # special case
             else:
                 selmarker = 'o'
             plt.plot(graph[x][2][3], graph[x][2][4], marker=selmarker, color=colo2, markersize=mrkr1-3)

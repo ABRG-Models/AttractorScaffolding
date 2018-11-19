@@ -31,6 +31,11 @@
 // as defining "proportional expression" of the target proteins.
 # include "fitness4.h"
 
+#elif defined USE_FITNESS_5
+// An alternative way of considering the limit cycle as defining
+// "proportional expression" of the target proteins.
+# include "fitness5.h"
+
 #else
 # error "When you include fitness.h you have to make sure to define USE_FITNESS_N"
 #endif

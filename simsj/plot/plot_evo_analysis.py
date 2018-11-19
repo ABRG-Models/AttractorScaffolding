@@ -75,7 +75,7 @@ def readNets (filepath):
 def doPlot (pOn, driftnodrift):
     # 10000 or 100000 depending on p
     FromValue = 10000
-    print (str(pOn))
+    print ('pOn = {0}'.format(pOn))
 
     # Make files from directory listing
     p = Path('../data/evolutions/')
@@ -216,9 +216,9 @@ def doPlot (pOn, driftnodrift):
     f6.set_ylabel('log(Fitness change)');
 
     # Plot one of them in bold:
-    specialfile=files[3]
-    A, B = readDataset(specialfile)
-    f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy)
+#    specialfile=files[3]
+#    A, B = readDataset(specialfile)
+#    f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy)
 
     f1.set_xlim([-1, 0.01])
     f1.set_xlabel(str(FromValue) + ' generations');
@@ -263,6 +263,13 @@ def doPlot (pOn, driftnodrift):
             fcount = fcount + 1
 
 driftnodrift = 'nodrift'
+
+# I'll have to run 0.7, 0.8 and 0.9 longer to get the stats
+#doPlot (0.9, driftnodrift)
+#doPlot (0.8, driftnodrift)
+#doPlot (0.7, driftnodrift)
+
+doPlot (0.6, driftnodrift)
 doPlot (0.5, driftnodrift)
 doPlot (0.4, driftnodrift)
 doPlot (0.3, driftnodrift)

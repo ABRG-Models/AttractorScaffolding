@@ -37,6 +37,15 @@ def doPlot (driftnodrift, plottype):
              '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.45.csv',
              '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.5.csv']
 
+    if plottype == 'loglog1':
+        graphtag = driftnodrift + ', log/log (log hist bins)'
+    elif plottype == 'loglog2':
+        graphtag = driftnodrift + ', log/log (linear hist bins)'
+    elif plottype == 'log':
+        graphtag = driftnodrift + ', lin/log'
+    else:
+        graphtag = driftnodrift + ', lin/lin'
+
     lbls = ['p=0.05',
             'p=0.10',
             'p=0.15',
@@ -64,13 +73,13 @@ def doPlot (driftnodrift, plottype):
            'size'   : fs}
     matplotlib.rc('font', **fnt)
 
-    scale = 1000.
+    scale = 1.
 
     f1 = plt.figure(figsize=(20,6)) # Figure object
 
-    M = np.zeros([nf,3])
+    M = np.zeros([nf,2])
 
-    nbins = 100
+    nbins = 20
 
     # Some markers
     mkr=['.', 'o', 'v', 's', 's', 'v', 'o', '^', '^', 'h']
@@ -84,11 +93,23 @@ def doPlot (driftnodrift, plottype):
         D = readDataset (fil)
         if D.size == 0:
             continue
-        bins = np.linspace(0, np.max(D), nbins)
-        print ('bins {0}'.format(bins[:-1]))
-        print ('D min: {0} occurs {1} times, D max: {2} occurs {3} times.'
-               .format (np.min(D), (D==np.min(D)).sum(), np.max(D), (D==np.max(D)).sum()))
+
+        print ('D min: {0}, D max: {1}'.format (np.min(D), np.max(D)))
+        if plottype == 'loglog1':
+            bins = np.logspace (np.log(np.min(D)), np.log(np.max(D)), base=2.7183, num=nbins)
+            print ('bins {0}'.format(bins[:-1]))
+        elif plottype == 'loglog2':
+            bins = np.linspace (0, np.max(D), nbins)
+        elif plottype == 'log':
+            bins = np.linspace (0, np.max(D), nbins)
+        else:
+            bins = np.linspace (0, np.max(D), nbins)
+
+        #print ('D min: {0} occurs {1} times, D max: {2} occurs {3} times.'
+        #       .format (np.min(D), (D==np.min(D)).sum(), np.max(D), (D==np.max(D)).sum()))
         h,b = np.histogram (D, bins)
+        print ('h: {0}'.format(h))
+        print ('b: {0}'.format(b))
 
         # Plot points
         #print ('b len {0} h len {1}'.format(len(b), len(h)))
@@ -99,35 +120,78 @@ def doPlot (driftnodrift, plottype):
         a1.append(ax)
 
         # Plot on it
-        if plottype == 'loglog':
-            a1[gcount].plot(np.log(b[:-1]/scale), np.log(h), color=colo, marker=mkr[y], markersize=ms[y])
+        if plottype == 'loglog1':
+            #bx = np.log(b[:-1]/scale)
+            #bx = np.vstack ((bx, np.log(h))).T
+            bx = np.log(b[:-1]/scale) # logginess of x axis captured by np.logspace bins
+            bx = np.vstack ((bx, np.log(h))).T
             a1[gcount].set_ylabel('log (evolutions)',fontsize=fs)
-            a1[gcount].set_xlabel('log (1000 generations)',fontsize=fs)
+            a1[gcount].set_xlabel('log (generations)',fontsize=fs)
+            a1[gcount].set_xlim([1,16])
+
+        elif plottype == 'loglog2':
+            bx = np.log(b[:-1]/scale)
+            bx = np.vstack ((bx, np.log(h))).T
+            a1[gcount].set_ylabel('log (evolutions)',fontsize=fs)
+            a1[gcount].set_xlabel('log (generations)',fontsize=fs)
+            a1[gcount].set_xlim([1,16])
+
+
         elif plottype == 'log':
-            a1[gcount].plot(b[:-1]/scale, np.log(h), color=colo, marker=mkr[y], markersize=ms[y])
+            bx = b[:-1]/scale
+            bx = np.vstack ((bx, np.log(h))).T
             a1[gcount].set_ylabel('log (evolutions)',fontsize=fs)
-            a1[gcount].set_xlabel('1000 generations',fontsize=fs)
+            a1[gcount].set_xlabel('generations',fontsize=fs)
+
         else:
-            a1[gcount].plot(b[:-1]/scale, h, color=colo, marker=mkr[y], markersize=ms[y])
+            bx = b[:-1]/scale
+            bx = np.vstack ((bx, h)).T
             a1[gcount].set_ylabel('evolutions',fontsize=fs)
-            a1[gcount].set_xlabel('1000 generations',fontsize=fs)
+            a1[gcount].set_xlabel('generations',fontsize=fs)
+
+        bx = bx[np.where(np.isfinite(bx[:,1]))]
+        bx = bx[np.where(np.isfinite(bx[:,0]))]
+        #print ('bx: {0}'.format(bx))
+        a1[gcount].plot(bx[:,0], bx[:,1], color=colo, linestyle='None', marker=mkr[y], markersize=ms[y])
+
+        # Weights? How to apply right? 1/sigma or 1/sigma^2.
+        fit, residuals, rank, singular_values, rcond = np.polyfit (bx[:,0], bx[:,1], 1, full=True)
+        print ('fit, residuals, rank, singular_values, rcond: {4} : {0} : {1} : {2} : {3} '
+               .format(residuals, rank, singular_values, rcond, fit))
+        fit_fn = np.poly1d (fit)
+        #print (fit_fn)
+        M[y,0] = fit[0]     # slope
+        #M[y,1] = residuals
+        a1[gcount].plot (bx[:,0], fit_fn(bx[:,0]), '-', linewidth=2, color=colo)
 
         # Set some common features of the subplot
         a1[gcount].set_title(lbls[gcount])
         a1[gcount].set_axisbelow(True)
+        #a1[gcount].text (1, 1, graphtag)
         gcount = gcount + 1
 
-    f1.tight_layout()
+    # rect=[left bottom right top]
+    f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
+
+    f1.text (0.5, 0.9, graphtag, fontsize=20)
     plt.savefig ('evolution_histos_' + plottype + filetag + '_ff4.png')
 
-    plt.show()
-
+    return M
 
 # Change this to choose which to plot.
 driftnodrift = 'nodrift' # 'nodrift' or 'drift'
 doPlot ('nodrift', '')
-doPlot ('drift', '')
-doPlot ('nodrift', 'log')
-doPlot ('drift', 'log')
-doPlot ('nodrift', 'loglog')
-doPlot ('drift', 'loglog')
+#doPlot ('drift', '')
+M1 = doPlot ('nodrift', 'log')
+#doPlot ('drift', 'log')
+M2 = doPlot ('nodrift', 'loglog1')
+M3 = doPlot ('nodrift', 'loglog2')
+#doPlot ('drift', 'loglog')
+P = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5])
+
+#f1 = plt.figure(figsize=(6,6))
+#ax = f1.add_subplot (1,1,1)
+#ax.plot (P, M1[:,1])
+#ax.plot (P, M2[:,1])
+
+plt.show()

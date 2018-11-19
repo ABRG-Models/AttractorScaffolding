@@ -54,6 +54,17 @@ using namespace std;
 // The fitness function used here
 #include "fitness.h"
 
+struct geninfo {
+    geninfo (unsigned long long int _gen, unsigned long long int _gen_0, double _fit)
+        : gen(_gen)
+        , gen_0(_gen_0)
+        , fit(_fit)
+        {}
+    unsigned long long int gen;   // generations since last increase in fitness
+    unsigned long long int gen_0; // generation since last F=1
+    double fit;                   // The fitness
+};
+
 // Perform a loop N_Generations long during which an initially
 // randomly selected genome is evolved until a maximally fit state is
 // achieved.
@@ -86,9 +97,10 @@ int main (int argc, char** argv)
         LOG ("Posterior target: " << target_pos << " which is " << (state_str (target_pos)));
     }
 
-    // generations records the relative number of generations required
-    // to achieve fitness 1.
-    vector<unsigned int> generations;
+    // generations records the relative generation number, and the
+    // fitness. Every entry in this records an increase in the fitness
+    // of the genome.
+    vector<geninfo> generations;
 
 #ifdef RECORD_ALL_FITNESS
     // Records the evolution of the fitness of a genome. Fig 3. The
@@ -107,8 +119,9 @@ int main (int argc, char** argv)
     // The main loop. Repeatedly evolve from a random genome starting
     // point, recording the number of generations required to achieve a
     // maximally fit state of 1.
-    unsigned int gen = 0;
-    unsigned int lastgen = 0;
+    unsigned long long int gen = 0;
+    unsigned long long int lastgen = 0;
+    unsigned long long int lastf1 = 0;
 
     while (gen < N_Generations) {
 
@@ -119,15 +132,15 @@ int main (int argc, char** argv)
         // Make a copy of the genome, in case evolving it leads to a
         // less fit genome, then evaluate the fitness of the genome.
         double a = evaluate_fitness (refg);
+
 #ifdef RECORD_ALL_FITNESS
         AllBasins ab_a (refg);
 #endif
         //LOG ("New random genome generated with fitness:" << a);
-        if (gen > 0) {
-            generations.push_back (gen-lastgen);
-            lastgen = gen;
-        }
-        ++gen;
+        ++gen; // Because we randomly generated.
+
+        // Note that if a==1.0 after the call to random_genome(), we
+        // should cycle around and call random_genome() again.
 
         // Test fitness to determine whether we should evolve.
         while (a < 1.0) {
@@ -143,7 +156,7 @@ int main (int argc, char** argv)
                             ab2.transitions.begin(), ab2.transitions.end(),
                             inserter(diffs, diffs.begin()));
 #endif
-            ++gen;
+            ++gen; // Because we evolved
 
             if (gen > 0 && (gen % N_Genview == 0)) {
                 LOG ("[pOn=" << pOn << "] That's " << gen/1000000.0 << "M generations (out of "
@@ -195,6 +208,13 @@ int main (int argc, char** argv)
                 ni.deltaF = static_cast<double>(b - a);
                 netinfo.back().push_back (ni);
 #endif
+                // Record the fitness increase in generations:
+                generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
+                lastgen = gen;
+                if (b==1.0) {
+                    lastf1 = gen;
+                }
+
                 // Copy new fitness to ref
                 a = b;
                 // Copy new to reference
@@ -220,28 +240,50 @@ int main (int argc, char** argv)
     LOG ("Generations size: " << generations.size());
 
     // Save data to file.
-    ofstream f;
+    ofstream f, f1;
     stringstream pathss;
+    pathss << "./data/";
+#ifdef RECORD_ALL_FITNESS
+    pathss << "evolutions/";
+#endif
 #ifdef STIPULATE_DRIFT_CASE
-    pathss << "./data/evolve_";
+    pathss << "evolve_";
 #else
-    pathss << "./data/evolve_nodrift_";
+    pathss << "evolve_nodrift_";
 #endif
 #ifdef RECORD_ALL_FITNESS
     pathss << "withf_";
 #endif
     pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
+    stringstream pathss1;
+    pathss1 << pathss.str();
+
     pathss << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
 
-    f.open (pathss.str().c_str());
+    pathss1 << FF_NAME << "_" << N_Generations << "_gensplus_" << pOn << ".csv";
+
+    f.open (pathss.str().c_str(), ios::out|ios::trunc);
     if (!f.is_open()) {
         cerr << "Error opening " << pathss.str() << endl;
         return 1;
     }
+
+    f1.open(pathss1.str().c_str(), ios::out|ios::trunc);
+    if (!f1.is_open()) {
+        cerr << "Error opening " << pathss1.str() << endl;
+        return 1;
+    }
+
     for (unsigned int i = 0; i < generations.size(); ++i) {
-        f << generations[i] << endl;
+        // One file has the time taken to get to F=1
+        if (generations[i].fit == 1.0) {
+            f << generations[i].gen_0 << endl;
+        }
+        // The other has the time (i.e. generations) taken to get to a fitness increment
+        f1 << generations[i].gen << endl;
     }
     f.close();
+    f1.close();
 
 #ifdef RECORD_ALL_FITNESS
     // Preprocess the vector of vectors.
@@ -259,9 +301,9 @@ int main (int argc, char** argv)
             // Open file
             stringstream pathss2;
 #ifdef STIPULATE_DRIFT_CASE
-            pathss2 << "./data/evolve_withf_";
+            pathss2 << "./data/evolutions/evolve_withf_";
 #else
-            pathss2 << "./data/evolve_nodrift_withf_";
+            pathss2 << "./data/evolutions/evolve_nodrift_withf_";
 #endif
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
             pathss2 << FF_NAME << "_" << N_Generations <<  "_fitness_" << pOn
@@ -285,6 +327,7 @@ int main (int argc, char** argv)
             f << "," << netinfo[i][0].ab.maxAttractorLength();
             f << "," << netinfo[i][0].numChangedTransitions;
             f << "," << netinfo[i][0].deltaF;
+            f << "," << N_Genes * (1<<N_Ins);
             f << endl;
 
             // Set up stringstream with the last line before the genome changes
@@ -298,10 +341,13 @@ int main (int argc, char** argv)
             old_genome_ss << "," << netinfo[i][0].ab.maxAttractorLength();
             old_genome_ss << "," << netinfo[i][0].numChangedTransitions;
             old_genome_ss << "," << netinfo[i][0].deltaF;
+            old_genome_ss << ",0";
             old_genome_ss << endl;
 
             int lastgen = 0;
             double last_fitness = 0.0;
+            // The last genome at which there was a fitness increment.
+            array<genosect_t, N_Genes> last_genome = netinfo[i][0].ab.genome;
             // Now the actual data.
             lastgen = static_cast<int>(netinfo[i].back().generation);
             for (unsigned int j = 0; j < netinfo[i].size(); ++j) {
@@ -315,8 +361,10 @@ int main (int argc, char** argv)
                     f << "," << netinfo[i][j].ab.maxAttractorLength();
                     f << "," << netinfo[i][j].numChangedTransitions;
                     f << "," << netinfo[i][j].deltaF;
+                    f << "," << compute_hamming (last_genome, netinfo[i][j].ab.genome);
                     f << endl;
                     last_fitness = netinfo[i][j].fitness;
+                    last_genome = netinfo[i][j].ab.genome;
                 }
 
                 old_genome_ss.str("");
@@ -328,6 +376,7 @@ int main (int argc, char** argv)
                 old_genome_ss << "," << netinfo[i][j].ab.maxAttractorLength();
                 old_genome_ss << "," << netinfo[i][j].numChangedTransitions;
                 old_genome_ss << "," << netinfo[i][j].deltaF;
+                old_genome_ss << ",0";
                 old_genome_ss << endl;
             }
 

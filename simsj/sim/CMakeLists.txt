@@ -1,167 +1,95 @@
 # The main evolve program, compiled with various fitness functions,
-# but always with N_Genes=5
-add_executable(evolve_ff1 evolve.cpp) # Uses 'fitness function 1' by default
-target_compile_definitions(evolve_ff1 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_1)
-add_executable(evolve_ff0 evolve.cpp)
-target_compile_definitions(evolve_ff0 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_0)
-add_executable(evolve_ff2 evolve.cpp)
-target_compile_definitions(evolve_ff2 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_2)
-add_executable(evolve_ff3 evolve.cpp)
-target_compile_definitions(evolve_ff3 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_3)
-add_executable(evolve_ff4 evolve.cpp)
-target_compile_definitions(evolve_ff4 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
+# but always with N_Genes=5. Operates in the "drift" case, where the
+# evolution of a new genome of equal fitness to the old one DOES
+# replace the old one.
+add_executable(evolve evolve.cpp)
+target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_5)
 
-add_executable(evolve_nodrift_ff4 evolve.cpp)
-target_compile_definitions(evolve_nodrift_ff4 PUBLIC USE_FITNESS_4)
+# The main evolve program operating in the "nodrift" case, where the
+# evolution of a new genome of equal fitness to the old one does NOT
+# replace the old one.
+add_executable(evolve_nodrift evolve.cpp)
+target_compile_definitions(evolve_nodrift PUBLIC USE_FITNESS_5)
 
 # Like the evolve programs, but saving every fitness value at every
-# generation. Again, N_Genes=5.
-add_executable(evolve_withf_ff0 evolve.cpp)
-target_compile_definitions(evolve_withf_ff0 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_0 RECORD_ALL_FITNESS N_Generations=100000)
-add_executable(evolve_withf_ff4 evolve.cpp)
-target_compile_definitions(evolve_withf_ff4 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+# generation. When fitness reaches 1, start from a new random genome
+# and create a new file to save the data into. Again, N_Genes=5.
+add_executable(evolve_withf evolve.cpp)
+target_compile_definitions(evolve_withf PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_5 RECORD_ALL_FITNESS N_Generations=1000000)
+# And nodrift version of the above:
+add_executable(evolve_nodrift_withf evolve.cpp)
+target_compile_definitions(evolve_nodrift_withf PUBLIC USE_FITNESS_5 RECORD_ALL_FITNESS N_Generations=1000000)
 
 # To generate the data for allowing the genome to drift.
-add_executable(drift_ff0 drift.cpp)
-target_compile_definitions(drift_ff0 PUBLIC USE_FITNESS_0)
-add_executable(drift_ff1 drift.cpp)
-target_compile_definitions(drift_ff1 PUBLIC USE_FITNESS_1)
-add_executable(drift_ff4 drift.cpp)
-target_compile_definitions(drift_ff4 PUBLIC USE_FITNESS_4)
+add_executable(drift drift.cpp)
+target_compile_definitions(drift PUBLIC USE_FITNESS_5)
 
-add_executable(drift_withf_ff4 drift.cpp)
-target_compile_definitions(drift_withf_ff4 PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+add_executable(drift_withf drift.cpp)
+target_compile_definitions(drift_withf PUBLIC USE_FITNESS_5 RECORD_ALL_FITNESS N_Generations=100000)
 
 # Null model - repeatedly generate random genomes
-add_executable(null_withf_ff4 nullmodel.cpp)
-target_compile_definitions(null_withf_ff4 PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+add_executable(null_withf nullmodel.cpp)
+target_compile_definitions(null_withf PUBLIC USE_FITNESS_5 RECORD_ALL_FITNESS N_Generations=100000)
 
-
-# This is essentially a debugging program, which sets up a random
-# genome, and evolves it one generation only.
-add_executable(evolve_onegen_ff0 evolve_onegen.cpp)
-target_compile_definitions(evolve_onegen_ff0 PUBLIC USE_FITNESS_0)
-add_executable(evolve_onegen_ff1 evolve_onegen.cpp)
-target_compile_definitions(evolve_onegen_ff1 PUBLIC USE_FITNESS_1)
-add_executable(evolve_onegen_ff2 evolve_onegen.cpp)
-target_compile_definitions(evolve_onegen_ff2 PUBLIC USE_FITNESS_2)
-add_executable(evolve_onegen_ff3 evolve_onegen.cpp)
-target_compile_definitions(evolve_onegen_ff3 PUBLIC USE_FITNESS_3)
-add_executable(evolve_onegen_ff4 evolve_onegen.cpp)
-target_compile_definitions(evolve_onegen_ff4 PUBLIC USE_FITNESS_4)
+# This is essentially a debugging/example program, which sets up a
+# random genome, and evolves it one generation only.
+add_executable(evolve_onegen evolve_onegen.cpp)
+target_compile_definitions(evolve_onegen PUBLIC USE_FITNESS_5)
 
 # This starts with a random genome, and evolves it for as many
 # generations as it takes to get to the first fit genome. N_Genes=5.
-add_executable(evolve_fit_genome_ff0 evolve_fit_genome.cpp)
-target_compile_definitions(evolve_fit_genome_ff0 PUBLIC USE_FITNESS_0)
-add_executable(evolve_fit_genome_ff1 evolve_fit_genome.cpp)
-target_compile_definitions(evolve_fit_genome_ff1 PUBLIC USE_FITNESS_1)
-add_executable(evolve_fit_genome_ff2 evolve_fit_genome.cpp)
-target_compile_definitions(evolve_fit_genome_ff2 PUBLIC USE_FITNESS_2)
-add_executable(evolve_fit_genome_ff4 evolve_fit_genome.cpp)
-target_compile_definitions(evolve_fit_genome_ff4 PUBLIC USE_FITNESS_4)
+add_executable(evolve_fit_genome evolve_fit_genome.cpp)
+target_compile_definitions(evolve_fit_genome PUBLIC USE_FITNESS_5)
 
 # This evaluates the fitness of the specific genome displayed in
 # Fig. 1 of the paper. N_Genes=5.
-add_executable(onestate_ff1 onestate.cpp)
-target_compile_definitions(onestate_ff1 PUBLIC USE_FITNESS_1)
-add_executable(onestate_ff0 onestate.cpp)
-target_compile_definitions(onestate_ff0 PUBLIC USE_FITNESS_0)
-add_executable(onestate_ff4 onestate.cpp)
-target_compile_definitions(onestate_ff4 PUBLIC USE_FITNESS_4)
+add_executable(onestate onestate.cpp)
+target_compile_definitions(onestate PUBLIC USE_FITNESS_5)
 
 # For N_Genes=5,Randomly select a number of genomes and output numbers
 # for those with fitness 0, those with >0 fitness and those with
 # fitness == 1.
-add_executable(estimate_zero_fits_ff0 estimate_zero_fits.cpp)
-target_compile_definitions(estimate_zero_fits_ff0 PUBLIC USE_FITNESS_0)
-add_executable(estimate_zero_fits_ff1 estimate_zero_fits.cpp)
-target_compile_definitions(estimate_zero_fits_ff1 PUBLIC USE_FITNESS_1)
-add_executable(estimate_zero_fits_ff4 estimate_zero_fits.cpp)
-target_compile_definitions(estimate_zero_fits_ff4 PUBLIC USE_FITNESS_4)
+add_executable(estimate_zero_fits estimate_zero_fits.cpp)
+target_compile_definitions(estimate_zero_fits PUBLIC USE_FITNESS_5)
+
+# Estimate fitness distribution
+#add_executable(estimate_fitness_dist estimate_fitness_dist.cpp)
+#target_compile_definitions(estimate_fitness_dist PUBLIC USE_FITNESS_5 N_Genes=5)
 
 # Show the fitness of a genome passed in on the command line.
-add_executable(showfitness_ff0 showfitness.cpp)
-target_compile_definitions(showfitness_ff0 PUBLIC USE_FITNESS_0)
-add_executable(showfitness_ff1 showfitness.cpp)
-target_compile_definitions(showfitness_ff1 PUBLIC USE_FITNESS_1)
-add_executable(showfitness_ff4 showfitness.cpp)
-target_compile_definitions(showfitness_ff4 PUBLIC USE_FITNESS_4)
+add_executable(showfitness showfitness.cpp)
+target_compile_definitions(showfitness PUBLIC USE_FITNESS_5)
 
 #
 # Evaluate the fitness of mutations away from a F=1 genome for Hamming
 # distance 1,2,3, etc. Do so for N_Genes=4,5,6.
 #
 
-# Fitness function 0
-# For N_Genes=4
-add_executable(mutation4_ff0 mutation.cpp)
-target_compile_definitions(mutation4_ff0 PUBLIC N_Genes=4 USE_FITNESS_0)
-target_link_libraries(mutation4_ff0 facto)
-# For N_Genes=5
-add_executable(mutation5_ff0 mutation.cpp)
-target_compile_definitions(mutation5_ff0 PUBLIC N_Genes=5 USE_FITNESS_0)
-target_link_libraries(mutation5_ff0 facto)
-# For N_Genes=6
-add_executable(mutation6_ff0 mutation.cpp)
-target_compile_definitions(mutation6_ff0 PUBLIC N_Genes=6 USE_FITNESS_0)
-target_link_libraries(mutation6_ff0 facto)
-
-# Fitness function 1
-# For N_Genes=4
-add_executable(mutation4_ff1 mutation.cpp)
-target_compile_definitions(mutation4_ff1 PUBLIC N_Genes=4 USE_FITNESS_1)
-target_link_libraries(mutation4_ff1 facto)
-# For N_Genes=5
-add_executable(mutation5_ff1 mutation.cpp)
-target_compile_definitions(mutation5_ff1 PUBLIC N_Genes=5 USE_FITNESS_1)
-target_link_libraries(mutation5_ff1 facto)
-# For N_Genes=6
-add_executable(mutation6_ff1 mutation.cpp)
-target_compile_definitions(mutation6_ff1 PUBLIC N_Genes=6 USE_FITNESS_1)
-target_link_libraries(mutation6_ff1 facto)
-
 # Fitness function 4
 # For N_Genes=4
-add_executable(mutation4_ff4 mutation.cpp)
-target_compile_definitions(mutation4_ff4 PUBLIC N_Genes=4 USE_FITNESS_4)
-target_link_libraries(mutation4_ff4 facto)
+add_executable(mutation4 mutation.cpp)
+target_compile_definitions(mutation4 PUBLIC N_Genes=4 USE_FITNESS_5)
+target_link_libraries(mutation4 facto)
 # For N_Genes=5
-add_executable(mutation5_ff4 mutation.cpp)
-target_compile_definitions(mutation5_ff4 PUBLIC N_Genes=5 USE_FITNESS_4)
-target_link_libraries(mutation5_ff4 facto)
+add_executable(mutation5 mutation.cpp)
+target_compile_definitions(mutation5 PUBLIC N_Genes=5 USE_FITNESS_5)
+target_link_libraries(mutation5 facto)
 # For N_Genes=6
-add_executable(mutation6_ff4 mutation.cpp)
-target_compile_definitions(mutation6_ff4 PUBLIC N_Genes=6 USE_FITNESS_4)
-target_link_libraries(mutation6_ff4 facto)
-
-# Find the proportion of random genomes with F=1, F>0; fitness function 0
-add_executable(proprandom4_ff0 proprandomfits.cpp)
-target_compile_definitions(proprandom4_ff0 PUBLIC N_Genes=4 USE_FITNESS_0)
-add_executable(proprandom5_ff0 proprandomfits.cpp)
-target_compile_definitions(proprandom5_ff0 PUBLIC N_Genes=5 USE_FITNESS_0)
-add_executable(proprandom6_ff0 proprandomfits.cpp)
-target_compile_definitions(proprandom6_ff0 PUBLIC N_Genes=6 USE_FITNESS_0)
-
-# Find the proportion of random genomes with F=1, F>0; fitness function 1
-add_executable(proprandom4_ff1 proprandomfits.cpp)
-target_compile_definitions(proprandom4_ff1 PUBLIC N_Genes=4 USE_FITNESS_1)
-add_executable(proprandom5_ff1 proprandomfits.cpp)
-target_compile_definitions(proprandom5_ff1 PUBLIC N_Genes=5 USE_FITNESS_1)
-add_executable(proprandom6_ff1 proprandomfits.cpp)
-target_compile_definitions(proprandom6_ff1 PUBLIC N_Genes=6 USE_FITNESS_1)
+add_executable(mutation6 mutation.cpp)
+target_compile_definitions(mutation6 PUBLIC N_Genes=6 USE_FITNESS_5)
+target_link_libraries(mutation6 facto)
 
 # Find the proportion of random genomes with F=1, F>0; fitness function 4
-add_executable(proprandom4_ff4 proprandomfits.cpp)
-target_compile_definitions(proprandom4_ff4 PUBLIC N_Genes=4 USE_FITNESS_4)
-add_executable(proprandom5_ff4 proprandomfits.cpp)
-target_compile_definitions(proprandom5_ff4 PUBLIC N_Genes=5 USE_FITNESS_4)
-add_executable(proprandom6_ff4 proprandomfits.cpp)
-target_compile_definitions(proprandom6_ff4 PUBLIC N_Genes=6 USE_FITNESS_4)
+add_executable(proprandom4 proprandomfits.cpp)
+target_compile_definitions(proprandom4 PUBLIC N_Genes=4 USE_FITNESS_5)
+add_executable(proprandom5 proprandomfits.cpp)
+target_compile_definitions(proprandom5 PUBLIC N_Genes=5 USE_FITNESS_5)
+add_executable(proprandom6 proprandomfits.cpp)
+target_compile_definitions(proprandom6 PUBLIC N_Genes=6 USE_FITNESS_5)
 
 # This executable displays the genome as it is mutated in a stream of text.
 add_executable(mutatestream mutatestream.cpp)
-target_compile_definitions(mutatestream PUBLIC USE_FITNESS_1)
+target_compile_definitions(mutatestream PUBLIC USE_FITNESS_5)
 
 # This accepts a string version of the genome (in 1s and 0s) and
 # displays the genome in tabular form.
@@ -182,11 +110,17 @@ target_link_libraries(compute_pnot0 facto)
 # Analysing the genome and the basins of attraction that they create.
 add_executable(analyse_genome analyse_genome.cpp)
 
+# Compute the probability of the fitness increasing on the next
+# evolution, starting from a fixed number of random genomes of
+# non-zero fitness.
 add_executable(prob_fitinc prob_fitinc.cpp)
-target_compile_definitions(prob_fitinc PUBLIC N_Genes=5 USE_FITNESS_4)
+target_compile_definitions(prob_fitinc PUBLIC N_Genes=5 USE_FITNESS_5)
 
+# Generates 10, random, non-zero fitness genomes and displays them.
 add_executable(fitness_of_ten fitness_of_ten.cpp)
-target_compile_definitions(fitness_of_ten PUBLIC N_Genes=5 USE_FITNESS_4)
+target_compile_definitions(fitness_of_ten PUBLIC N_Genes=5 USE_FITNESS_5)
 
+# Examine the statistics of the evolution code - make sure that bits
+# are flipped with even probability.
 add_executable(flip_stats flip_stats.cpp)
-target_compile_definitions(flip_stats PUBLIC N_Genes=5 N_Generations=100000 USE_FITNESS_4)
+target_compile_definitions(flip_stats PUBLIC N_Genes=5 N_Generations=100000 USE_FITNESS_5)

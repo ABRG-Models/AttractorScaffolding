@@ -21,17 +21,22 @@ if [ ! -d ${HN} ]; then
     fi
 fi
 
-# Run several mutations in parallel.
-./${HN}/sim/mutation6_ff4 01 &
-./${HN}/sim/mutation6_ff4 02 &
-./${HN}/sim/mutation6_ff4 03 &
-./${HN}/sim/mutation6_ff4 04 &
-./${HN}/sim/mutation6_ff4 05 &
-./${HN}/sim/mutation6_ff4 06 &
-./${HN}/sim/mutation6_ff4 07 &
-./${HN}/sim/mutation6_ff4 08 &
-./${HN}/sim/mutation6_ff4 09 &
-./${HN}/sim/mutation6_ff4 10 &
+echo "Using build directory ${HN} for executables"
 
-wait
+# Run several evolves in parallel.
+./${HN}/sim/evolve_nodrift_withf 0.01
+./${HN}/sim/evolve_nodrift_withf 0.02
+./${HN}/sim/evolve_nodrift_withf 0.05
+./${HN}/sim/evolve_nodrift_withf 0.10
+./${HN}/sim/evolve_nodrift_withf 0.15
+./${HN}/sim/evolve_nodrift_withf 0.20
+./${HN}/sim/evolve_nodrift_withf 0.25
+./${HN}/sim/evolve_nodrift_withf 0.3
+./${HN}/sim/evolve_nodrift_withf 0.35
+./${HN}/sim/evolve_nodrift_withf 0.4
+./${HN}/sim/evolve_nodrift_withf 0.45
+./${HN}/sim/evolve_nodrift_withf 0.5
+
 popd
+
+exit 0

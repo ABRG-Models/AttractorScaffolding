@@ -65,4 +65,25 @@ f4.set_xlabel('Max limit cycle size');
 F1.tight_layout()
 plt.savefig ('null_model_stats_ff4.png')
 
+F2 = plt.figure (figsize=(8,8))
+# For each unique value in A[:,2], do a histogram of the fitnesses in A[:,1]
+print ('A col 2 has length {0}'.format(len(A[:,2])))
+lcs = np.unique(A[:,2])
+print ('{0} unique values in A[:,2]: {1}'.format(len(lcs), lcs))
+a1 = []
+gcount = 0
+nbins = 20
+for lc in lcs:
+    print ('{0}'.format(lc))
+    AA = A[np.where(A[:,2]==lc),:]
+    print ('{0}'.format(np.shape(AA)))
+    D = AA[0,:,1]
+    print ('{0}'.format(D))
+    bins = np.linspace(1,0.5*np.max(D),nbins)
+    h,b = np.histogram (D, bins)
+    ax = F2.add_subplot (2,5,gcount+1)
+    a1.append(ax)
+    a1[gcount].plot (b[:-1], h, '.', color='r', marker='o')
+    gcount = gcount + 1
+
 plt.show()

@@ -8,7 +8,6 @@ elif [ ${PWD} = 'simsj' ]; then # This line will change
 else
     echo "Please run this from simsj or the scripts directory."
 fi
-
 # Find out where to run from.
 HN=`hostname`
 if [ ! -d ${HN} ]; then
@@ -21,17 +20,19 @@ if [ ! -d ${HN} ]; then
     fi
 fi
 
-# Run several mutations in parallel.
-./${HN}/sim/mutation4_ff4 01 &
-./${HN}/sim/mutation4_ff4 02 &
-./${HN}/sim/mutation4_ff4 03 &
-./${HN}/sim/mutation4_ff4 04 &
-./${HN}/sim/mutation4_ff4 05 &
-./${HN}/sim/mutation4_ff4 06 &
-./${HN}/sim/mutation4_ff4 07 &
-./${HN}/sim/mutation4_ff4 08 &
-./${HN}/sim/mutation4_ff4 09 &
-./${HN}/sim/mutation4_ff4 10 &
+echo "Using build directory ${HN} for executables"
+
+# Run several drifts in parallel.
+#./${HN}/sim/drift 0.05 &
+./${HN}/sim/drift 0.1 &
+#./${HN}/sim/drift 0.15 &
+./${HN}/sim/drift 0.2 &
+#./${HN}/sim/drift 0.25 &
+./${HN}/sim/drift 0.3 &
+#./${HN}/sim/drift 0.35 &
+./${HN}/sim/drift 0.4 &
+#./${HN}/sim/drift 0.45 &
+./${HN}/sim/drift 0.5 &
 
 wait
 popd

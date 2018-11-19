@@ -24,16 +24,20 @@ fi
 echo "Using build directory ${HN} for executables"
 
 # Run several evolves in parallel.
-./${HN}/sim/evolve_nodrift_ff4 0.05 &
-./${HN}/sim/evolve_nodrift_ff4 0.10 &
-./${HN}/sim/evolve_nodrift_ff4 0.15 &
-./${HN}/sim/evolve_nodrift_ff4 0.20 &
-./${HN}/sim/evolve_nodrift_ff4 0.25 &
-./${HN}/sim/evolve_nodrift_ff4 0.3 &
-./${HN}/sim/evolve_nodrift_ff4 0.35 &
-./${HN}/sim/evolve_nodrift_ff4 0.4 &
-./${HN}/sim/evolve_nodrift_ff4 0.45 &
-./${HN}/sim/evolve_nodrift_ff4 0.5 &
+./${HN}/sim/evolve_nodrift 0.01 &
+./${HN}/sim/evolve_nodrift 0.02 &
+./${HN}/sim/evolve_nodrift 0.05 &
+./${HN}/sim/evolve_nodrift 0.10 &
+./${HN}/sim/evolve_nodrift 0.15 &
+./${HN}/sim/evolve_nodrift 0.20 &
+./${HN}/sim/evolve_nodrift 0.25 &
+./${HN}/sim/evolve_nodrift 0.3 &
+./${HN}/sim/evolve_nodrift 0.35 &
+./${HN}/sim/evolve_nodrift 0.4 &
+./${HN}/sim/evolve_nodrift 0.45 &
+./${HN}/sim/evolve_nodrift 0.5 &
 
 wait
 popd
+
+exit 0
