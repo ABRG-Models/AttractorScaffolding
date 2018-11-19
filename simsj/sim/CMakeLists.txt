@@ -103,7 +103,8 @@ target_link_libraries(h_m facto)
 add_executable(combos combos.cpp)
 target_link_libraries(combos facto)
 
-# Computing Probability of non-zero score by fast, binomials method:
+# Computing Probability of non-zero score for fitness function 4 by
+# fast, binomials method:
 add_executable(compute_pnot0 compute_pnot0.cpp)
 target_link_libraries(compute_pnot0 facto)
 
