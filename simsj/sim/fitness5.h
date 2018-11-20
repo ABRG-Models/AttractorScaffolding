@@ -19,7 +19,7 @@ using namespace std;
  */
 #define state_t_unset 0x80
 
-#define FF_NAME "ff4"
+#define FF_NAME "ff5"
 
 // Trying out a modification to the FF
 #define ADD_DONT_MULT 1
