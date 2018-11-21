@@ -152,7 +152,7 @@ int main (int argc, char** argv)
             for (unsigned int j = 0; j < netinfo[i].size(); ++j) {
                 // New genome:
                 fout << static_cast<int>(netinfo[i][j].generation) << "," << netinfo[i][j].fitness;
-                fout << "," << genome_id(netinfo[i][j].ab.genome);
+                fout << "," << genome2str(netinfo[i][j].ab.genome);
                 fout << "," << netinfo[i][j].ab.getNumBasins();
                 fout << "," << netinfo[i][j].ab.meanAttractorLength();
                 fout << "," << netinfo[i][j].ab.maxAttractorLength();
