@@ -2,6 +2,9 @@
  * This defines a fitness function described in the associated
  * paper. See the code comment for evaluate_fitness() for a
  * description of the fitness function.
+ *
+ * This is multiplicative between the genes, but takes a mean of the
+ * anterior and posterior scores.
  */
 
 #ifndef __FITNESS_FUNCTION__
@@ -19,10 +22,7 @@ using namespace std;
  */
 #define state_t_unset 0x80
 
-#define FF_NAME "ff5"
-
-// Trying out a modification to the FF
-#define ADD_DONT_MULT 1
+#define FF_NAME "ff6"
 
 double
 evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
@@ -69,24 +69,35 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 
                 // Now have the set lc; can work out its score.
 
-                // For tabulating the score
-                unsigned int sc = 0;
+                // For tabulating the scores
+                array<double, N_Genes> sc;
+                for (unsigned int j = 0; j < N_Genes; ++j) { sc[j] = 0.0; }
 
                 set<state_t>::const_iterator i = lc.begin();
                 while (i != lc.end()) {
                     state_t a = ((*i) ^ ~target) & state_mask;
                     for (unsigned int j = 0; j < N_Genes; ++j) {
-                        sc += (unsigned int)((a >> j) & 0x1);
+                        sc[j] += static_cast<double>( (a >> j) & 0x1 );
                     }
                     ++i;
                 }
                 // Divide down now.
-                score = static_cast<double>(sc) / static_cast<double>(lc_len * N_Genes);
+#pragma omp simd
+                for (unsigned int j = 0; j < N_Genes; ++j) {
+                    sc[j] /= static_cast<double>(lc_len);
+                }
 
 #ifdef DEBUGF
                 DBGF("Score:");
-                cout << score;
+                cout << sc[0];
 #endif
+                score = sc[0];
+                for (unsigned int j = 1; j < N_Genes; ++j) {
+#ifdef DEBUGF
+                    cout << "," << sc[j];
+#endif
+                    score = score * sc[j];
+                }
             }
 #ifdef DEBUGF
             cout << endl;
@@ -113,13 +124,16 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
  * The fitness is then computed according
  * to:
  *
- * f = 0.5 * [(a0 + a1 + a2 + a3 + a4)/5 + (p0 + p1 + p2 + p3 + p4)/5]
+ * f = (a0 * a1 * a2 * a3 * a4) * (p0 * p1 * p2 * p3 * p4)
  *
  * a0 is the proportion of time during the limit cycle that bit 0 has
  * the state matching the anterior target
  *
  * Returns fitness in range 0 to 1.0. Note use of double. The fitness
- * values can potentially be very small for a long limit cycle.
+ * values can potentially be very small for a long limit cycle. For
+ * example, for a 5 gene LC of size 10, the fitness could be as low as
+ * (1/10)^5 * (1/10)^5 = 1/10^10, which is heading towards what a
+ * single precision float can represent.
  *
  * For further details on this fitness evaluation, please see the
  * associated paper.
@@ -130,7 +144,7 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     double ant_score = evaluate_one (genome, initial_ant, target_ant);
     double pos_score = evaluate_one (genome, initial_pos, target_pos);
 
-    double fitness = (ant_score + pos_score) * 0.5;
+    double fitness = 0.5 * (ant_score + pos_score);
 
 #ifdef DEBUGF
     if (fitness == 1.0) {

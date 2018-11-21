@@ -125,3 +125,12 @@ target_compile_definitions(fitness_of_ten PUBLIC N_Genes=5 USE_FITNESS_5)
 # are flipped with even probability.
 add_executable(flip_stats flip_stats.cpp)
 target_compile_definitions(flip_stats PUBLIC N_Genes=5 N_Generations=100000 USE_FITNESS_5)
+
+add_executable(estimate_fitness_dist_ff4 estimate_fitness_dist.cpp)
+target_compile_definitions(estimate_fitness_dist_ff4 PUBLIC N_Genes=5 N_Genomes=10000000 USE_FITNESS_4)
+
+add_executable(estimate_fitness_dist_ff5 estimate_fitness_dist.cpp)
+target_compile_definitions(estimate_fitness_dist_ff5 PUBLIC N_Genes=5 N_Genomes=10000000 USE_FITNESS_5)
+
+add_executable(estimate_fitness_dist_ff6 estimate_fitness_dist.cpp)
+target_compile_definitions(estimate_fitness_dist_ff6 PUBLIC N_Genes=5 N_Genomes=10000000 USE_FITNESS_6)

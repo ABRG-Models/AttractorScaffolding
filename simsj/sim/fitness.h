@@ -32,9 +32,16 @@
 # include "fitness4.h"
 
 #elif defined USE_FITNESS_5
-// An alternative way of considering the limit cycle as defining
-// "proportional expression" of the target proteins.
+// Like FF4, considers the limit cycle as defining "proportional
+// expression" of the target proteins, but takes a mean of the time
+// each gene spends in the correct state, rather than computing a
+// multiplicative score like FF4.
 # include "fitness5.h"
+
+#elif defined USE_FITNESS_6
+// Like FF4 (multiplicative between the genes), but takes the mean of
+// the anterior and posterior scores.
+# include "fitness6.h"
 
 #else
 # error "When you include fitness.h you have to make sure to define USE_FITNESS_N"
