@@ -389,11 +389,12 @@ class NetInfo
 public:
     NetInfo() {}
     NetInfo(AllBasins& ab_, unsigned int gen, double fitn) {
+        this->update (ab_, gen, fitn);
+    }
+    void update (AllBasins& ab_, unsigned int gen, double fitn) {
         this->ab = ab_;
         this->generation = gen;
         this->fitness = fitn;
-    }
-    void update (void) {
     }
     ~NetInfo() {}
     //! Contains the genome, and information about the attractors in the network.
