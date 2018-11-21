@@ -159,7 +159,7 @@ plt.errorbar (m5_final[:,0], m5_final[:,1], yerr=m5_final[:,2], fmt='.', linesty
 f0.axes[0].set_xlabel('Hamming distance from F=1 genome',fontsize=fs2)
 f0.axes[0].set_ylabel('Proportion of possible states that are fit',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness0.png')
+plt.savefig('png/mutantfitness0.png')
 
 f1 = plt.figure(figsize=(8,8))
 #f1, axs = pl1.subplots(nrows=2, ncols=2, sharex=True)
@@ -171,7 +171,7 @@ plt.errorbar (m5_final[:,0]/80, m5_final[:,1], yerr=m5_final[:,2], fmt='.', line
 f1.axes[0].set_xlabel('Proportional Hamming distance from F=1 genome',fontsize=fs2)
 f1.axes[0].set_ylabel('Proportion of possible states that are fit',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness1.png')
+plt.savefig('png/mutantfitness1.png')
 
 f2 = plt.figure(figsize=(8,8))
 plt.errorbar (m4_final[:,0]/32, m4_final[:,4], yerr=m4_final[:,5], fmt='.', linestyle='-', color=c.slateblue2)
@@ -180,7 +180,7 @@ plt.errorbar (m5_final[:,0]/80, m5_final[:,4], yerr=m5_final[:,5], fmt='.', line
 f2.axes[0].set_xlabel('Proportional Hamming distance from F=1 genome',fontsize=fs2)
 f2.axes[0].set_ylabel('Mean fitness per possible state',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness2.png')
+plt.savefig('png/mutantfitness2.png')
 
 f3 = plt.figure(figsize=(8,8))
 plt.errorbar (m4_final[:,0]/32, m4_final[:,7], yerr=m4_final[:,8], fmt='.', linestyle='-', color=c.slateblue2)
@@ -198,7 +198,7 @@ plt.plot (px, fit_fn3(px), linestyle='-.', color=c.palevioletred3)
 f3.axes[0].set_xlabel('Proportional Hamming distance from F=1 genome',fontsize=fs2)
 f3.axes[0].set_ylabel('Sum of fitness/number of fit states',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness3.png')
+plt.savefig('png/mutantfitness3.png')
 
 f4 = plt.figure(figsize=(8,8))
 plt.errorbar (m4_final[:,0], m4_final[:,7], yerr=m4_final[:,8], fmt='.', linestyle='-', color=c.slateblue2)
@@ -207,7 +207,7 @@ plt.errorbar (m5_final[:,0], m5_final[:,7], yerr=m5_final[:,8], fmt='.', linesty
 f4.axes[0].set_xlabel('Hamming distance from F=1 genome',fontsize=fs2)
 f4.axes[0].set_ylabel('Sum of fitness/number of fit states',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness4.png')
+plt.savefig('png/mutantfitness4.png')
 
 f5 = plt.figure(figsize=(8,8))
 plt.errorbar (m4_final[:,0]/32, np.log(m4_final[:,7]), yerr=m4_final[:,8], fmt='.', linestyle='-', color=c.slateblue2)
@@ -216,7 +216,7 @@ plt.errorbar (m5_final[:,0]/80, np.log(m5_final[:,7]), yerr=m5_final[:,8], fmt='
 f5.axes[0].set_xlabel('Proportional Hamming distance from F=1 genome',fontsize=fs2)
 f5.axes[0].set_ylabel('log(Sum of fitness/number of fit states)',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness5.png')
+plt.savefig('png/mutantfitness5.png')
 
 f6 = plt.figure(figsize=(8,8))
 plt.errorbar (m4_final[:,0], np.log(m4_final[:,7]), yerr=m4_final[:,8], fmt='.', linestyle='-', color=c.slateblue2)
@@ -233,7 +233,7 @@ plt.plot (px, fit_fn3(px), linestyle='-.', color=c.palevioletred3)
 f6.axes[0].set_xlabel('Hamming distance from F=1 genome',fontsize=fs2)
 f6.axes[0].set_ylabel('log(Sum of fitness/number of fit states)',fontsize=fs2)
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness6.png')
+plt.savefig('png/mutantfitness6.png')
 
 f7 = plt.figure(figsize=(8,8))
 #f1, axs = pl1.subplots(nrows=2, ncols=2, sharex=True)
@@ -246,6 +246,6 @@ f7.axes[0].set_xlabel('Proportional Hamming distance from F=1 genome',fontsize=f
 f7.axes[0].set_ylabel('Proportion of possible states that are fit',fontsize=fs2)
 f7.axes[0].set_xlim([0,0.5])
 plt.legend(('4 genes','5 genes','6 genes'))
-plt.savefig('mutantfitness7.png')
+plt.savefig('png/mutantfitness7.png')
 
 plt.show()

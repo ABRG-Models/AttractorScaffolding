@@ -174,7 +174,7 @@ def doPlot (driftnodrift, plottype, ff):
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
 
     f1.text (0.5, 0.9, graphtag, fontsize=20)
-    plt.savefig ('evolution_histos_' + plottype + filetag + '_'+ff+'.png')
+    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'.png')
 
     return M
 

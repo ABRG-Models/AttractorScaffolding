@@ -12,6 +12,6 @@ F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot (111)
 sl.plot_states (net, f1.axes)
 
-plt.savefig('states.png', dpi=600)
+plt.savefig('png/states.png', dpi=600)
 print ('Wrote states.png')
 plt.show()

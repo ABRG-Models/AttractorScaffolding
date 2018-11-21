@@ -74,5 +74,5 @@ else:
 
 #    lbls = ['1','2','3','4','5','6','7','8','9']
 #    plt.legend(lbls, title='k')
-# plt.savefig('h_m.png');
+# plt.savefig('png/h_m.png');
 pl.show()

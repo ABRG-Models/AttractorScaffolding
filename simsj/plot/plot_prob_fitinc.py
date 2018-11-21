@@ -87,7 +87,7 @@ for ii in range(0,7):
 
     #f1.set_xlim([-1, 0.01])
     F1.tight_layout()
-    figpath = 'prob_fitinc_pOn_' + str(pOn) + '.png'
+    figpath = 'png/prob_fitinc_pOn_' + str(pOn) + '.png'
     plt.savefig (figpath)
     #plt.show()
     plt.clf()

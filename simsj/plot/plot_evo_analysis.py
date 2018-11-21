@@ -225,7 +225,7 @@ def doPlot (pOn, driftnodrift):
     f1.set_ylabel('fitness');
     f1.set_title (driftnodrift + ' p=' + str(pOn))
 
-    plt.savefig ('evo_analysis_'+driftnodrift+'_'+'{0:.2f}'.format(pOn)+'_ff4.png')
+    plt.savefig ('png/evo_analysis_'+driftnodrift+'_'+'{0:.2f}'.format(pOn)+'_ff4.png')
 
     # Set a default fontsize for matplotlib:
     fs=12

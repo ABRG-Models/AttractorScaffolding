@@ -197,7 +197,7 @@ a3.set_xlim([0,0.55])
 a3.set_ylim([0,80000])
 
 f1.tight_layout()
-plt.savefig ('evolution' + filetag + '_'+ff+'.png')
+plt.savefig ('png/evolution' + filetag + '_'+ff+'.png')
 
 plt.show()
 

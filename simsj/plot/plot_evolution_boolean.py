@@ -120,6 +120,6 @@ f1.set_xlim([-1, 0.01])
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
 f1.set_title (driftnodrift + ' p=' + str(pOn))
-plt.savefig ('evolution_boolean_'+driftnodrift+'_'+str(pOn)+'_ff4.png')
+plt.savefig ('png/evolution_boolean_'+driftnodrift+'_'+str(pOn)+'_ff4.png')
 
 plt.show()

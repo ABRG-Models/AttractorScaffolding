@@ -48,6 +48,6 @@ doPlot ('ff5', f2)
 f3 = F1.add_subplot(3,1,3)
 doPlot ('ff6', f3)
 F1.tight_layout()
-plt.savefig ('fitness_dists.png')
+plt.savefig ('png/fitness_dists.png')
 
 plt.show()

@@ -159,7 +159,7 @@ a3.set_ylabel('Mean generations to happen upon $f=1$ (x10K)')
 a3.set_xlim([0,0.55])
 a3.set_ylim([0,7.5])
 f3.tight_layout()
-plt.savefig ('distribution_drift_mean_vs_p_ff4.png')
+plt.savefig ('png/distribution_drift_mean_vs_p_ff4.png')
 
 plt.show()
 

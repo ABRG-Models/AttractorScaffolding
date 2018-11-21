@@ -272,9 +272,9 @@ plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 f1.tight_layout()
 
 if logplot:
-    plt.savefig('smooth_fit_log_ff4.png')
+    plt.savefig('png/smooth_fit_log_ff4.png')
 else:
-    plt.savefig('smooth_fit_ff4.png')
+    plt.savefig('png/smooth_fit_ff4.png')
 
 #
 # Second figure produced by this script is "Fitness increases.." current Fig. 6.
@@ -339,8 +339,8 @@ plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 f2.tight_layout()
 
 if logplot:
-    plt.savefig('fitness_increases_gradually_log_ff4.png')
+    plt.savefig('png/fitness_increases_gradually_log_ff4.png')
 else:
-    plt.savefig('fitness_increases_gradually_ff4.png')
+    plt.savefig('png/fitness_increases_gradually_ff4.png')
 
 plt.show()

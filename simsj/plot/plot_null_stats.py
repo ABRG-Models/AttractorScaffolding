@@ -18,6 +18,9 @@ FF_NAME = 'ff5'
 
 # NB: Run plot_null_stats_load.py first to generate nullstats_A.npy
 A = np.load ('nullstats_A' + FF_NAME + '.npy')
+# Could replace above with:
+#A2 = np.loadtxt ('../data/null_withf_a21_p10_'+FF_NAME+'_100000_fitness_0.csv', delimiter=',')
+#print ('shapes: {0}, {1}'.format(np.shape(A), np.shape(A2)))
 
 f1 = F1.add_subplot(2,2,1)
 f1.plot (A[:,0]/10000,A[:,1],marker='o',linestyle='None',linewidth=2,color=col.darkviolet)
@@ -100,7 +103,7 @@ f4.set_xlabel('Max limit cycle size');
 
 #f1.set_xlim([-1, 0.01])
 F1.tight_layout()
-plt.savefig ('null_model_stats_' + FF_NAME + '.png')
+plt.savefig ('png/null_model_stats_' + FF_NAME + '.png')
 
 F2 = plt.figure (figsize=(12,8))
 # For each unique value in A[:,2] (number of limit cycles), do a
@@ -133,5 +136,5 @@ for lc in lcs:
     a1[gcount].set_title('LC size {0}'.format(lc))
     gcount = gcount + 1
 
-plt.savefig ('null_model_stats_perLC_' + FF_NAME + '.png')
+plt.savefig ('png/null_model_stats_perLC_' + FF_NAME + '.png')
 plt.show()

@@ -134,7 +134,7 @@ def doPlot (driftnodrift, plottype):
         gcount = gcount + 1
 
     f1.tight_layout()
-    plt.savefig ('fitinc_histos_' + plottype + filetag + '_ff4.png')
+    plt.savefig ('png/fitinc_histos_' + plottype + filetag + '_ff4.png')
 
 # Change this to choose which to plot.
 driftnodrift = 'nodrift' # 'nodrift' or 'drift'
