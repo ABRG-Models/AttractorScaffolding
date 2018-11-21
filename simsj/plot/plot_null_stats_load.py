@@ -34,5 +34,6 @@ fnt = {'family' : 'DejaVu Sans',
        'size'   : 14}
 matplotlib.rc('font', **fnt)
 
-A = readDataset('../data/null_withf_a21_p10_ff4_100000_fitness_0.csv')
-np.save ('nullstats_A', A)
+FF_NAME = 'ff5'
+A = readDataset('../data/null_withf_a21_p10_'+FF_NAME+'_100000_fitness_0.csv')
+np.save ('nullstats_A'+FF_NAME, A)

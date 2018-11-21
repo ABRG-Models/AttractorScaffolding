@@ -17,7 +17,7 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-def doPlot (driftnodrift, plottype):
+def doPlot (driftnodrift, plottype, ff):
 
     if driftnodrift == 'drift':
         filetag = ''
@@ -26,16 +26,16 @@ def doPlot (driftnodrift, plottype):
     # Make files from directory listing
     p = Path('../data')
     ##files = list(p.glob('*evolve'+filetag+'_a21_p10_ff4_100000000_gens_*.csv')) # order is wrong
-    files = ['../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.05.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.1.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.15.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.2.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.25.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.3.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.35.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.4.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.45.csv',
-             '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gens_0.5.csv']
+    files = ['../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.05.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.1.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.15.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.2.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.25.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.3.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.35.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.4.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.45.csv',
+             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.5.csv']
 
     if plottype == 'loglog1':
         graphtag = driftnodrift + ', log/log (log hist bins)'
@@ -174,21 +174,22 @@ def doPlot (driftnodrift, plottype):
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
 
     f1.text (0.5, 0.9, graphtag, fontsize=20)
-    plt.savefig ('evolution_histos_' + plottype + filetag + '_ff4.png')
+    plt.savefig ('evolution_histos_' + plottype + filetag + '_'+ff+'.png')
 
     return M
 
 # Change this to choose which to plot.
 driftnodrift = 'nodrift' # 'nodrift' or 'drift'
-doPlot ('nodrift', '')
-#doPlot ('drift', '')
-M1 = doPlot ('nodrift', 'log')
-#doPlot ('drift', 'log')
-M2 = doPlot ('nodrift', 'loglog1')
-M3 = doPlot ('nodrift', 'loglog2')
-#doPlot ('drift', 'loglog')
-P = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5])
+fitf = 'ff6'
+doPlot ('nodrift', '', fitf)
+#doPlot ('drift', '', fitf)
+M1 = doPlot ('nodrift', 'log', fitf)
+#doPlot ('drift', 'log', fitf)
+M2 = doPlot ('nodrift', 'loglog1', fitf)
+M3 = doPlot ('nodrift', 'loglog2', fitf)
+#doPlot ('drift', 'loglog', fitf)
 
+#P = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5])
 #f1 = plt.figure(figsize=(6,6))
 #ax = f1.add_subplot (1,1,1)
 #ax.plot (P, M1[:,1])

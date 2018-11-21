@@ -87,7 +87,7 @@ def doPlot (pOn, driftnodrift):
     print (globstr)
     files = list(p.glob(globstr))
 
-    print (files)
+    #print (files)
 
     # Font size for plotting
     fs2=14 # for axes tick labels
@@ -265,17 +265,16 @@ def doPlot (pOn, driftnodrift):
 driftnodrift = 'nodrift'
 
 # I'll have to run 0.7, 0.8 and 0.9 longer to get the stats
-#doPlot (0.9, driftnodrift)
-#doPlot (0.8, driftnodrift)
-#doPlot (0.7, driftnodrift)
-
-doPlot (0.6, driftnodrift)
-doPlot (0.5, driftnodrift)
-doPlot (0.4, driftnodrift)
-doPlot (0.3, driftnodrift)
-doPlot (0.2, driftnodrift)
-doPlot (0.15, driftnodrift)
-doPlot (0.1, driftnodrift)
-doPlot (0.05, driftnodrift)
+#doPlot (0.8, driftnodrift) # need 50000000! 1 hr of computation
+#doPlot (0.7, driftnodrift) # Need 20M?
+#doPlot (0.6, driftnodrift) # Need 10M?
+doPlot (0.5, driftnodrift)  # 13 in 1000000 and 119 in 10000000
+doPlot (0.4, driftnodrift)  # 26 in 500000
+doPlot (0.3, driftnodrift)  # 66 in 500000
+doPlot (0.2, driftnodrift)  # 150 in 500000
+doPlot (0.15, driftnodrift) # 131 in 500000
+doPlot (0.1, driftnodrift)  # 63 in 500000
+doPlot (0.05, driftnodrift) # 22 in 1000000
+doPlot (0.02, driftnodrift) # 2 full F=1 in 1000000
 
 plt.show()

@@ -51,22 +51,22 @@ for ii in range(0,7):
     f1.plot (np.log(A[:,0]), np.log(A[:,1]), marker='o', linestyle='None', linewidth=2, color=col.darkviolet)
     f1.set_xlabel('log(Initial Fitness)');
     f1.set_ylabel('log(P(fitter))');
-    f1.set_xlim([-10,-1])
-    f1.set_ylim([-8,0])
+    #f1.set_xlim([-10,-1])
+    #f1.set_ylim([-8,0])
 
     f2 = F1.add_subplot(2,2,2)
     f2.plot (np.log(A[:,0]), A[:,1], marker='o', linestyle='None', linewidth=2, color=col.darkviolet)
     f2.set_xlabel('log(Initial Fitness)');
     f2.set_ylabel('P(fitter)');
-    f2.set_xlim([-10,-1])
-    f2.set_ylim([0,0.6])
+    #f2.set_xlim([-10,-1])
+    #f2.set_ylim([0,0.6])
 
     f3 = F1.add_subplot(2,2,3)
     f3.plot (A[:,1], A[:,2], marker='o', linestyle='None', linewidth=2, color=col.maroon1)
     f3.set_xlabel('P(fitter)');
     f3.set_ylabel('P(equal fitness)');
-    f3.set_xlim([0,0.6])
-    f3.set_ylim([0,0.3])
+    #f3.set_xlim([0,0.6])
+    #f3.set_ylim([0,0.3])
 
     nbins=20
 
@@ -82,12 +82,12 @@ for ii in range(0,7):
     f4.plot(b[:-1],h,'.',color=col.darkviolet, marker='o', markersize=8)
     f4.set_xlabel('log (P(fitter))');
     f4.set_ylabel('Freq');
-    f4.set_xlim([-8,0])
-    f4.set_ylim([0,300])
+    #f4.set_xlim([-8,0])
+    #f4.set_ylim([0,300])
 
     #f1.set_xlim([-1, 0.01])
     F1.tight_layout()
     figpath = 'prob_fitinc_pOn_' + str(pOn) + '.png'
     plt.savefig (figpath)
-    plt.show()
+    #plt.show()
     plt.clf()

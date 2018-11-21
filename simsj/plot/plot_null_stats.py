@@ -6,28 +6,6 @@ import csv
 import sebcolour
 col = sebcolour.Colour
 
-# Read csv files with gen/fitness data in
-def readDataset (filepath):
-    f = np.zeros([1,7])
-    #nets = []
-    with open (filepath, 'r') as csvfile:
-        rdr = csv.reader (csvfile)
-        for row in rdr:
-            f[-1,0] = float(row[0])
-            f[-1,1] = float(row[1]) # fitness
-            # row[2] is genome, not used here.
-            #nets.append(row[2])
-            f[-1,2] = float(row[3]) # num basins
-            f[-1,3] = float(row[4]) # mean limit cycle length
-            f[-1,4] = float(row[5]) # max limit cycle length
-            f[-1,5] = float(row[6]) # num changed transitions
-            f[-1,6] = float(row[7]) # change in fitness
-
-            f = np.append(f, np.zeros([1,7]), 0)
-
-    # Note the -1 as there will be a final, zero line in the array
-    return f[:-1,:]#, nets
-
 # Set a default fontsize for matplotlib:
 fnt = {'family' : 'DejaVu Sans',
        'weight' : 'regular',
@@ -36,7 +14,10 @@ matplotlib.rc('font', **fnt)
 
 F1 = plt.figure (figsize=(8,8))
 
-A = readDataset('../data/null_withf_a21_p10_ff4_100000_fitness_0.csv')
+FF_NAME = 'ff5'
+
+# NB: Run plot_null_stats_load.py first to generate nullstats_A.npy
+A = np.load ('nullstats_A' + FF_NAME + '.npy')
 
 f1 = F1.add_subplot(2,2,1)
 f1.plot (A[:,0]/10000,A[:,1],marker='o',linestyle='None',linewidth=2,color=col.darkviolet)
@@ -45,45 +26,112 @@ f1.set_ylabel('fitness');
 
 # Num basin vs fitness
 f2 = F1.add_subplot(2,2,2)
-f2.plot (A[:,2],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.maroon1)
+nbins = 34
+X, Y = np.meshgrid(np.linspace(0,32,33), np.linspace(0,1.0,100))
+Z = np.zeros([33,100])
+fitness = A[:,1]
+numcyc = A[:,2]
+for mlc in range (0,33): # mean limit cycle (size)
+    print ('mlc={0}'.format(mlc))
+    print ('fitness: {0}'.format(fitness))
+    # a if condition else b
+    fitsel = fitness[(numcyc >= mlc) & (numcyc < mlc+1)]
+    print ('fitsel.shape(): {0} .size(): {1} Number not 0.5: {2}'
+           .format(np.shape(fitsel), np.size(fitsel), np.size(fitsel[fitsel!=0.5])))
+    print ('FITSEL: {0}'.format(fitsel))
+    bins = np.linspace(0, 1.0, 101)
+    h, b = np.histogram (fitsel, bins)
+    print ('h shape: {0}'.format(np.shape(h)))
+    Z[int(mlc),:] = np.log(h)
+#f2.plot (A[:,2],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.maroon1)
+f2.contourf(X,Y,Z.T)
 f2.set_ylabel('fitness');
 f2.set_xlabel('Num limit cycles in system');
 
 # Mean limit cycle length
 f3 = F1.add_subplot(2,2,3)
-f3.plot (A[:,3],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.violetred)
+
+nbins = 34
+X, Y = np.meshgrid(np.linspace(0,32,33), np.linspace(0,1.0,100))
+Z = np.zeros([33,100])
+fitness = A[:,1]
+meanlim = A[:,3]
+for mlc in range (0,33): # mean limit cycle (size)
+    print ('mlc={0}'.format(mlc))
+    print ('fitness: {0}'.format(fitness))
+    # a if condition else b
+    fitsel = fitness[(meanlim >= mlc) & (meanlim < mlc+1)]
+    print ('fitsel.shape(): {0} .size(): {1} Number not 0.5: {2}'
+           .format(np.shape(fitsel), np.size(fitsel), np.size(fitsel[fitsel!=0.5])))
+    print ('FITSEL: {0}'.format(fitsel))
+    bins = np.linspace(0, 1.0, 101)
+    h, b = np.histogram (fitsel, bins)
+    print ('h shape: {0}'.format(np.shape(h)))
+    Z[int(mlc),:] = np.log(h)
+#f3.plot (A[:,3],A[:,1],marker='.',markersize=0.5,linestyle='None',linewidth=2,color=col.violetred)
+f3.contourf(X,Y,Z.T)
 f3.set_ylabel('fitness');
 f3.set_xlabel('Mean limit cycle size');
 
 # Max limit cycle length
 f4 = F1.add_subplot(2,2,4)
-f4.plot (A[:,4],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.crimson)
+
+nbins = 34
+X, Y = np.meshgrid(np.linspace(0,32,33), np.linspace(0,1.0,100))
+Z = np.zeros([33,100])
+#fitness = A[:,1]
+maxlim = A[:,4]
+for mlc in range (0,33): # mean limit cycle (size)
+    print ('mlc={0}'.format(mlc))
+    print ('fitness: {0}'.format(fitness))
+    # a if condition else b
+    fitsel = fitness[(maxlim >= mlc) & (maxlim < mlc+1)]
+    print ('fitsel.shape(): {0} .size(): {1} Number not 0.5: {2}'
+           .format(np.shape(fitsel), np.size(fitsel), np.size(fitsel[fitsel!=0.5])))
+    print ('FITSEL: {0}'.format(fitsel))
+    bins = np.linspace(0, 1.0, 101)
+    h, b = np.histogram (fitsel, bins)
+    print ('h shape: {0}'.format(np.shape(h)))
+    Z[int(mlc),:] = np.log(h)
+#f4.plot (A[:,4],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.crimson)
+f4.contourf(X,Y,Z.T)
 f4.set_ylabel('fitness');
 f4.set_xlabel('Max limit cycle size');
 
 #f1.set_xlim([-1, 0.01])
 F1.tight_layout()
-plt.savefig ('null_model_stats_ff4.png')
+plt.savefig ('null_model_stats_' + FF_NAME + '.png')
 
-F2 = plt.figure (figsize=(8,8))
-# For each unique value in A[:,2], do a histogram of the fitnesses in A[:,1]
+F2 = plt.figure (figsize=(12,8))
+# For each unique value in A[:,2] (number of limit cycles), do a
+# histogram of the fitnesses in A[:,1]
 print ('A col 2 has length {0}'.format(len(A[:,2])))
 lcs = np.unique(A[:,2])
+
 print ('{0} unique values in A[:,2]: {1}'.format(len(lcs), lcs))
 a1 = []
 gcount = 0
 nbins = 20
 for lc in lcs:
     print ('{0}'.format(lc))
-    AA = A[np.where(A[:,2]==lc),:]
-    print ('{0}'.format(np.shape(AA)))
-    D = AA[0,:,1]
+    print ('A shape {0}'.format(np.shape(A)))
+    AA = A[np.where(A[:,2]==lc)]
+    print ('AA shape {0}'.format(np.shape(AA)))
+    D = AA[:,1]
+    print ('D shape {0} max {1} min {2}'.format(np.shape(D), max(D), min(D)))
+    unq, cnts = np.unique(D, return_counts=True)
+    print ('unq: {0}'.format(unq))
     print ('{0}'.format(D))
-    bins = np.linspace(1,0.5*np.max(D),nbins)
+    bins = np.linspace (min(D), max(D), num=nbins)
     h,b = np.histogram (D, bins)
     ax = F2.add_subplot (2,5,gcount+1)
     a1.append(ax)
-    a1[gcount].plot (b[:-1], h, '.', color='r', marker='o')
+    print (b[:-1])
+    print (h)
+    a1[gcount].plot (b[:-1], h, color='r')
+    #a1[gcount].plot (np.log(unq), np.log(cnts), '.', color='r', marker='o')
+    a1[gcount].set_title('LC size {0}'.format(lc))
     gcount = gcount + 1
 
+plt.savefig ('null_model_stats_perLC_' + FF_NAME + '.png')
 plt.show()
