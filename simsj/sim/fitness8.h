@@ -85,7 +85,7 @@ evaluate_expression (array<genosect_t, N_Genes>& genome, state_t state)
     return expression;
 }
 
-
+//#define MULTIPLIC 1
 /*!
  * For the passed-in genome, find its final state, starting from the
  * anterior state initial_ant and the posterior state initial_pos
@@ -141,28 +141,30 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
 
         } else if ((a_and_a_xor_p >> j) & 0x1) { // case 2
             DBGF ("Gene " << j << " case 2");
-            //fitnesses[j] = 0.5 * (exp_ant[j] - exp_pos[j] + 1);
+#ifndef MULTIPLIC
+            fitnesses[j] = 0.5 * (exp_ant[j] - exp_pos[j] + 1);
+#else
             fitnesses[j] = exp_ant[j] - exp_pos[j];
-            if (fitnesses[j] > 0) {
+            if (fitnesses[j] > 0.0) {
                 // Nothing further to do
             } else {
                 // If the gradient is in the wrong direction, set fitness to 0.
-                fitnesses[j] = 0;
+                fitnesses[j] = 0.0;
             }
-
+#endif
         } else if ((p_and_a_xor_p >> j) & 0x1) { // case 3
             DBGF ("Gene " << j << " case 3");
-#ifdef LINEAR
+#ifndef MULTIPLIC
             // This gives a fitness in range 0 to 1, with 0 to 0.5
             // given for gradients in the wrong direction.
             fitnesses[j] = 0.5 * (exp_pos[j] - exp_ant[j]);
 #else
             fitnesses[j] = exp_pos[j] - exp_ant[j];
-            if (fitnesses[j] > 0) {
+            if (fitnesses[j] > 0.0) {
                 // Nothing further to do
             } else {
                 // If the gradient is in the wrong direction, set fitness to 0.
-                fitnesses[j] = 0;
+                fitnesses[j] = 0.0;
             }
 #endif
         } else {
@@ -171,12 +173,21 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
         }
     }
 
+#ifdef MULTIPLIC
+    double fitness = 1.0;
+    for (unsigned int j=0; j<N_Genes; ++j) {
+        DBGF (" Gene " << j << " has expression ant/pos: " << exp_ant[j] << "/" << exp_pos[j] << " contributes: " << fitnesses[j]);
+        fitness *= fitnesses[j];
+    }
+    fitness /= N_Genes;
+#else
     double fitness = 0.0;
     for (unsigned int j=0; j<N_Genes; ++j) {
         DBGF (" Gene " << j << " has expression ant/pos: " << exp_ant[j] << "/" << exp_pos[j] << " contributes: " << fitnesses[j]);
         fitness += fitnesses[j];
     }
     fitness /= N_Genes;
+#endif
 
 #ifdef DEBUGF
     if (fitness == 1.0) {
