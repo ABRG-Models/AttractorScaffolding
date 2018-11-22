@@ -43,6 +43,16 @@
 // the anterior and posterior scores.
 # include "fitness6.h"
 
+#elif defined USE_FITNESS_7
+// Like FF5 (additive between the genes), but multiplies the anterior
+// and posterior scores.
+# include "fitness7.h"
+
+#elif defined USE_FITNESS_8
+// Seb's fitness function which pays attention to whether the gradient
+// from ant->pos is in the correct direction.
+# include "fitness8.h"
+
 #else
 # error "When you include fitness.h you have to make sure to define USE_FITNESS_N"
 #endif
