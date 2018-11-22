@@ -58,7 +58,7 @@ the name of your computer's hostname).
 
 ```bash
 pushd build
-cmake ..
+CXX=clang++ cmake .. # or CXX=icpc cmake .. or just cmake .. to use the default which is probably g++
 make -j6 # or however many cores you have
 popd
 ```
