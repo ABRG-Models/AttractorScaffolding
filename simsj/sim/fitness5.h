@@ -21,9 +21,6 @@ using namespace std;
 
 #define FF_NAME "ff5"
 
-// Trying out a modification to the FF
-#define ADD_DONT_MULT 1
-
 double
 evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 {
