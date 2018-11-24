@@ -2,6 +2,8 @@
  * This defines a fitness function described in the associated
  * paper. See the code comment for evaluate_fitness() for a
  * description of the fitness function.
+ *
+ * This is the "multiplicative fitness function"
  */
 
 #ifndef __FITNESS_FUNCTION__
