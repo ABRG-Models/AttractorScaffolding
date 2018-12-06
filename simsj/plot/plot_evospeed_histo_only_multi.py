@@ -77,6 +77,9 @@ def doPlot (driftnodrift, plottype, ff):
 
     f1 = plt.figure(figsize=(20,6)) # Figure object
 
+    f2 = plt.figure(figsize=(8,8))
+    ax2 = f2.add_subplot (1,1,1)
+
     M = np.zeros([nf,2])
 
     nbins = 20
@@ -96,7 +99,8 @@ def doPlot (driftnodrift, plottype, ff):
 
         print ('D min: {0}, D max: {1}'.format (np.min(D), np.max(D)))
         if plottype == 'loglog1':
-            bins = np.logspace (np.log(np.min(D)), np.log(np.max(D)), base=2.7183, num=nbins)
+            #bins = np.logspace (np.log(np.min(D)), np.log(np.max(D)), base=2.7183, num=nbins)
+            bins = np.logspace (np.log(np.min(D)), np.log(np.max(D)), base=6, num=nbins)
             print ('bins {0}'.format(bins[:-1]))
         elif plottype == 'loglog2':
             bins = np.linspace (0, np.max(D), nbins)
@@ -123,11 +127,12 @@ def doPlot (driftnodrift, plottype, ff):
         if plottype == 'loglog1':
             #bx = np.log(b[:-1]/scale)
             #bx = np.vstack ((bx, np.log(h))).T
-            bx = np.log(b[:-1]/scale) # logginess of x axis captured by np.logspace bins
-            bx = np.vstack ((bx, np.log(h))).T
+            bx = np.log10(b[:-1]/scale) # logginess of x axis captured by np.logspace bins
+            bx = np.vstack ((bx, np.log10(h))).T
             a1[gcount].set_ylabel('log (evolutions)',fontsize=fs)
             a1[gcount].set_xlabel('log (generations)',fontsize=fs)
-            a1[gcount].set_xlim([1,16])
+            a1[gcount].set_xlim([1,6])
+            a1[gcount].set_ylim([0,5])
 
         elif plottype == 'loglog2':
             bx = np.log(b[:-1]/scale)
@@ -135,7 +140,6 @@ def doPlot (driftnodrift, plottype, ff):
             a1[gcount].set_ylabel('log (evolutions)',fontsize=fs)
             a1[gcount].set_xlabel('log (generations)',fontsize=fs)
             a1[gcount].set_xlim([1,16])
-
 
         elif plottype == 'log':
             bx = b[:-1]/scale
@@ -152,7 +156,11 @@ def doPlot (driftnodrift, plottype, ff):
         bx = bx[np.where(np.isfinite(bx[:,1]))]
         bx = bx[np.where(np.isfinite(bx[:,0]))]
         #print ('bx: {0}'.format(bx))
-        a1[gcount].plot(bx[:,0], bx[:,1], color=colo, linestyle='None', marker=mkr[y], markersize=ms[y])
+        a1[gcount].plot(bx[:,0], bx[:,1], color=colo, linestyle='-', marker=mkr[y], markersize=ms[y])
+
+        print ('gcount={0}'.format(gcount))
+        if gcount == 1 or gcount == 6 or gcount == 9:
+            ax2.plot(bx[:,0], bx[:,1], color=colo, linestyle='-', marker=mkr[y], markersize=ms[y])
 
         # Weights? How to apply right? 1/sigma or 1/sigma^2.
         fit, residuals, rank, singular_values, rcond = np.polyfit (bx[:,0], bx[:,1], 1, full=True)
@@ -162,7 +170,7 @@ def doPlot (driftnodrift, plottype, ff):
         #print (fit_fn)
         M[y,0] = fit[0]     # slope
         #M[y,1] = residuals
-        a1[gcount].plot (bx[:,0], fit_fn(bx[:,0]), '-', linewidth=2, color=colo)
+        #a1[gcount].plot (bx[:,0], fit_fn(bx[:,0]), '-', linewidth=2, color=colo)
 
         # Set some common features of the subplot
         a1[gcount].set_title(lbls[gcount])
@@ -170,9 +178,18 @@ def doPlot (driftnodrift, plottype, ff):
         #a1[gcount].text (1, 1, graphtag)
         gcount = gcount + 1
 
+
+    ax2.set_ylabel('log$_{10}$ (F=1 evolutions)',fontsize=fs)
+    ax2.set_xlabel('log$_{10}$ (generations to evolve)',fontsize=fs)
+    ax2.set_xlim([1,6])
+    ax2.set_ylim([0,5])
+    ax2.legend(('p=0.1','p=0.35','p=0.5'))
+    f2.suptitle (driftnodrift);
+    #f2.tight_layout()
+    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'_format2.png')
+
     # rect=[left bottom right top]
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
-
     f1.text (0.5, 0.9, graphtag, fontsize=20)
     plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'.png')
 
@@ -180,13 +197,13 @@ def doPlot (driftnodrift, plottype, ff):
 
 # Change this to choose which to plot.
 driftnodrift = 'nodrift' # 'nodrift' or 'drift'
-fitf = 'ff6'
-doPlot ('nodrift', '', fitf)
+fitf = 'ff4'
+#doPlot ('nodrift', '', fitf)
 #doPlot ('drift', '', fitf)
-M1 = doPlot ('nodrift', 'log', fitf)
+#M1 = doPlot ('nodrift', 'log', fitf)
 #doPlot ('drift', 'log', fitf)
 M2 = doPlot ('nodrift', 'loglog1', fitf)
-M3 = doPlot ('nodrift', 'loglog2', fitf)
+M3 = doPlot ('drift', 'loglog1', fitf)
 #doPlot ('drift', 'loglog', fitf)
 
 #P = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5])
