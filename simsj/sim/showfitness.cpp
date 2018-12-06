@@ -13,6 +13,8 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <sys/types.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -35,7 +37,8 @@ using namespace std;
 int main (int argc, char** argv)
 {
     // Seed the RNG
-    srand(4);
+    unsigned int seed = mix(clock(), time(NULL), getpid());
+    srand (seed);
 
     //probability of flipping
     pOn = 0.1;
@@ -43,23 +46,30 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    if (argc < 2) {
-        LOG ("Usage: " << argv[0] << " 0110100101.....");
+    if (argc > 2) {
+        LOG ("Usage: " << argv[0] << " 0110100101..... (or omit string to show a random genome)");
         return 1;
     }
 
-    string s(argv[1]);
+    string s("");
+    if (argc == 2) {
+        string s1(argv[1]);
+        s = s1;
 
-    unsigned int l = s.length();
-    unsigned int l_genosect = 1 << N_Ins;
-    unsigned int l_genome = N_Genes * l_genosect;
-    if (l == l_genome) {
-        LOG ("String has " << l_genome << " bit chars as required...");
+        unsigned int l = s.length();
+        unsigned int l_genosect = 1 << N_Ins;
+        unsigned int l_genome = N_Genes * l_genosect;
+        if (l == l_genome) {
+            LOG ("String has " << l_genome << " bit chars as required...");
+        } else {
+            LOG ("String does not have " << l_genome << " bit chars as required. Exiting.");
+            return 1;
+        }
     } else {
-        LOG ("String does not have " << l_genome << " bit chars as required. Exiting.");
-        return 1;
+        array<genosect_t, N_Genes> g1;
+        random_genome(g1);
+        s = genome2str (g1);
     }
-
 
     array<genosect_t, N_Genes> g = str2genome (s);
 
