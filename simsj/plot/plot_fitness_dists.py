@@ -40,13 +40,15 @@ fnt = {'family' : 'DejaVu Sans',
        'size'   : fs2}
 matplotlib.rc('font', **fnt)
 
-F1 = plt.figure (figsize=(9,12))
-f1 = F1.add_subplot(3,1,1)
+F1 = plt.figure (figsize=(9,16))
+f1 = F1.add_subplot(4,1,1)
 doPlot ('ff4', f1)
-f2 = F1.add_subplot(3,1,2)
+f2 = F1.add_subplot(4,1,2)
 doPlot ('ff5', f2)
-f3 = F1.add_subplot(3,1,3)
+f3 = F1.add_subplot(4,1,3)
 doPlot ('ff6', f3)
+f4 = F1.add_subplot(4,1,4)
+doPlot ('ff8', f4)
 F1.tight_layout()
 plt.savefig ('png/fitness_dists.png')
 
