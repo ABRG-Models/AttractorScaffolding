@@ -20,7 +20,7 @@ using namespace std;
 // Choose debugging level.
 //
 //#define DEBUGF 1
-#define DEBUG 1
+//#define DEBUG 1
 // #define DEBUG2 1
 
 // Number of genes in a state is set at compile time.
@@ -67,5 +67,6 @@ int main (int argc, char** argv)
     show_genome (genome);
     double f = evaluate_fitness (genome);
     LOG ("The fitness of the newly evolved genome is " << f << " (should be 1)");
+    LOG ("1s and 0s representation: " << genome2str (genome));
     return 0;
 }
