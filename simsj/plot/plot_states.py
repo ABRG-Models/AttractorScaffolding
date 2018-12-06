@@ -4,14 +4,29 @@ import matplotlib.pyplot as plt
 
 import states_lib as sl
 
-#net = '00111101110001011111111001001001001000011101111010111110101011110011101100110111'
-#net = '01000110101110000010111011111000010010100010110010001001111110001110000110001101' # The net that had different fitness for Stuarts and my code.
-#net = '00001111111111000001101000001011000000011010100110011011111000011000011110100000' # 0.5 for ff5
-net = '11010100010011010011000001011010110111011010011100000101111101010010011110000110'
+# F=1
+net = '11110100010110100111010101001011110001011110111010111100011011011001101111111100'
 F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot (111)
 sl.plot_states (net, f1.axes)
+plt.tight_layout()
+plt.savefig('png/states_F1.png', dpi=600)
+print ('Wrote states_F1.png')
 
-plt.savefig('png/states.png', dpi=600)
-print ('Wrote states.png')
+# F=1 but one bit flipped                       v--this one
+net = '11110100010110100111010101001011110001011010111010111100011011011001101111111100'
+F1 = plt.figure (figsize=(8,8))
+f1 = F1.add_subplot (111)
+sl.plot_states (net, f1.axes)
+plt.tight_layout()
+plt.savefig('png/states_F1oneflip.png', dpi=600)
+
+# F=0.3
+net = '00011110000010010001000111000110111000100001101101101000011101001010110100011101'
+F1 = plt.figure (figsize=(8,8))
+f1 = F1.add_subplot (111)
+sl.plot_states (net, f1.axes)
+plt.tight_layout()
+plt.savefig('png/states_F0.3.png', dpi=600)
+
 plt.show()
