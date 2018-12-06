@@ -11,6 +11,12 @@ target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
 add_executable(evolve_nodrift evolve.cpp)
 target_compile_definitions(evolve_nodrift PUBLIC USE_FITNESS_4)
 
+add_executable(evolve_nodrift_n6 evolve.cpp)
+target_compile_definitions(evolve_nodrift_n6 PUBLIC N_Genes=6 USE_FITNESS_4)
+
+add_executable(evolve_nodrift_n7 evolve.cpp)
+target_compile_definitions(evolve_nodrift_n7 PUBLIC N_Genes=7 USE_FITNESS_4)
+
 # Like the evolve programs, but saving every fitness value at every
 # generation. When fitness reaches 1, start from a new random genome
 # and create a new file to save the data into. Again, N_Genes=5.
@@ -52,13 +58,19 @@ target_compile_definitions(onestate PUBLIC USE_FITNESS_4)
 add_executable(estimate_zero_fits estimate_zero_fits.cpp)
 target_compile_definitions(estimate_zero_fits PUBLIC USE_FITNESS_4)
 
-# Estimate fitness distribution
-#add_executable(estimate_fitness_dist estimate_fitness_dist.cpp)
-#target_compile_definitions(estimate_fitness_dist PUBLIC USE_FITNESS_4 N_Genes=5)
+# Estimate how many genomes lead to "shared terminations"
+add_executable(estimate_shared_terminations estimate_shared_terminations.cpp)
+target_compile_definitions(estimate_shared_terminations PUBLIC USE_FITNESS_4)
+
+add_executable(estimate_shared_terminations_n6 estimate_shared_terminations.cpp)
+target_compile_definitions(estimate_shared_terminations_n6 PUBLIC USE_FITNESS_4 N_Genes=6)
+
+add_executable(estimate_shared_terminations_n7 estimate_shared_terminations.cpp)
+target_compile_definitions(estimate_shared_terminations_n7 PUBLIC USE_FITNESS_4 N_Genes=7)
 
 # Show the fitness of a genome passed in on the command line.
 add_executable(showfitness showfitness.cpp)
-target_compile_definitions(showfitness PUBLIC USE_FITNESS_8)
+target_compile_definitions(showfitness PUBLIC USE_FITNESS_4)
 
 #
 # Evaluate the fitness of mutations away from a F=1 genome for Hamming

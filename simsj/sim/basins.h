@@ -16,7 +16,7 @@ using namespace std;
 /*!
  * When working with states in a graph of nodes, it may be necessary
  * to use one bit to refer to the state as being unset; this is the
- * bit to use.
+ * bit to use. This precludes the use of N_Genes==8.
  */
 #define state_t_unset 0x80
 
@@ -374,8 +374,25 @@ public:
     }
 
     /*!
+     * Return the basin of attraction which contains the state st.
+     */
+    BasinOfAttraction find (state_t& st) {
+        for (auto b : this->basins) {
+            try {
+                StateNode sn = b.nodes.at(st);
+                return b;
+            } catch (const std::out_of_range& e) {
+                // st in not in b.
+            }
+        }
+        BasinOfAttraction nullbasin;
+        return nullbasin;
+    }
+
+    /*!
      * Holds all the transitions in all the basins. Should have size
-     * exactly 2^N_Genes. Will break for N_Genes > 16.
+     * exactly 2^N_Genes. Will break for N_Genes > 16 (we store two
+     * genes in each unsigned int; 2*16=32).
      */
     set<unsigned int> transitions;
 };

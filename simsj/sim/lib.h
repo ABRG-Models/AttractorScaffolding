@@ -42,7 +42,11 @@ using namespace std;
  * section of each molecule is 2^N_Ins. 32 bit width sections are
  * enough for N_Genes <= 6. 64 bit width sections ok for N_Genes <= 7.
  */
+#if N_Genes == 7
+typedef unsigned long long int genosect_t;
+#else
 typedef unsigned int genosect_t;
+#endif
 
 /*!
  * The state has N_Genes bits in it. Working with N_Genes <= 8, so:
@@ -108,8 +112,12 @@ state_t target_pos = 0xa;  // 01010 or 10 dec
 state_t target_ant = 0x2a; // 101010
 state_t target_pos = 0x15; // 010101
 #endif
-#if N_Genes > 6
-#error "You'll need to set up target_ant/target_pos suitably for N_Genes > 6 (and also consider the type for genosect_t)"
+#if N_Genes == 7
+state_t target_ant = 0x55; // 1010101
+state_t target_pos = 0x2a; // 0101010
+#endif
+#if N_Genes > 7
+#error "You'll need to set up target_ant/target_pos suitably for N_Genes > 7. Also consider the type for genosect_t. Finally, check up on state_t_unset in basins.h to go to N_Genes==8 or higher."
 #endif
 //@}
 
@@ -125,6 +133,10 @@ state_t initial_pos = 0x0;  // 00000b;
 #if N_Genes == 6
 state_t initial_ant = 0x20; // 100000b;
 state_t initial_pos = 0x0;  // 000000b;
+#endif
+#if N_Genes == 7
+state_t initial_ant = 0x40; // 1000000b;
+state_t initial_pos = 0x0;  // 0000000b;
 #endif
 
 /*!
