@@ -1,8 +1,8 @@
 /*
  * Take N_Starts randomly generated, but f>0 genomes. Mutate each one
  * N_Generations times. Determine the probability distribution of
- * mutating to a fitter genome a value of pOn provided on the command
- * line.
+ * mutating to a fitter genome. A value of pOn is provided on the
+ * command line.
  *
  * Author: S James
  * Date: November 2018.
