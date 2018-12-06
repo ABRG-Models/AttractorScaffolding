@@ -17,6 +17,12 @@
 // Number of genes in a state is set at compile time.
 #ifndef N_Genes
 # define N_Genes 5
+#else
+# if N_Genes == 5
+// Ok, all is well
+# else
+#  error 'Check the line of code which initialises the genome to compile with N_Genes != 5'
+# endif
 #endif
 
 // Common code
