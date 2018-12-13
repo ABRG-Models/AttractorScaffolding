@@ -560,6 +560,16 @@ evolve_genome (array<genosect_t, N_Genes>& genome)
 }
 
 /*!
+ * Flip one bit in the passed in genome at index flipidx
+ */
+void
+bitflip_genome (array<genosect_t, N_Genes>& genome, unsigned int theGenosect, unsigned int extra)
+{
+    DBG2("Genosect " << theGenosect << " plus " << extra);
+    genome[theGenosect] ^= (0x1 << extra);
+}
+
+/*!
  * A version of evolve_genome which adds to a count of the number of
  * flips made in each genosect. Was used for code verification.
  */

@@ -125,6 +125,10 @@ target_link_libraries(dimension_tree)
 add_executable(compute_pnot0 compute_pnot0.cpp)
 target_link_libraries(compute_pnot0 facto)
 
+add_executable(bitflipping bitflipping.cpp)
+target_link_libraries(bitflipping)
+target_compile_definitions(bitflipping PUBLIC N_Genes=5 USE_FITNESS_4)
+
 # Analysing the genome and the basins of attraction that they create.
 add_executable(analyse_genome analyse_genome.cpp)
 
