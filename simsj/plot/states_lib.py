@@ -55,6 +55,7 @@ def tree (base, graph, cycle, bias, visits):
             colo2 = plt.cm.prism(c/32.0)
         #print ('Printing marker for c={0}'.format(c))
         plt.plot(xco, yco, 'o', markersize=mrkr1, color=colo)
+        plt.text(xco+0.25,yco-0.05, '{:02X}'.format(c), ha='center')
         if c==21 or c==10:
             selmarker = 'v'
         elif c==16 or c==0:
