@@ -14,6 +14,8 @@
 #include <sstream>
 #include <stdlib.h>
 #include <vector>
+#include <list>
+#include <math.h>
 
 using namespace std;
 
@@ -531,6 +533,57 @@ copy_genome (const array<genosect_t, N_Genes>& from, array<genosect_t, N_Genes>&
     for (unsigned int i = 0; i < N_Genes; ++i) {
         to[i] = from[i];
     }
+}
+
+/*!
+ * This one will, rather than flipping each bit with a certain
+ * probability, instead flip bits_to_flip bits, selected randomly.
+ */
+void
+evolve_genome (array<genosect_t, N_Genes>& genome, unsigned int bits_to_flip)
+{
+#ifdef DEBUG
+    unsigned int numflipped = 0;
+#endif
+
+    unsigned int genosect_w = (1 << N_Ins);
+    unsigned int lgenome = N_Genes * genosect_w;
+
+    // Init a list containing all the indices, lgenome long. As bits
+    // are flipped, we'll remove from this list, ensuring that the
+    // random selection of the remaining bits remains fair.
+    list<unsigned int> idices;
+    for (unsigned int b = 0; b < lgenome; ++b) {
+        idices.push_back (b);
+    }
+    for (unsigned int b = 0; b < bits_to_flip; ++b) {
+        unsigned int r = static_cast<unsigned int>(floor(randDouble() * (double)lgenome));
+        // Catch the edge case (where randDouble() returned exactly 1.0)
+        if (r == lgenome) {
+            --r;
+        }
+
+        // The bit to flip is *i, after these two lines:
+        list<unsigned int>::iterator i = idices.begin();
+        for (unsigned int rr = 0; rr < r; ++rr, ++i) {}
+
+        unsigned int j = *i;
+        // Find out which genome sect j is in.
+        unsigned int gi = j / genosect_w;
+        DBG ("Genome section gi= " << gi << " which is an offset of " << (gi*genosect_w));
+        genosect_t gsect = genome[gi];
+
+        j -= (gi*genosect_w);
+#ifdef DEBUG
+        ++numflipped;
+        DBG ("Flipping bit " << j+(gi*genosect_w));
+#endif
+        gsect ^= (0x1 << j);
+        genome[gi] = gsect;
+
+        --lgenome;
+    }
+    DBG ("Num flipped: " << numflipped);
 }
 
 /*!

@@ -26,6 +26,14 @@ target_compile_definitions(evolve_withf PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_
 add_executable(evolve_nodrift_withf evolve.cpp)
 target_compile_definitions(evolve_nodrift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=1000000)
 
+# Evolving by flipping fixed number of bits each time (with drift)...
+add_executable(evolve_bybits evolve_bybits.cpp)
+target_compile_definitions(evolve_bybits PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
+
+# ...(without drift)
+add_executable(evolve_bybits_nodrift evolve_bybits.cpp)
+target_compile_definitions(evolve_bybits_nodrift PUBLIC USE_FITNESS_4)
+
 # To generate the data for allowing the genome to drift.
 add_executable(drift drift.cpp)
 target_compile_definitions(drift PUBLIC USE_FITNESS_4)
