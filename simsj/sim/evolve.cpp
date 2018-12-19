@@ -132,6 +132,9 @@ int main (int argc, char** argv)
     unsigned long long int lastgen = 0;
     unsigned long long int lastf1 = 0;
 
+    // Count F=1 genomes to print out at the end.
+    unsigned long long int f1count = 0;
+
     while (gen < nGenerations) {
 
         // At the start of the loop, and every time fitness of 1.0 is
@@ -226,6 +229,8 @@ int main (int argc, char** argv)
                 lastgen = gen;
                 if (b==1.0) {
                     lastf1 = gen;
+                    LOG ("F=1 at generation " << gen);
+                    ++f1count;
                 }
 
                 // Copy new fitness to ref
@@ -250,7 +255,7 @@ int main (int argc, char** argv)
 #endif
     }
 
-    LOG ("Generations size: " << generations.size());
+    LOG ("Generations size: " << generations.size() << " with " << f1count << " F=1 genomes found.");
 
     // Save data to file.
     ofstream f, f1;
