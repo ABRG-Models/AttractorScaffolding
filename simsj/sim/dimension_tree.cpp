@@ -103,7 +103,7 @@ int main (int argc, char** argv)
 
     node_t n = atoi(argv[1]);
     if (n >= 16) { // Could be increased to 32 but results will be fairly useless.
-        cerr << "Please choose n <= 16 (probably 6, 7 or 8 is a sensible maximum)" << endl;
+        cerr << "Please choose n < 16 (probably 6, 7 or 8 is a sensible maximum)" << endl;
         return 1;
     }
     node_t n_states = 1<<n;

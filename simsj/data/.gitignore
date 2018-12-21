@@ -2,3 +2,8 @@ evolve_nodrift_a85*.csv
 evolve_nodrift_a21_p10_ff7*.csv
 evolve_nodrift_a21_p10_ff8*.csv
 node_*.csv
+r_*.csv
+r*.csv
+evolveb_*.csv
+prob_fitinc*.csv
+evolve_a21*.csv

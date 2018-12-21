@@ -146,6 +146,9 @@ add_executable(analyse_genome analyse_genome.cpp)
 add_executable(prob_fitinc prob_fitinc.cpp)
 target_compile_definitions(prob_fitinc PUBLIC N_Genes=5 USE_FITNESS_4)
 
+add_executable(prob_fitinc_bybits prob_fitinc_bybits.cpp)
+target_compile_definitions(prob_fitinc_bybits PUBLIC N_Genes=5 USE_FITNESS_4)
+
 # Generates 10, random, non-zero fitness genomes and displays them.
 add_executable(fitness_of_ten fitness_of_ten.cpp)
 target_compile_definitions(fitness_of_ten PUBLIC N_Genes=5 USE_FITNESS_4)

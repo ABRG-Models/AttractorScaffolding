@@ -126,7 +126,7 @@
   \corrAuthorFont $^{*}$ Correspondence: \corrEmail}
 
 % No page numbering please
-\pagenumbering{gobble}
+%\pagenumbering{gobble}
 
 % A trick to get the bibliography to show up with 1. 2. etc in place
 % of [1], [2] etc.:
@@ -164,7 +164,7 @@
 
 % Define title, empty date and authors
 \title {
-  The combinatorics of fitness scores in an oscillating gene system
+  Fitness scores in an oscillating gene system
 }
 \date{} % No date please
 \author{\Authors}
@@ -181,8 +181,8 @@
 
 \section{Introduction}
 
-This is an attempt to describe the scoring system used to determine
-the fitness of the gene system described in the paper ``How self
+This is an exploration of the scoring system used to determine the
+fitness of the gene system described in the paper ``How self
 organization can guide natural selection''.
 
 The paper describes a model system (representing a part of an
@@ -224,11 +224,14 @@ proteins. There are 8 gene states ($2^3$) for this 3 gene system and
 $2^n$ states for an $n$ gene system.
 
 In addition to this gene state space, the model describes
-a \emph{genome state space}.
+a \emph{genome state space} with $n 2^{n-1}$ bits. The value of the
+genome specifies all the transitions in the gene space. Each genome in
+the genome space has an associated fitness. In a sense, the fitness
+function is superimposed on the genome space.
 
 [Describe genome state space, so that reader knows that gene states
 transition and arrive in attractor limit cycles, which are compared
-with target states.]
+with target states. Picture here possibly.]
 
 \section{Fitness scores}
 
@@ -423,11 +426,105 @@ cycle (the paper model multiplies two such probabilities).
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.9\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/p0.png}
+\includegraphics[width=0.9\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/p0.png}
 \caption{\emph{Probability of zero/non-zero score.} The probability of
 obtaining a zero or non-zero score for randomly selected limit cycle
 state sets of length $l$ in several systems with $3$--$25$ genes.}
 \label{fig:p0}
+\end{center}
+\end{figure}
+
+\section{The genome space}
+
+The genome space is distinct from the gene state space. The genome
+space is larger, with $n 2^{n-1}$ bits required to specify the
+transitions in a gene space of $n$ genes.
+
+\subsection{Visualising the gene space transitions}
+
+We can plot the gene space transitions in our 5 gene space (Fig.~\ref{fig:genetrans}).
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/states_bitflips_flip000.png}
+\caption{\emph{Sample gene state transitions.} All $2^5=32$ gene
+states in a $5$ gene system. Each state is labelled by colour and by
+its value. The states on the limit cycle are labelled in square
+brackets. Each state has a transition to a downstream state. Not all
+states are transitioned to by another state. The set of all
+transitions can be described as a set of pairs of states. For this
+network, which is specified by the genome `00011110000010010001000111000110111000100001101101101000011101001010110100011101', that set would include: 15:25, 25:11, 11:09, etc.}
+\label{fig:genetrans}
+\end{center}
+\end{figure}
+
+\subsection{Flipping one bit}
+
+Flipping one bit in the genome space always changes exactly two
+transitions in the gene state transition diagram
+(Fig.~\ref{fig:genetrans2}). The reason that two states change for one
+bit change in the genome, relates to the arrangement of this gene
+transition space: only the other $n-1$ inputs determine the next state
+of the gene. Consider bit 0 of the genome, which determines the next
+state of gene a when the inputs to gene a are [0 0 0 0]. There are two
+gene states which give this input to gene a: [0 0 0 0 0] and [1 0 0 0
+0] and so both of these gene states have their transition modified
+when bit 0 of the genome flips.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/states_bitflips_flip02.png}
+\caption{\emph{Flip one bit.} The result of flipping bit 2 of the
+genome given in Fig.~\ref{fig:genetrans}. Gene state 18 no longer
+transitions to gene state 00. Instead, it transitions to gene state
+16. Gene state 02 no longer transitions to gene state 04, instead, it
+transitions to gene state 20. Two transition changes for one bit
+change in the genome.}
+\label{fig:genetrans2}
+\end{center}
+\end{figure}
+
+\subsection{Paths from vertex to vertex}
+
+In the genome space, there are $h!$ `paths' from any genome to another
+genome a Hamming distance $h$ away.
+
+The probability of a new genome being fitter, equal or less fit is
+shown in Fig.~\ref{fig:prob_fitter}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/prob_fitinc_flipbits_prob_vs_bits.png}
+\caption{\emph{Probability of finding a fitter state.}
+The probability of finding a fitter, equally fit, or less fit state
+plotted against the number of bits that are flipped to generate a new
+genome. Top left: means, with standard deviations shown as error
+bars. For a single bit flip, the probability of finding an equally fit
+state is highest. The probability of finding a fitter state is
+somewhat independent of the number of bits flipped, with a very wide variance.}
+\label{fig:prob_fitter}
+\end{center}
+\end{figure}
+
+
+\section{Evolution speed}
+
+% /home/seb/models/Wilson2018EvoGene/simsj/plot/png/evolution_histos_loglog1_nodrift_ff4_fb.png
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/evolution_histos_loglog1_nodrift_ff4_fb.png}
+\caption{\emph{Evolution rates as function of number of bit flips per
+generation.} No drift.}
+\label{fig:ev_bf}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/evolution_histos_loglog1_nodrift_ff4.png}
+\caption{\emph{Evolution rates as function of probability of flipping
+a big when evolving.} No drift}
+\label{fig:ev_prob}
 \end{center}
 \end{figure}
 

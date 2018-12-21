@@ -13,7 +13,7 @@ sl.plot_states (net, f1.axes)
 plt.tight_layout()
 plt.savefig('png/states_bitflips_flip000.png', dpi=600)
 
-for i in range(0,80):
+for i in range(0,1):
     netflip = list(net)
     if netflip[i] == '0':
         netflip[i] = '1'

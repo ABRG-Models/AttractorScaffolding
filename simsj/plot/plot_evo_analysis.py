@@ -158,7 +158,9 @@ def doPlot (pOn, driftnodrift):
         h, b = np.histogram (tssel, bins)
         Z[int(nc),:] = h
     #f3.plot (fitnesschange, numchangedtrans, 'o');
-    f3.contourf(X,Y,np.log(Z))
+    Z_ = np.log(Z)
+    Z_[Z_ == -np.inf]=0
+    f3.contourf(X,Y,Z_)
     f3.plot (tsince, numchangedtrans, '.', color='k', markersize=2);
     f3.set_xlabel('Time since last transition');
     f3.set_ylabel('Number of changed transitions');
@@ -237,7 +239,7 @@ def doPlot (pOn, driftnodrift):
     # For the specialfile, also show its states, using Dan's code.
     import states_lib as sl
 
-    plot_states = 0
+    plot_states = 1
     if plot_states:
         fcount = 0
         for f in files:
@@ -265,9 +267,9 @@ def doPlot (pOn, driftnodrift):
 driftnodrift = 'nodrift'
 
 # I'll have to run 0.7, 0.8 and 0.9 longer to get the stats
-#doPlot (0.8, driftnodrift) # need 50000000! 1 hr of computation
-#doPlot (0.7, driftnodrift) # Need 20M?
-#doPlot (0.6, driftnodrift) # Need 10M?
+doPlot (0.8, driftnodrift) # need 50000000! 1 hr of computation
+doPlot (0.7, driftnodrift) # Need 20M?
+doPlot (0.6, driftnodrift) # Need 10M?
 doPlot (0.5, driftnodrift)  # 13 in 1000000 and 119 in 10000000
 doPlot (0.4, driftnodrift)  # 26 in 500000
 doPlot (0.3, driftnodrift)  # 66 in 500000

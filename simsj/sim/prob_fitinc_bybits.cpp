@@ -63,12 +63,12 @@ int main (int argc, char** argv)
     if (argc < 2) {
         cerr << "Examines the statistics of the probability of evolving to" << endl
              << "a higher fitness genome for " << N_Starts << " starting genomes." << endl
-             << "Uses the fitness function " << FF_NAME << " and a given probability " << endl
-             << "of flipping (pOn) which must be supplied." << endl << endl
-             << "Usage: " << argv[0] << " pOn" << endl;
+             << "Uses the fitness function " << FF_NAME << " and a number of bits to flip " << endl
+             << "(flipbits) which must be supplied." << endl << endl
+             << "Usage: " << argv[0] << " flipbits" << endl;
         return 1;
     }
-    pOn = atof (argv[1]);
+    unsigned int flipbits = (unsigned int) atoi (argv[1]);
 
     // Holds the starting genomes
     array<array<genosect_t, N_Genes>, N_Starts> genomes;
@@ -97,10 +97,13 @@ int main (int argc, char** argv)
 
     // Experiment with the probability of evolving fitter
     for (unsigned int g = 0; g < N_Starts; ++g) {
+        if (g % 100 == 0) {
+            LOG ("[flipbits=" << flipbits << "] Processing genome starting point number " << g);
+        }
         for (unsigned int e = 0; e < N_Generations; ++e) {
             array<genosect_t, N_Genes> testg;
             copy_genome (genomes[g], testg);
-            evolve_genome (testg);
+            evolve_genome (testg, flipbits);
             double newf = evaluate_fitness (testg);
             if (newf > initialFitness[g]) {
                 // Fitness increased
@@ -114,7 +117,7 @@ int main (int argc, char** argv)
     cout << "Collected data; writing out..." << endl;
     ofstream fout;
     stringstream path;
-    path << "data/prob_fitinc_" << N_Generations << "_evolutions_pOn_" << pOn << "_" << FF_NAME << ".csv";
+    path << "data/prob_fitinc_" << N_Generations << "_evolutions_flipbits_" << flipbits << "_" << FF_NAME << ".csv";
     fout.open (path.str().c_str(), ios::out|ios::trunc);
     if (!fout.is_open()) {
         cerr << "Failed to open " << path.str() << " for writing." << endl;
@@ -123,7 +126,7 @@ int main (int argc, char** argv)
 
     fout << "GenomeID,Fitness,NumberEvolvingFitter,NumberEvolvingEqual,NumberEvolvingLessFit" << endl;
     for (unsigned int g = 0; g < N_Starts; ++g) {
-        fout << genome_id(genomes[g]) << "," << initialFitness[g] << "," << numFitter[g] << "," << numEqual[g] << (N_Generations-(numFitter[g]+numEqual[g])) << endl;
+        fout << genome_id(genomes[g]) << "," << initialFitness[g] << "," << numFitter[g] << "," << numEqual[g]  << "," << (N_Generations-(numFitter[g]+numEqual[g])) << endl;
     }
 
     fout.close();

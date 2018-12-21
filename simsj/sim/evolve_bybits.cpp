@@ -164,7 +164,7 @@ int main (int argc, char** argv)
 #ifdef RECORD_ALL_FITNESS
             AllBasins ab1 (newg);
 #endif
-#define REDUCING_BIT_FLIPS_AS_F_INCREASES 1
+//#define REDUCING_BIT_FLIPS_AS_F_INCREASES 1
 #ifdef REDUCING_BIT_FLIPS_AS_F_INCREASES // Just an idea
             unsigned int modflips = (unsigned int) ceil((1.0-a) * bits_to_flip);
             DBG2 ("Fitness: " << a << " bits to flip: " << modflips);

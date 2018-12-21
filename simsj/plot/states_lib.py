@@ -15,7 +15,7 @@ def flatten(lis):
             yield item
 
 # FUNCTION TO DRAW TREES
-def tree (base, graph, cycle, bias, visits):
+def tree (base, graph, cycle, bias, visits, print_states_hex):
     # find parents
     parents = graph[base][0]
     for each in cycle:
@@ -55,7 +55,10 @@ def tree (base, graph, cycle, bias, visits):
             colo2 = plt.cm.prism(c/32.0)
         #print ('Printing marker for c={0}'.format(c))
         plt.plot(xco, yco, 'o', markersize=mrkr1, color=colo)
-        plt.text(xco+0.25,yco-0.05, '{:02X}'.format(c), ha='center')
+        if print_states_hex:
+            plt.text(xco+0.25,yco-0.05, '{:02X}'.format(c), ha='center')
+        else:
+            plt.text(xco+0.25,yco-0.05, '{:02d}'.format(c), ha='center')
         if c==21 or c==10:
             selmarker = 'v'
         elif c==16 or c==0:
@@ -72,9 +75,9 @@ def tree (base, graph, cycle, bias, visits):
         plt.arrow(xco, yco, graph[base][2][3]-xco, graph[base][2][4]-yco, overhang=0, length_includes_head=True, head_width=0.15, head_length=0.5, fc=greycol, ec=greycol)
 
     for z in parents:
-        tree (z, graph, parents, bias, visits)
+        tree (z, graph, parents, bias, visits, print_states_hex)
 
-def plot_states (net, ax):
+def plot_states (net, ax, print_states_hex=False):
     # Find where each state leads
     targets = []
 
@@ -113,6 +116,7 @@ def plot_states (net, ax):
             x = targets[x]
 
         base = visits[visits.index(x):]
+        # It's awkward to format the list of bases in hex, so it's not implemented
         if not base[0] in list(flatten(bases)):
             bases.append(base)
 
@@ -164,7 +168,7 @@ def plot_states (net, ax):
             plt.plot(graph[x][2][3], graph[x][2][4], marker=selmarker, color=colo2, markersize=mrkr1_inner)
 
         for x in base:
-            tree (x, graph, base, bias, visits)
+            tree (x, graph, base, bias, visits, print_states_hex)
 
         # do it again for the next set
 

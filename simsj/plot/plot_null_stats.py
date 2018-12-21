@@ -47,6 +47,7 @@ for mlc in range (0,33): # mean limit cycle (size)
     print ('h shape: {0}'.format(np.shape(h)))
     Z[int(mlc),:] = np.log(h)
 #f2.plot (A[:,2],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.maroon1)
+Z[Z==-np.inf]=0
 f2.contourf(X,Y,Z.T)
 f2.set_ylabel('fitness');
 f2.set_xlabel('Num limit cycles in system');
@@ -72,6 +73,7 @@ for mlc in range (0,33): # mean limit cycle (size)
     print ('h shape: {0}'.format(np.shape(h)))
     Z[int(mlc),:] = np.log(h)
 #f3.plot (A[:,3],A[:,1],marker='.',markersize=0.5,linestyle='None',linewidth=2,color=col.violetred)
+Z[Z==-np.inf]=0
 f3.contourf(X,Y,Z.T)
 f3.set_ylabel('fitness');
 f3.set_xlabel('Mean limit cycle size');
@@ -97,6 +99,7 @@ for mlc in range (0,33): # mean limit cycle (size)
     print ('h shape: {0}'.format(np.shape(h)))
     Z[int(mlc),:] = np.log(h)
 #f4.plot (A[:,4],A[:,1],marker='o',linestyle='None',linewidth=2,color=col.crimson)
+Z[Z==-np.inf]=0
 f4.contourf(X,Y,Z.T)
 f4.set_ylabel('fitness');
 f4.set_xlabel('Max limit cycle size');
