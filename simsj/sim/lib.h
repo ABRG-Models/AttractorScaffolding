@@ -37,18 +37,39 @@ using namespace std;
 #ifndef N_Genes
 # error 'Number of genes parameter N_Genes must be defined'
 #endif
-#define N_Ins       (N_Genes-1)
+
+#define N_Ins_EQUALS_N_Genes 1 // Maybe define in CMakeLists
+#ifdef N_Ins_EQUALS_N_Genes // k = n
+#define ExtraOffset  (1)
+#define N_Ins        (N_Genes) // really k_Ins
+#else                       // k = n-1
+#define ExtraOffset  (0)
+#define N_Ins        (N_Genes-1)
+#define N_minus_k    (1)
+#endif
 
 /*!
  * The genome has a section for each 'molecule'. The length of the
  * section of each molecule is 2^N_Ins. 32 bit width sections are
  * enough for N_Genes <= 6. 64 bit width sections ok for N_Genes <= 7.
  */
-#if N_Genes == 7
+#if N_Genes == 7 // or N_Genes == 6 and N_Ins_EQUALS_N_Genes
 typedef unsigned long long int genosect_t;
+#elif N_Genes == 6
+# if defined N_Ins_EQUALS_N_Genes
+typedef unsigned long long int genosect_t;
+# else
+typedef unsigned int genosect_t;
+# endif
 #else
 typedef unsigned int genosect_t;
 #endif
+
+/*!
+ * Width of the genome section. Used here to create the right width
+ * bitsets for debugging.
+ */
+#define Genosect_Width (1 << N_Ins)
 
 /*!
  * The state has N_Genes bits in it. Working with N_Genes <= 8, so:
@@ -153,9 +174,9 @@ masks_init (void)
     DBG2 ("N_Genes: " << N_Genes << " N_Ins: " << N_Ins << " length of genome: " << l_genome);
 #endif
 
-    // Set up globals. Set N_Genes-1 bits to the high position for the lo_mask
+    // Set up globals. Set N_Ins bits to the high position for the lo_mask
     lo_mask_start = 0x0;
-    for (unsigned int i = 0; i < N_Genes-1; ++i) {
+    for (unsigned int i = 0; i < N_Ins; ++i) {
         lo_mask_start |= 0x1 << i;
     }
     hi_mask_start = 0xff & (0xff << N_Genes);
@@ -229,9 +250,15 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
     DBG2 ("state: " << bs_st);
 #endif
     for (unsigned int i = 0; i < N_Genes; ++i) {
-        inputs[i] = (state & lo_mask) | ((state & hi_mask) >> 1);
+
+#ifdef N_Ins_EQUALS_N_Genes
+        inputs[i] = (state << i) & state_mask | (state >> (N_Genes-i));
+#else
+        inputs[i] = (state & lo_mask) | ((state & hi_mask) >> N_minus_k);
         hi_mask = (hi_mask >> 1) | 0x80;
         lo_mask >>= 1;
+#endif
+
 #ifdef DEBUG
         bitset<8> bs_in(inputs[i]);
         DBG2 ("input[" << i << "]: " << bs_in << " or 0x" << hex << (unsigned int)inputs[i]<< dec);
@@ -247,17 +274,17 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
         genosect_t gs = genome[i];
         genosect_t inpit = (0x1 << inputs[i]);
 #ifdef DEBUG
-        bitset<16> bs_gs(gs);
-        bitset<16> bs_inpit(inpit);
-        DBG2 ("genome sect: "<< bs_gs);
+        bitset<Genosect_Width> bs_gs(gs);
+        bitset<Genosect_Width> bs_inpit(inpit);
+        DBG2 ("genome sect            : "<< bs_gs);
         DBG2 ("iterator into that sect: " << bs_inpit << "...");
 #endif
         state_t num = ((gs & inpit) ? 0x1 : 0x0);
         //DBG2 ("... which gives " << (unsigned int)num);
         if (num) {
-            state |= (0x1 << (N_Ins-i));
+            state |= (0x1 << (N_Ins-(i+ExtraOffset)));
         } else {
-            state &= ~(0x1 << (N_Ins-i));
+            state &= ~(0x1 << (N_Ins-(i+ExtraOffset)));
         }
     }
 }
@@ -322,7 +349,7 @@ genome2int (array<genosect_t, N_Genes>& genome)
     for (unsigned int i = 0; i < N_Genes; ++i) {
         __uint128_t g = genome[i];
         u |= (g << shift);
-        shift+=16;
+        shift += (1 << N_Ins);
     }
     return (long double)u;
 }
@@ -713,14 +740,14 @@ random_genome (void)
         if (a) {
             genosect_t b = a << inp_target_ant[i];
 #ifdef DEBUG
-            bitset<16> bs (b);
+            bitset<Genosect_Width> bs (b);
             DBG2 ("(ant) For genome["<<i<<"] we OR  with: " << bs);
 #endif
             genome[i] = genome[i] | b;
         } else {
             genosect_t b = ~(0x1 << inp_target_ant[i]);
 #ifdef DEBUG
-            bitset<16> bs (b);
+            bitset<Genosect_Width> bs (b);
             DBG2 ("(ant) For genome["<<i<<"] we AND with: " << bs);
 #endif
             genome[i] = genome[i] & b;
@@ -730,20 +757,20 @@ random_genome (void)
         if (a) {
             genosect_t b = a << inp_target_pos[i];
 #ifdef DEBUG
-            bitset<16> bs (b);
+            bitset<Genosect_Width> bs (b);
             DBG2 ("(pos) For genome["<<i<<"] we OR  with: " << bs);
 #endif
             genome[i] = genome[i] | b;
         } else {
             genosect_t b = ~(0x1 << inp_target_pos[i]);
 #ifdef DEBUG
-            bitset<16> bs (b);
+            bitset<Genosect_Width> bs (b);
             DBG2 ("(pos) For genome["<<i<<"] we AND with: " << bs);
 #endif
             genome[i] = genome[i] & b;
         }
 
-        bitset<16> bs_gn(genome[i]);
+        bitset<Genosect_Width> bs_gn(genome[i]);
         DBG2 ("genome[" << i << "] = " << bs_gn);
     }
 #endif // SET_KNOWN_GENOME_BITS
