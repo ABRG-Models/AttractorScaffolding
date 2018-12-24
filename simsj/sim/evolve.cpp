@@ -229,7 +229,7 @@ int main (int argc, char** argv)
                 lastgen = gen;
                 if (b==1.0) {
                     lastf1 = gen;
-                    LOG ("F=1 at generation " << gen);
+                    DBG ("F=1 at generation " << gen);
                     ++f1count;
                 }
 
