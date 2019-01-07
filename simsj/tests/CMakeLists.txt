@@ -8,8 +8,8 @@ add_test(hamming hamming)
 add_executable(hamming_genome hamming_genome.cpp)
 add_test(hamming_genome hamming_genome)
 
-add_executable(genome2str genome2str.cpp)
-add_test(genome2str genome2str)
+add_executable(tgenome2str genome2str.cpp)
+add_test(tgenome2str tgenome2str)
 
 add_executable(tstr2genome str2genome.cpp)
 add_test(tstr2genome tstr2genome)

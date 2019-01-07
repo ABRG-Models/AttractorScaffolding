@@ -4,6 +4,7 @@ from collections import Iterable
 
 mrkr1 = 12
 mrkr1_inner = 8
+fs = 18
 
 # FUNCTION TO TURN NESTED LIST INTO 1D LIST
 def flatten(lis):
@@ -15,7 +16,7 @@ def flatten(lis):
             yield item
 
 # FUNCTION TO DRAW TREES
-def tree (base, graph, cycle, bias, visits, print_states_hex):
+def tree (base, graph, cycle, bias, visits, print_states_hex, docolour):
     # find parents
     parents = graph[base][0]
     for each in cycle:
@@ -53,38 +54,60 @@ def tree (base, graph, cycle, bias, visits, print_states_hex):
             colo2 = plt.cm.flag(c/32.0)
         else:
             colo2 = plt.cm.prism(c/32.0)
+        if docolour == False:
+            colo = 'k'
+            colo2 = 'k'
         #print ('Printing marker for c={0}'.format(c))
         plt.plot(xco, yco, 'o', markersize=mrkr1, color=colo)
-        if print_states_hex:
-            plt.text(xco+0.25,yco-0.05, '{:02X}'.format(c), ha='center')
-        else:
-            plt.text(xco+0.25,yco-0.05, '{:02d}'.format(c), ha='center')
+        text_labels=0
+        if c==21 or c==10 or c==16 or c==0:
+            text_labels=1
+
+        if text_labels:
+            if print_states_hex:
+                tt = plt.text(xco+0.25,yco+0.4, '{:02X}'.format(c), ha='center', fontsize=fs)
+            else:
+                tt = plt.text(xco+0.25,yco+0.4, '{:d}'.format(c), ha='center', fontsize=fs)
+            tt.set_bbox(dict(boxstyle='round,pad=0.0', edgecolor='none', facecolor='white', alpha=0.6))
+
         if c==21 or c==10:
             selmarker = 'v'
+            if docolour == False:
+                colo2 = 'w'
         elif c==16 or c==0:
             #print ('Printing star for c={0}'.format(c)) # Note in one case, star is red and BG circle is red.
             selmarker = '*'
-            if (c==0):
-                print ('printing selmarker for c={0} with BLUE star'.format(c))
-                colo2='b'
+            if docolour == False:
+                selmarker = 'o'
+                colo2 = 'w'
+            else:
+                if (c==0):
+                    print ('printing selmarker for c={0} with BLUE star'.format(c))
+                    colo2='b'
         else:
             selmarker = 'o'
-        #print ('colo={0}, colo2={1}'.format(colo, colo2))
+
         plt.plot (xco, yco, marker=selmarker, markersize=mrkr1_inner, color=colo2)
 
         plt.arrow(xco, yco, graph[base][2][3]-xco, graph[base][2][4]-yco, overhang=0, length_includes_head=True, head_width=0.15, head_length=0.5, fc=greycol, ec=greycol)
 
     for z in parents:
-        tree (z, graph, parents, bias, visits, print_states_hex)
+        tree (z, graph, parents, bias, visits, print_states_hex, docolour)
 
-def plot_states (net, ax, print_states_hex=False):
+def plot_states (net, ax, print_states_hex=False, kequalsn=True, docolour=True):
     # Find where each state leads
     targets = []
 
     for i in range(2**5):
         state = np.binary_repr(i,5)
 
-        effect = net[int(state[1:],2)] + net[int(state[:1]+state[2:],2)+16] + net[int(state[:2]+state[3:],2) + 32] + net[int(state[:3]+state[4],2)+48] + net[int(state[:4],2)+64]
+        # k=n
+        if kequalsn:
+            effect = net[int(state,2)] + net[int(state[1:]+state[0:1],2) + 32] + net[int(state[2:]+state[0:2],2) + 64] + net[int(state[3:]+state[0:3],2)+96] + net[int(state[4:]+state[0:4],2)+128]
+
+        else:
+            # k=n-1
+            effect = net[int(state[1:],2)] + net[int(state[:1]+state[2:],2)+16] + net[int(state[:2]+state[3:],2) + 32] + net[int(state[:3]+state[4],2)+48] + net[int(state[:4],2)+64]
 
         # in decimal form
         targets.append(int(effect[4]) + 2*int(effect[3]) + 4*int(effect[2]) + 8*int(effect[1]) + 16*int(effect[0]))
@@ -141,7 +164,8 @@ def plot_states (net, ax, print_states_hex=False):
         bias = bias + 2
 
         # draw those on the LC
-        plt.text(0+0.7,bias-2+0.5,base, ha='center')
+        tt = plt.text(0+0.7,bias-2+0.5,base, ha='center', fontsize=fs)
+        tt.set_bbox(dict(boxstyle='round,pad=0.0', edgecolor='none', facecolor='white', alpha=0.6))
         circle = plt.Circle ((0,bias), 1, color=greycol, fill=False)
         ax.add_artist(circle)
         for x in base:
@@ -155,20 +179,33 @@ def plot_states (net, ax, print_states_hex=False):
                 colo2 = plt.cm.prism(x/32.0)
             #plt.plot(graph[x][2][3], graph[x][2][4], 'o', color=(0,0,0), markersize=mrkr1)
             #print ('Printing marker for c={0}'.format(x))
-            plt.plot(graph[x][2][3], graph[x][2][4], 'o', color=colo, markersize=mrkr1)
+            if docolour == True:
+                plt.plot(graph[x][2][3], graph[x][2][4], 'o', color=colo, markersize=mrkr1)
+            else:
+                plt.plot(graph[x][2][3], graph[x][2][4], 'o', color='k', markersize=mrkr1)
+
+            if docolour == False:
+                colo2 = 'k'
             if x==21 or x==10:
                 selmarker = 'v'
+                if docolour == False:
+                    colo2 = 'w'
             elif x==16 or x==0:
                 selmarker = '*'
-                if x==0:
-                    print ('printing selmarker for x={0} with BLUE star'.format(x))
-                    colo2='b' # special case
+                if docolour == False:
+                    selmarker = 'o'
+                    colo2 = 'w'
+                else:
+                    if x==0:
+                        print ('printing selmarker for x={0} with BLUE star'.format(x))
+                        colo2='b' # special case
             else:
                 selmarker = 'o'
+
             plt.plot(graph[x][2][3], graph[x][2][4], marker=selmarker, color=colo2, markersize=mrkr1_inner)
 
         for x in base:
-            tree (x, graph, base, bias, visits, print_states_hex)
+            tree (x, graph, base, bias, visits, print_states_hex, docolour)
 
         # do it again for the next set
 

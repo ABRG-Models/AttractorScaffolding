@@ -145,6 +145,10 @@ state_t target_pos = 0x2a; // 0101010
 //@}
 
 // Initial anterior and posterior states:
+#if N_Genes == 3
+state_t initial_ant = 0x4;  // 100b;
+state_t initial_pos = 0x0;  // 000b;
+#endif
 #if N_Genes == 4
 state_t initial_ant = 0x8;  // 1000b;
 state_t initial_pos = 0x0;  // 0000b;
@@ -194,8 +198,29 @@ masks_init (void)
 }
 
 #if N_Genes == 5
+# if defined N_Ins_EQUALS_N_Genes
 /*!
+ * A selected genome for k=n
+ *
  * This is the genome given in Fig 1 of the paper for N_Genes=5:
+ */
+array<genosect_t, N_Genes>
+selected_genome (void)
+{
+    // The one we'll use in the paper as the bold evolution and for which we show the state transitions
+    array<genosect_t, N_Genes> genome = {{ 0x5039a8e4, 0xa090a0eb, 0x56cfd0a8, 0x9c9ccdbb, 0x60b214b }};
+    return genome;
+}
+array<genosect_t, N_Genes>
+selected_genome1 (void)
+{
+    // The one we'll use in the paper
+    array<genosect_t, N_Genes> genome = {{ 0xa036, 0x451f, 0x7f08, 0x203c, 0xdf52 }};
+    return genome;
+}
+# else
+/*!
+ * A genome for k=n-1
  */
 array<genosect_t, N_Genes>
 selected_genome (void)
@@ -204,14 +229,14 @@ selected_genome (void)
     array<genosect_t, N_Genes> genome = {{ 0xa3bc, 0x927f, 0x7b84, 0xf57d, 0xecdc }};
     return genome;
 }
-
 array<genosect_t, N_Genes>
 selected_genome1 (void)
 {
-    // Has limit cycle attractor. Was previously going to be the selected genome
+    // The one we'll use in the paper
     array<genosect_t, N_Genes> genome = {{ 0xa036, 0x451f, 0x7f08, 0x203c, 0xdf52 }};
     return genome;
 }
+# endif
 #endif
 
 #ifdef SET_KNOWN_GENOME_BITS
@@ -495,9 +520,14 @@ show_genome (const array<genosect_t, N_Genes>& genome)
         cout << i << " ";
     }
     cout << "<-- for input, bit posn; for output, array index";
-    cout << endl << "----------------" << endl;
 #if N_Genes == 5
-    cout << "1234   a b c d e <-- 1,2,3,4 is i ii iii iv in Fig 1." << endl;
+# if defined N_Ins_EQUALS_N_Genes
+    cout << endl << "----------------" << endl;
+    cout << "12345   abcde <-- 1,2,3,4,5 is i ii iii iv v in Fig 1." << endl;
+# else
+    cout << endl << "-----------------" << endl;
+    cout << "1234   abcde <-- 1,2,3,4 is i ii iii iv in Fig 1." << endl;
+# endif
 #else
     for (unsigned int i = 0; i<N_Ins; ++i) {
         cout << i;
@@ -514,7 +544,7 @@ show_genome (const array<genosect_t, N_Genes>& genome)
         cout << bitset<N_Ins>(j) << "   ";
         for (unsigned int i = 0; i < N_Genes; ++i) {
             genosect_t mask = 0x1 << j;
-            cout << ((genome[i]&mask) >> j) << " ";
+            cout << ((genome[i]&mask) >> j);
         }
         cout << endl;
     }
@@ -986,6 +1016,38 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     cout << "score: " << score << endl;
     cout << "---\n";
     return rtn;
+}
+
+// Some string manipulation
+vector<string>
+stringToVector (const string& s, const string& separator,
+                const bool ignoreTrailingEmptyVal)
+{
+    if (separator.empty()) {
+        throw runtime_error ("Can't split the string; the separator is empty.");
+    }
+    vector<string> theVec;
+    string entry("");
+    string::size_type sepLen = separator.size();
+    string::size_type a=0, b=0;
+    while (a < s.size()
+           && (b = s.find (separator, a)) != string::npos) {
+        entry = s.substr (a, b-a);
+        theVec.push_back (entry);
+        a=b+sepLen;
+    }
+    // Last one has no separator
+    if (a < s.size()) {
+        b = s.size();
+        entry = s.substr (a, b-a);
+        theVec.push_back (entry);
+    } else {
+        if (!ignoreTrailingEmptyVal) {
+            theVec.push_back ("");
+        }
+    }
+
+    return theVec;
 }
 
 #endif // __LIB_H__

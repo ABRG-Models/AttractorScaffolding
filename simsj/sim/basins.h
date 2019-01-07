@@ -111,14 +111,14 @@ public:
                 state_t state = mi->first;
                 StateNode sn = mi->second;
                 while (this->limitCycle.count(state) == 0) {
-                    cout << " --> " << state_str (state);
+                    cout << " --> " << state_str (state) << "(" << (unsigned int)state << ")";
                     state = sn.child;
                     sn = this->nodes.at (state);
                 }
                 set<state_t>::const_iterator si = this->limitCycle.begin();
                 cout << " -->* ";
                 while (si != this->limitCycle.end()) {
-                    cout << state_str (*si) << ":";
+                    cout << state_str (*si) << "("<< (unsigned int)state << "):";
                     ++si;
                 }
                 cout << endl;

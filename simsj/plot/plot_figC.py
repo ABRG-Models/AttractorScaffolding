@@ -13,26 +13,6 @@ import matplotlib.pyplot as plt
 import csv
 import sebcolour
 col = sebcolour.Colour
-cols1 = np.array([col.darkviolet,
-                  col.darkorchid1,
-                  col.mediumorchid1,
-                  col.orchid,
-                  col.maroon1,
-                  col.violetred1,
-                  col.violetred,
-                  col.crimson,
-                  col.orange,
-                  col.goldenrod1,
-                  col.darkviolet,
-                  col.darkorchid1,
-                  col.mediumorchid1,
-                  col.orchid,
-                  col.maroon1,
-                  col.violetred1,
-                  col.violetred,
-                  col.crimson,
-                  col.orange,
-                  col.goldenrod1])
 
 # Read csv files with gen/fitness data in
 def readDataset (filepath):
@@ -74,7 +54,7 @@ def readNets (filepath):
 
 # 10000 or 100000 depending on p
 FromValue = 1000
-pOn = 0.05
+pOn = 0.1
 driftnodrift = 'drift'
 
 # Make files from directory listing
@@ -102,25 +82,27 @@ F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot(1,1,1)
 
 fcount=0
+maxtoshow=9
 for f in files:
-    print ('file {0}'.format(f))
     A, B = readDataset(f)
-    if fcount <= 9:
+    if fcount <= maxtoshow:
         # Find out where in A we have the -10000K generation & check its value
         From10K=A[np.where(A[:,0]>-(FromValue+1))]
         if From10K[0,1] < 0.2:
-            f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=2, color=cols1[fcount])
+            print ('file {0}'.format(f))
+            f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=2, color=plt.cm.plasma((fcount*0.8)/maxtoshow))
             fcount = fcount + 1
 
 # Plot one of them in bold:
-specialfile=files[4]
+specialfile=files[8]
+print ('Special file: {0}'.format(specialfile))
 A, B = readDataset(specialfile)
 f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy)
 
 #f1.set_xlim([-0.2, 0.01])
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
-f1.set_title (driftnodrift + ' p=' + str(pOn))
-plt.savefig ('png/evolution_boolean_'+driftnodrift+'_'+str(pOn)+'_ff4.png')
+#f1.set_title (driftnodrift + ' p=' + str(pOn))
+plt.savefig ('png/paper_figC.png')
 
 plt.show()

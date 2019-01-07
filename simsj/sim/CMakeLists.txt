@@ -3,7 +3,7 @@
 # evolution of a new genome of equal fitness to the old one DOES
 # replace the old one.
 add_executable(evolve evolve.cpp)
-target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
+target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 N_Generations=1000000000)
 
 # The main evolve program operating in the "nodrift" case, where the
 # evolution of a new genome of equal fitness to the old one does NOT
@@ -21,10 +21,10 @@ target_compile_definitions(evolve_nodrift_n7 PUBLIC N_Genes=7 USE_FITNESS_4)
 # generation. When fitness reaches 1, start from a new random genome
 # and create a new file to save the data into. Again, N_Genes=5.
 add_executable(evolve_withf evolve.cpp)
-target_compile_definitions(evolve_withf PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=1000000)
+target_compile_definitions(evolve_withf PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=10000)
 # And nodrift version of the above:
 add_executable(evolve_nodrift_withf evolve.cpp)
-target_compile_definitions(evolve_nodrift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=1000000)
+target_compile_definitions(evolve_nodrift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
 
 # Evolving by flipping fixed number of bits each time (with drift)...
 add_executable(evolve_bybits evolve_bybits.cpp)
@@ -80,6 +80,9 @@ target_compile_definitions(estimate_shared_terminations_n7 PUBLIC USE_FITNESS_4 
 add_executable(showfitness showfitness.cpp)
 target_compile_definitions(showfitness PUBLIC USE_FITNESS_4)
 
+add_executable(showselected showselected.cpp)
+target_compile_definitions(showselected PUBLIC USE_FITNESS_4)
+
 #
 # Evaluate the fitness of mutations away from a F=1 genome for Hamming
 # distance 1,2,3, etc. Do so for N_Genes=4,5,6.
@@ -100,12 +103,18 @@ target_compile_definitions(mutation6 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(mutation6 facto)
 
 # Find the proportion of random genomes with F=1, F>0; fitness function 4
+add_executable(proprandom3 proprandomfits.cpp)
+target_compile_definitions(proprandom3 PUBLIC N_Genes=3 USE_FITNESS_4)
+target_link_libraries(proprandom3 facto)
 add_executable(proprandom4 proprandomfits.cpp)
 target_compile_definitions(proprandom4 PUBLIC N_Genes=4 USE_FITNESS_4)
+target_link_libraries(proprandom4 facto)
 add_executable(proprandom5 proprandomfits.cpp)
 target_compile_definitions(proprandom5 PUBLIC N_Genes=5 USE_FITNESS_4)
+target_link_libraries(proprandom5 facto)
 add_executable(proprandom6 proprandomfits.cpp)
 target_compile_definitions(proprandom6 PUBLIC N_Genes=6 USE_FITNESS_4)
+target_link_libraries(proprandom6 facto)
 
 # This executable displays the genome as it is mutated in a stream of text.
 add_executable(mutatestream mutatestream.cpp)
@@ -114,6 +123,8 @@ target_compile_definitions(mutatestream PUBLIC USE_FITNESS_4)
 # This accepts a string version of the genome (in 1s and 0s) and
 # displays the genome in tabular form.
 add_executable(str2genome str2genome.cpp)
+
+add_executable(genome2str genome2str.cpp)
 
 # This computes a function h(m) which may be discussed in the paper.
 add_executable(h_m h_m.cpp)

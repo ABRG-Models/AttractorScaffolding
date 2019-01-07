@@ -31,7 +31,7 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    array<genosect_t, N_Genes> genome = selected_genome1();
+    array<genosect_t, N_Genes> genome = selected_genome();
 
     show_genome(genome);
 
