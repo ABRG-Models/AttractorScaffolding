@@ -208,13 +208,13 @@ array<genosect_t, N_Genes>
 selected_genome (void)
 {
     // The one we'll use in the paper as the bold evolution and for which we show the state transitions
-    array<genosect_t, N_Genes> genome = {{ 0x5039a8e4, 0xa090a0eb, 0x56cfd0a8, 0x9c9ccdbb, 0x60b214b }};
+    array<genosect_t, N_Genes> genome = {{ 0x8875517a, 0x5c1e87e1, 0x8eef99d4, 0x1a3c467f, 0xdf7235c6 }};
     return genome;
 }
 array<genosect_t, N_Genes>
 selected_genome1 (void)
 {
-    // The one we'll use in the paper
+    // This one is used in a test
     array<genosect_t, N_Genes> genome = {{ 0xa036, 0x451f, 0x7f08, 0x203c, 0xdf52 }};
     return genome;
 }

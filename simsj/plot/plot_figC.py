@@ -11,6 +11,9 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
+import re
+import subprocess
+import states_lib as sl
 import sebcolour
 col = sebcolour.Colour
 
@@ -67,8 +70,6 @@ globstr = '*evolve_withf'+ftag+'a21_p10_ff4_*_fitness_'+str(pOn)+'*.csv'
 print (globstr)
 files = list(p.glob(globstr))
 
-print ('files: {0}'.format(files))
-
 # Font size for plotting
 fs2=22 # for axes tick labels
 
@@ -81,6 +82,19 @@ matplotlib.rc('font', **fnt)
 F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot(1,1,1)
 
+# Set plot_states to 1 when deciding which of the state transition
+# diagrams is most interesting and should be the "chosen genome" for
+# the paper.
+plot_states = 0
+
+if plot_states:
+    F2 = plt.figure (figsize=(24,16))
+
+# Used when state plotting:
+hexstates = False
+kequalsn = True
+docolour = False
+
 fcount=0
 maxtoshow=9
 for f in files:
@@ -89,20 +103,29 @@ for f in files:
         # Find out where in A we have the -10000K generation & check its value
         From10K=A[np.where(A[:,0]>-(FromValue+1))]
         if From10K[0,1] < 0.2:
-            print ('file {0}'.format(f))
-            f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=2, color=plt.cm.plasma((fcount*0.8)/maxtoshow))
+            #print ('file {0}'.format(f))
+            f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=2, color=plt.cm.plasma((fcount*0.8)/maxtoshow), label='{0}'.format(fcount))
             fcount = fcount + 1
+            if plot_states:
+                nethex_re = re.search('(.*)_genome_(.*).csv', '{0}'.format(f))
+                cmd = '../build/sim/genome2str'
+                args = nethex_re.group(2)
+                net = subprocess.check_output ([cmd, args]).decode("utf-8")
+                f2 = F2.add_subplot(3,4,fcount)
+                sl.plot_states (net, f2.axes, hexstates, kequalsn, docolour)
+                f2.set_title('{0} - {1}'.format(fcount-1, args), fontsize=10)
+
 
 # Plot one of them in bold:
-specialfile=files[8]
+sfnum = 1
+specialfile=files[sfnum]
 print ('Special file: {0}'.format(specialfile))
 A, B = readDataset(specialfile)
-f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy)
-
-#f1.set_xlim([-0.2, 0.01])
+f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy, label='{0}'.format(sfnum))
+if plot_states:
+    f1.legend()
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
-#f1.set_title (driftnodrift + ' p=' + str(pOn))
-plt.savefig ('png/paper_figC.png')
+plt.savefig ('png/paper_figC.svg')
 
 plt.show()

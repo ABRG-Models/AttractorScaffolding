@@ -54,10 +54,10 @@ int main (int argc, char** argv)
         g++;
     }
 
-    show_genome(genome);
+    //show_genome(genome);
 
     string stringis = genome2str (genome);
-    LOG ("Genome: " << stringis);
+    cout << stringis << endl;
 
     return 0;
 }
