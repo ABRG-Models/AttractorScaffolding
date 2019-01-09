@@ -29,8 +29,9 @@ using namespace std;
 # define N_Genes 5
 #endif
 
-// The number of generations to evolve for. 20000000 takes roughly 30
-// seconds on an Intel Core i9-8950HK CPU.
+// The number of generations to evolve for. 100,000,000 takes roughly
+// 3 minutes and 30 seconds on an Intel Core i9-8950HK CPU, for n=5
+// and k=n.
 #ifndef N_Generations
 # define N_Generations   100000000
 #endif

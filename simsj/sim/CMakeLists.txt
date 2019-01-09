@@ -3,7 +3,7 @@
 # evolution of a new genome of equal fitness to the old one DOES
 # replace the old one.
 add_executable(evolve evolve.cpp)
-target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 N_Generations=1000000000)
+target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
 
 # The main evolve program operating in the "nodrift" case, where the
 # evolution of a new genome of equal fitness to the old one does NOT
