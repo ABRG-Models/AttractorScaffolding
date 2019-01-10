@@ -157,8 +157,9 @@ int main (int argc, char** argv)
 
     } else {
         LOG ("Doing sampling search...");
-        for (unsigned long long int g = 0; g < ntrials; ++g) {
+        for (unsigned long long int g = 0; g < ntrials; ) {
             array<genosect_t, N_Genes> genome = random_genome();
+            // Note: g increments in EVALUATE_FITNESS():
             EVALUATE_FITNESS(genome);
         }
     }
