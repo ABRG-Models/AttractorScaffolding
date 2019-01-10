@@ -21,7 +21,7 @@ def readDataset (filepath):
     return f[:-1,:]
 
 expfitstartidx = 4 # index of 0.05 in p, below
-p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.557, 0.562, 0.6]#, 0.65, 0.7]
+p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]#, 0.65, 0.7]
 
 maxgens='100000000'
 
@@ -178,7 +178,7 @@ a2.set_ylabel('m (slope of best fit) [' + driftnodrift + ']')
 log_means = np.log(M[expfitstartidx:,2])
 means_fit = np.polyfit (M[expfitstartidx:,1], log_means, 1)
 print ('Exponential fit to curve ({2}): {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0], driftnodrift))
-expx = np.arange(0.05,0.6,0.001)
+expx = np.arange(0.05,0.5,0.001)
 expfit = np.exp (means_fit[1]) * np.exp (means_fit[0]*expx)
 
 
@@ -189,7 +189,10 @@ a3 = f1.add_subplot (1,3,3)
 a3.plot (M[:,1], M[:,2]/scale, marker='o', linestyle='None', color=col.gray20, markersize=12)
 a3.plot (expx, expfit/scale, marker='None', linestyle='-', color=col.crimson, markersize=9)
 # Plot a point showing the mean number of f=1 genomes when randomly sampling
-a3.plot ([0,0.8], [146520,146520], marker='None', linestyle='-', color=col.navy)
+# 1451/1 x 10^8 gives 68918
+# 5516/4 x 10^8 gives 72516
+# 5787/4 x 10^8 gives 69120 (repeat)
+a3.plot ([0,0.8], [69120,69120], marker='None', linestyle='-', color=col.navy)
 a3.legend(['Mean gens to evolve','Fit: {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0], driftnodrift),'Random discovery rate'])
 a3.set_xlabel('p')
 a3.set_ylabel('$\mu$ (mean gens to evolve [' + driftnodrift + '] $f=1$)')

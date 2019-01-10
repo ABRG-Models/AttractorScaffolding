@@ -1,7 +1,10 @@
 /*
- * Show all of a set of combinations of size k drawn from a set size
- * n.
+ * Compute the probability of non-zero fitness in the fitness function
+ * number 4. This computes the value of the relation given in
+ * paper/combinatorics/combinatorics.tex/pdf for a given number of
+ * genes supplied on the command line.
  */
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -31,7 +34,6 @@ int main (int argc, char** argv)
     }
 
     int ngenes = atoi(argv[1]);
-    //int n = (1<<ngenes);   // 2^ngenes
 
     ofstream fout;
     stringstream fpath;

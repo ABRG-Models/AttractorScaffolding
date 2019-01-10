@@ -1,7 +1,6 @@
 /*
- * This defines a fitness function described in the associated
- * paper. See the code comment for evaluate_fitness() for a
- * description of the fitness function.
+ * This defines a fitness function which is a modification of fitness
+ * function 0.
  */
 
 #ifndef __FITNESS_FUNCTION__

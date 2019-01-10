@@ -38,6 +38,7 @@ target_compile_definitions(evolve_bybits_nodrift PUBLIC USE_FITNESS_4)
 add_executable(drift drift.cpp)
 target_compile_definitions(drift PUBLIC USE_FITNESS_4)
 
+# Record drift with all fitness saved
 add_executable(drift_withf drift.cpp)
 target_compile_definitions(drift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
 
@@ -124,6 +125,7 @@ target_compile_definitions(mutatestream PUBLIC USE_FITNESS_4)
 # displays the genome in tabular form.
 add_executable(str2genome str2genome.cpp)
 
+# The opposite of str2genome.
 add_executable(genome2str genome2str.cpp)
 
 # This computes a function h(m) which may be discussed in the paper.

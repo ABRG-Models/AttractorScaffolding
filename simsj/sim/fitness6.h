@@ -1,10 +1,6 @@
 /*
- * This defines a fitness function described in the associated
- * paper. See the code comment for evaluate_fitness() for a
- * description of the fitness function.
- *
- * This is multiplicative between the genes, but takes a mean of the
- * anterior and posterior scores.
+ * Modification of ff4. This is multiplicative between the genes, but
+ * takes a mean of the anterior and posterior scores.
  */
 
 #ifndef __FITNESS_FUNCTION__

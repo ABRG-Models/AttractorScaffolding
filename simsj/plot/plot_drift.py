@@ -16,11 +16,11 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-files = ['../data/drift_ff4_100000000_gens_0.1.csv',
-         '../data/drift_ff4_100000000_gens_0.2.csv',
-         '../data/drift_ff4_100000000_gens_0.3.csv',
-         '../data/drift_ff4_100000000_gens_0.4.csv',
-         '../data/drift_ff4_100000000_gens_0.5.csv']
+files = ['../data/drift_a21_p10_ff4_100000000_gens_0.1.csv',
+         '../data/drift_a21_p10_ff4_100000000_gens_0.2.csv',
+         '../data/drift_a21_p10_ff4_100000000_gens_0.3.csv',
+         '../data/drift_a21_p10_ff4_100000000_gens_0.4.csv',
+         '../data/drift_a21_p10_ff4_100000000_gens_0.5.csv']
 
 lbls = ['p=0.10',
         'p=0.20',
@@ -120,7 +120,7 @@ a1.set_xlabel('10K generations',fontsize=fs)
 a1.set_axisbelow(True)
 #print (M)
 f1.tight_layout()
-plt.savefig ('distribution_drift_histo_ff4.png')
+plt.savefig ('png/distribution_drift_histo_ff4.png')
 
 # Slope vs p fit. Fit line to most of the points.
 slope_fit = np.polyfit (M[1:,1], M[1:,0], 1)
@@ -137,7 +137,7 @@ a2.set_ylabel('Slope of best fit line')
 a2.set_xlim([0,0.55])
 a2.set_ylim([-1.8,0])
 f2.tight_layout()
-plt.savefig ('distribution_drift_slope_vs_p_ff4.png')
+plt.savefig ('png/distribution_drift_slope_vs_p_ff4.png')
 
 # Mean vs p fit. Fit exponential to the mean number of gens, excluding
 # the first point.

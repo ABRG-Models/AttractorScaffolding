@@ -2,7 +2,7 @@
  * Evolves genome repeatedly according to the fitness function
  * described in the paper associated with this code.
  *
- * This version uses teh evolve_genome() function that flips a set
+ * This version uses the evolve_genome() function that flips a set
  * number of bits, rather than flipping each by probability
  *
  * Author: S James

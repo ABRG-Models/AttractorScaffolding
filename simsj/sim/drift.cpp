@@ -1,5 +1,4 @@
 /*
- *
  * Drift with low p value (actually whatever is provided by the user
  * on the command line)
  *
@@ -30,8 +29,7 @@ using namespace std;
 # define N_Genes 5
 #endif
 
-// The number of generations to evolve for. 20000000 takes roughly 30
-// seconds on an Intel Core i9-8950HK CPU.
+// The number of generations to evolve for
 #ifndef N_Generations
 # define N_Generations 100000000
 #endif
@@ -148,7 +146,9 @@ int main (int argc, char** argv)
     // Save data to file. These data files can be graphed using the python scripts.
     ofstream fout;
     stringstream pathss;
-    pathss << "./data/drift_" << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
+    pathss << "./data/drift_";
+    pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
+    pathss << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
     fout.open (pathss.str().c_str());
     if (!fout.is_open()) {
         cerr << "Error opening " << pathss.str() << endl;

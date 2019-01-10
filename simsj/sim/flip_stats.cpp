@@ -34,11 +34,6 @@ using namespace std;
 # define N_Generations   100000000
 #endif
 
-// Whether to create large files with all the fitness information,
-// which can be used to make up graphs showing evolution of the
-// fitness.
-//#define RECORD_ALL_FITNESS 1
-
 // Common code
 #include "lib.h"
 
@@ -64,15 +59,19 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    // Holds the genome and a copy of it.
+    // Reference genome
     array<genosect_t, N_Genes> refg;
 
-    array<unsigned long long int, N_Genes> flipcount = {{ 0, 0, 0, 0, 0 }};
+    array<unsigned long long int, N_Genes> flipcount;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        flipcount[i] = 0;
+    }
     for (unsigned int i = 0; i < N_Generations; ++i) {
         evolve_genome (refg, flipcount);
     }
+    cout << "For pOn = " << pOn << "..." << endl;
     for (int j = 0; j < N_Genes; ++j) {
-        cout << "For pOn = " << pOn << " mean bits flipped in gene " << j<< " was " << flipcount[j] / (double)N_Generations << endl;
+        cout << "Mean number of bits flipped in genome section for gene " << j << " was " << flipcount[j] / (double)N_Generations << endl;
     }
     return 0;
 }
