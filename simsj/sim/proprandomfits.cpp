@@ -114,7 +114,7 @@ int main (int argc, char** argv)
         // A counter for the number of trials; should end up equal to ntrials:
         unsigned long long int g = 0;
         // Number of permutations in a genome section:
-        unsigned long long int genome_sect_perms = (0x1ULL << (0x1ULL<<N_Ins));
+        unsigned long long int genome_sect_perms = (0x1ULL << (0x1UL<<N_Ins));
 #if N_Genes == 3
         for (unsigned long long int g1 = 0; g1 < genome_sect_perms; ++g1) {
             for (unsigned long long int g2 = 0; g2 < genome_sect_perms; ++g2) {
