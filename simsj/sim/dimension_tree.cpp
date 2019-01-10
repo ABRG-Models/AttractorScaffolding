@@ -70,7 +70,7 @@ void find_paths (map<node_t, deque<node_t> >& paths,
                     pi->second.push_front (trans.first);
                     added = true;
                 }
-                if (pi->first > max_path_idx) {
+                if ((int)pi->first > max_path_idx) {
                     max_path_idx = pi->first;
                 }
 
@@ -117,7 +117,7 @@ int main (int argc, char** argv)
         set<pair<node_t, node_t> > trans;
         for (node_t i = 0; i < n_states; ++i) {
             set_bits = _mm_popcnt_u32 ((unsigned int)i);
-            if (set_bits == n_ones) {
+            if ((node_t)set_bits == n_ones) {
                 nodes.insert(i);
 
                 // If not on the first layer, determine which of the
@@ -181,7 +181,7 @@ int main (int argc, char** argv)
     // Now find the number of unique paths to a specific state.
     if (argc > 2) {
         node_t pathto_state = atoi(argv[2]);
-        if (pathto_state >= (1<<n)) {
+        if (pathto_state >= (node_t)(1<<n)) {
             cerr << "pathto_state should be in range [0,"<< ((1<<n)-1) << "]" << endl;
             return 1;
         }
@@ -196,9 +196,9 @@ int main (int argc, char** argv)
         // Recursive function required to find all the paths.
         map<node_t, deque<node_t> > paths;
         find_paths (paths, transition_layers, pathto_state, set_bits_pathto-1);
-        map<node_t, deque<node_t> >::iterator pi = paths.begin();
         cout << "There are " << paths.size() << " paths from 0 to " << pathto_state << endl;
 #ifdef SHOW_PATHS
+        map<node_t, deque<node_t> >::iterator pi = paths.begin();
         while (pi != paths.end()) {
             cout << "Path " << pi->first << ": ";
             for (node_t n : pi->second) {
