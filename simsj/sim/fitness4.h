@@ -23,6 +23,9 @@ using namespace std;
 
 #define FF_NAME "ff4"
 
+/*!
+ * Evaluates the fitness of one context (anterior or posterior).
+ */
 double
 evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 {
