@@ -43,9 +43,10 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    array<genosect_t, N_Genes> genome = {{ 0x79b2, 0xadd, 0x4382, 0x5032, 0x25d5 }};
+    array<genosect_t, N_Genes> genome = selected_genome();
 
     AllBasins ab1 (genome);
+    cout << "Original genome\n---------------" << endl;
     cout << "All transitions is a set of size " << ab1.transitions.size() << endl;
     cout << "Number of basins: " << ab1.getNumBasins() << endl;
     cout << "Size of attractors: ";
@@ -56,13 +57,14 @@ int main (int argc, char** argv)
         cout << *i;
         ++i;
     }
-    cout << endl;
+    cout << endl << endl;
 
     // Evolve the genome...
     pOn = 0.05;
     evolve_genome (genome);
 
     AllBasins ab2 (genome);
+    cout << "\nEvolved genome\n--------------" << endl;
     cout << "All transitions is a set of size " << ab2.transitions.size() << endl;
     cout << "Number of basins: " << ab2.getNumBasins() << endl;
     cout << "Size of attractors: ";
@@ -80,7 +82,7 @@ int main (int argc, char** argv)
     set_intersection (ab1.transitions.begin(), ab1.transitions.end(),
                       ab2.transitions.begin(), ab2.transitions.end(),
                       inserter(intersection, intersection.begin()));
-    cout << "Intersection between sets: " << endl;
+    cout << "\nIntersection between sets\n-------------------------" << endl;
     for (unsigned int n : intersection) {
         cout << "0x" << hex << n << dec << ' ';
     }
@@ -90,7 +92,7 @@ int main (int argc, char** argv)
     set_difference (ab1.transitions.begin(), ab1.transitions.end(),
                     ab2.transitions.begin(), ab2.transitions.end(),
                     inserter(difference, difference.begin()));
-    cout << "Difference between sets: " << endl;
+    cout << "\nDifference between sets\n-----------------------" << endl;
     for (unsigned int n : difference) {
         cout << "0x" << hex << n << dec << ' ';
     }
