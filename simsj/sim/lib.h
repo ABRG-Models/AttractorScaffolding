@@ -256,8 +256,11 @@ void
 compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
 {
     array<state_t, N_Genes> inputs;
+
+#ifndef N_Ins_EQUALS_N_Genes
     state_t lo_mask = lo_mask_start;
     state_t hi_mask = hi_mask_start;
+#endif
 
 #ifdef DEBUG
     bitset<8> bs_st(state);
@@ -266,7 +269,7 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
     for (unsigned int i = 0; i < N_Genes; ++i) {
 
 #ifdef N_Ins_EQUALS_N_Genes
-        inputs[i] = (state << i) & state_mask | (state >> (N_Genes-i));
+        inputs[i] = ((state << i) & state_mask) | (state >> (N_Genes-i));
 #else
         inputs[i] = (state & lo_mask) | ((state & hi_mask) >> N_minus_k);
         hi_mask = (hi_mask >> 1) | 0x80;
