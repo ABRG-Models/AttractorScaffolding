@@ -34,10 +34,19 @@ using namespace std;
 #endif
 #define LOG(s)  cout << "LOG: " << s << endl;
 
+/*!
+ * N_Genes has to be defined.
+ */
 #ifndef N_Genes
 # error 'Number of genes parameter N_Genes must be defined'
 #endif
 
+/*!
+ * Here you can set (in the notation used by Stuart Kaufmann) whether
+ * k=n or k=n-1. We investigated both, but the paper covers the case
+ * where k=n. In the code, N_Ins is equivalent to Kaufmann's 'k';
+ * N_Genes is his 'n'.
+ */
 #define N_Ins_EQUALS_N_Genes 1 // Maybe define in CMakeLists
 #ifdef N_Ins_EQUALS_N_Genes // k = n
 #define ExtraOffset  (1)
@@ -49,8 +58,8 @@ using namespace std;
 #endif
 
 /*!
- * The genome has a section for each 'molecule'. The length of the
- * section of each molecule is 2^N_Ins. 32 bit width sections are
+ * The genome has a section for each gene. The length of the
+ * section of each gene is 2^N_Ins. 32 bit width sections are
  * enough for N_Genes <= 6. 64 bit width sections ok for N_Genes <= 7.
  */
 #if N_Genes == 7 // or N_Genes == 6 and N_Ins_EQUALS_N_Genes
@@ -84,7 +93,7 @@ typedef unsigned char state_t;
 #define state_t_top_bit 0x80
 
 /*!
- * Probability of flipping during evolution.
+ * Probability of flipping each bit of the genome during evolution.
  */
 float pOn;
 
@@ -237,26 +246,6 @@ selected_genome1 (void)
     return genome;
 }
 # endif
-#endif
-
-#ifdef SET_KNOWN_GENOME_BITS
-/*!
- * Given a state for N_Genes (that is, a number with N_Genes bits),
- * compute the inputs for each gene.
- */
-array<state_t, N_Genes>
-compute_next_inputs (state_t state)
-{
-    array<state_t, N_Genes> inputs;
-    state_t lo_mask = lo_mask_start;
-    state_t hi_mask = hi_mask_start;
-    for (unsigned int i = 0; i < N_Genes; ++i) {
-        inputs[i] = (state & lo_mask) | ((state & hi_mask) >> 1);
-        hi_mask = (hi_mask >> 1) | state_t_top_bit;
-        lo_mask >>= 1;
-    }
-    return inputs;
-}
 #endif
 
 /*!
@@ -699,8 +688,10 @@ evolve_genome (array<genosect_t, N_Genes>& genome, array<unsigned long long int,
     }
 }
 
-// A random genome which makes the same number of calls to the RNG as
-// Stuart Wilson's implementation.
+/*!
+ * A random genome which makes exactly the same number of calls to the
+ * RNG as Stuart Wilson's implementation.
+ */
 void
 random_genome_sw (array<genosect_t, N_Genes>& genome) {
     long int nbits = N_Genes * (1<<N_Ins);
@@ -714,101 +705,34 @@ random_genome_sw (array<genosect_t, N_Genes>& genome) {
     genome = vecbool2genome (G);
 }
 
+/*!
+ * Populate the passed in genome with random bits.
+ */
 void
 random_genome (array<genosect_t, N_Genes>& genome)
 {
-    /*
-     * Initialise a fully random genome
-     */
     for (unsigned int i = 0; i < N_Genes; ++i) {
         genome[i] = ((genosect_t) rand()) & genosect_mask;
     }
 }
 
-#if 0
-// Alternative to random_genome()
-void
-random_genome2 (array<genosect_t, N_Genes>& genome)
-{
-    for (unsigned int i = 0; i < N_Genes; ++i) {
-        genosect_t gsect = genome[i];
-        for (unsigned int j = 0; j < (1<<N_Ins); ++j) {
-            if (randFloat() < 0.5f) {
-                // Flip bit j
-                gsect ^= (0x1 << j);
-            }
-        }
-        genome[i] = gsect;
-    }
-}
-#endif
-
 /*!
- * Generate a random genome.
+ * Generate a random genome and return it.
  */
 array<genosect_t, N_Genes>
 random_genome (void)
 {
-    /*
-     * Initialise a fully random genome
-     */
     array<genosect_t, N_Genes> genome;
     for (unsigned int i = 0; i < N_Genes; ++i) {
         genome[i] = ((genosect_t) rand()) & genosect_mask;
     }
 
-#ifdef SET_KNOWN_GENOME_BITS
-    /*
-     * Now set the bits in the genome that we can deduce.
-     */
-    array<state_t, N_Genes> inp_target_ant = compute_next_inputs (target_ant);
-    array<state_t, N_Genes> inp_target_pos = compute_next_inputs (target_pos);
-
-    for (unsigned int i = 0; i < N_Genes; ++i) {
-
-        genosect_t a = ((target_ant >> i) & 0x1);
-        if (a) {
-            genosect_t b = a << inp_target_ant[i];
-#ifdef DEBUG
-            bitset<Genosect_Width> bs (b);
-            DBG2 ("(ant) For genome["<<i<<"] we OR  with: " << bs);
-#endif
-            genome[i] = genome[i] | b;
-        } else {
-            genosect_t b = ~(0x1 << inp_target_ant[i]);
-#ifdef DEBUG
-            bitset<Genosect_Width> bs (b);
-            DBG2 ("(ant) For genome["<<i<<"] we AND with: " << bs);
-#endif
-            genome[i] = genome[i] & b;
-        }
-
-        a = ((target_pos >> i) & 0x1);
-        if (a) {
-            genosect_t b = a << inp_target_pos[i];
-#ifdef DEBUG
-            bitset<Genosect_Width> bs (b);
-            DBG2 ("(pos) For genome["<<i<<"] we OR  with: " << bs);
-#endif
-            genome[i] = genome[i] | b;
-        } else {
-            genosect_t b = ~(0x1 << inp_target_pos[i]);
-#ifdef DEBUG
-            bitset<Genosect_Width> bs (b);
-            DBG2 ("(pos) For genome["<<i<<"] we AND with: " << bs);
-#endif
-            genome[i] = genome[i] & b;
-        }
-
-        bitset<Genosect_Width> bs_gn(genome[i]);
-        DBG2 ("genome[" << i << "] = " << bs_gn);
-    }
-#endif // SET_KNOWN_GENOME_BITS
-
     return genome;
 }
 
-// Using intrinsics for computing Hamming distances
+/*!
+ * Using intrinsics for computing Hamming distances
+ */
 #include <immintrin.h>
 
 /*!
@@ -819,32 +743,10 @@ random_genome (void)
 state_t
 compute_hamming (state_t state, state_t target)
 {
-#ifdef NO_INSTRINSICS
-#ifdef DEBUG2
-    bitset<N_Genes> bs_st(state);
-    bitset<N_Genes> bs_tar(target);
-    DBG2 ("State: " << bs_st << " Target:"  << bs_tar);
-#endif
-    state_t hamming = N_Genes;
-    if (state != target) {
-        for (unsigned int i = 0; i < N_Genes; ++i) {
-            // Bit i in state
-            DBG2 ("st: " << ((state & (0x1 << i))>>i) << " targ: " << ((target & (0x1 << i))>>i));
-            if (((state & (0x1 << i))>>i) == ((target & (0x1 << i))>>i)) {
-                hamming--;
-            }
-        }
-    } else {
-        hamming = 0;
-    }
-    DBG2 ("hamming: " << (unsigned int)hamming);
-    return hamming;
-#else
     // For this very short type, a lookup is probably faster than this intrinsic:
     state_t bits = state ^ target;
     unsigned int hamming = _mm_popcnt_u32 ((unsigned int)bits);
     return static_cast<state_t>(hamming);
-#endif
 }
 
 /*!
@@ -915,6 +817,9 @@ printc (int comb[], int k)
     printf ("\b\b}\n");
 }
 
+/*!
+ * Returns a string of len 1s and 0s in the unsigned int ui.
+ */
 string
 uint_str (const unsigned int& ui, int len)
 {
@@ -963,7 +868,8 @@ printc_binary (int comb[], int k, int w)
  * zero columns in any column up to col m-1.
  */
 int
-printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int m, int& prec_zcs, int& zcs)
+printc_binary (int comb[], int l, int ng,
+               int show_zeros_mask, float& score, int m, int& prec_zcs, int& zcs)
 {
     int rtn = 0;
     int zeros = 0;
@@ -975,7 +881,6 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     for (int s = 0; s < l; ++s) {
         for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
             cols[c] += (comb[s] & (1<<c)) >> c;
-            //cout << "i=" << i << "; cols[" << c << "] = " << cols[c] << endl;
         }
         if (show_zeros_mask
             && ((comb[s] ^ show_zeros_mask) & show_zeros_mask) == show_zeros_mask) {
@@ -985,7 +890,6 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     }
 
     if (zeros == l) {
-        //cout << "Had all zeros in col(s): " << uint_str(show_zeros_mask, ng) << " for states: | ";
         cout << "ZCol," << uint_str(show_zeros_mask, ng) << ",";
         for (int s = 0; s < l; ++s) {
             for (unsigned int c = 0; c < (unsigned int)ng; ++c) {
@@ -1018,7 +922,9 @@ printc_binary (int comb[], int l, int ng, int show_zeros_mask, float& score, int
     return rtn;
 }
 
-// Some string manipulation
+/*!
+ * Some string manipulation
+ */
 vector<string>
 stringToVector (const string& s, const string& separator,
                 const bool ignoreTrailingEmptyVal)
