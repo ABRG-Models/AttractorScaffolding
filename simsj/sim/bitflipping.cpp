@@ -1,5 +1,4 @@
 /*
- *
  * Randomly generate a genome. Look at the number of changed
  * transitions for flipping each single bit.
  *
@@ -69,12 +68,8 @@ int main (int argc, char** argv)
     AllBasins ab;
     AllBasins ab1;
 
-    // The main loop. Repeatedly generate a random genome point,
-    // recording the number of genomes generated every time a
-    // maximally fit state of 1 is happened upon.
-    //random_genome (genome);
-    // This matches the one in plot_states_bitflips.py
-    genome = str2genome ("00011110000010010001000111000110111000100001101101101000011101001010110100011101");
+    // The starting genome
+    genome = random_genome();
 
     lastf = evaluate_fitness (genome);
     DBG ("Fitness of unflipped genome = " << lastf);
@@ -109,10 +104,7 @@ int main (int argc, char** argv)
             set_difference (ab.transitions.begin(), ab.transitions.end(),
                             ab1.transitions.begin(), ab1.transitions.end(),
                             inserter(difference, difference.begin()));
-            LOG("Num changed transitions: " <<  difference.size() << ", fitness: " << f);
-            if (difference.size() != 2) {
-                LOG ("WHOOP WHOOP WHOOOP WHOOOOOOP!!!!!");
-            }
+            LOG("Num changed transitions: " <<  difference.size() << ", fitness: " << f << "\t\tdelta_f: " << (f-lastf));
         }
     }
 
