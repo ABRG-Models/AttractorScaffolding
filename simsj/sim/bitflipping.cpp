@@ -18,8 +18,7 @@
 
 using namespace std;
 
-// Choose debugging level. If you uncomment one of these, then you
-// should probably reduce N_Generations
+// Choose debugging level.
 //
 #define DEBUG 1
 // #define DEBUG2 1
@@ -38,9 +37,6 @@ using namespace std;
 // The fitness function used here
 #include "fitness.h"
 
-// Perform a loop N_Generations long during which an initially
-// randomly selected genome is evolved until a maximally fit state is
-// achieved.
 int main (int argc, char** argv)
 {
     // Seed the RNG.
@@ -50,17 +46,9 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    // generations records the relative number of generations required
-    // to achieve fitness 1.
-    vector<unsigned int> generations;
-
-    // Records the evolution of the fitness of a genome. Fig 3. The
-    // (abs) generation for each fitness is recorded along with the
-    // floating point fitness value. Record this in a vector of
-    // vectors, with one vector for each evolution towards F=1
-
-    // Holds the drifting genome
+    // Holds the original genome
     array<genosect_t, N_Genes> genome;
+    // Holds the new, bitflipped genome
     array<genosect_t, N_Genes> genome1;
 
     double f = 0.0;
@@ -74,7 +62,7 @@ int main (int argc, char** argv)
     lastf = evaluate_fitness (genome);
     DBG ("Fitness of unflipped genome = " << lastf);
     ab.update (genome);
-    //NetInfo netinfo(ab, 1, lastf);
+
     for (unsigned int g = 0; g < N_Genes; ++g) {
         for (unsigned int i = 0; i < (1<<N_Ins); ++i) {
 
@@ -104,7 +92,7 @@ int main (int argc, char** argv)
             set_difference (ab.transitions.begin(), ab.transitions.end(),
                             ab1.transitions.begin(), ab1.transitions.end(),
                             inserter(difference, difference.begin()));
-            LOG("Num changed transitions: " <<  difference.size() << ", fitness: " << f << "\t\tdelta_f: " << (f-lastf));
+            LOG ("Num changed transitions: " <<  difference.size() << ", fitness: " << f << "\t\tdelta_f: " << (f-lastf));
         }
     }
 
