@@ -206,3 +206,20 @@ This compiles a function h(m) which is relevant to fitness function 0.
 
 * Compiles to **h_m**
 * Results on command line
+
+### mutatestream.cpp
+
+Mutates a known-good genome 100 times with pOn=0.05 and outputs the
+genomes in 1s and 0s format on the cmd line.
+
+* Compiles to **mutatestream**
+* Results on command line
+
+### mutation.cpp
+
+Mutate a known-good genome and evaluate the fitness at various Hamming
+distances away from the fitness = 1 original.
+
+* Compiles into *mutation4*, *mutation5* and *mutation6*
+* Results into data/mutations_ff4_n4_*.csv
+* Results plotted by plot_smooth_fit.py *or plot_mutations.py?*
