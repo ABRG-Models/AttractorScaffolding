@@ -794,6 +794,7 @@ next_combination (int comb[], int k, int n)
     }
 
     if (comb[0] > n - k) { /* Combination (n-k, n-k+1, ..., n) reached */
+        /* Peculiar bug occurs here on returning when called within combos.cpp */
         return 0; /* No more combinations can be generated */
     }
 
