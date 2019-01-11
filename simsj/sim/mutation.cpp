@@ -25,7 +25,7 @@ using namespace std;
 
 // Choose debugging level.
 //
-// #define DEBUG 1
+#define DEBUG 1
 // #define DEBUG2 1
 
 // Number of genes in a state is set at compile time.
@@ -101,7 +101,7 @@ int main (int argc, char** argv)
     lmp::InitSetUi(nchoosek, 1);
     lmp::InitSetUi(max_exhaustive, MAX_EXHAUSTIVE);
 
-    for (ulong h = 1; h <= (l_genome/2); ++h) {
+    for (ulong h = 1; h <= (l_genome/3); ++h) {
 
         // Compute l_genome choose h to find out whether to do exhaustive
         // computation or sampled estimate of the number of fit
@@ -116,14 +116,14 @@ int main (int argc, char** argv)
         pair<unsigned int, double> fitmuts;
         if (lmp::Cmp(nchoosek, max_exhaustive) > 0) {
 
-            nsamples = (MAX_EXHAUSTIVE>>1);
+            nsamples = (MAX_EXHAUSTIVE>>2);
             numHammingStates = (double)nsamples;
             DBG ("Sampled search, choose " << nsamples << " out of " << nchoosek << " Hamming " << h << " states");
             // Work out a suitable number of samples, up to a max of MAX_EXHAUSTIVE
             exhaustive_search = 0;
             fitmuts = num_fit_mutations_sample (genome, h, nsamples);
         } else {
-            // It might seem bonkers to turn it into a string then
+            // It might seem bonkers to turn nchoosek into a string then
             // back to double, but it worked, and was simpler than
             // using mpz_export() and as it's only called a few times,
             // timing isn't an issue.
