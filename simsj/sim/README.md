@@ -197,7 +197,7 @@ Convert from genome_id format
 (e.g. 5039a8e4-a090a0eb-56cfd0a8-9c9ccdbb-60b214b) to 1s and 0s
 format.
 
-* Compiles to **genome2str**
+* Compiles into **genome2str** (and **genome2str6** for ngenes=6)
 * Results on command line
 
 ### h_m.cpp
@@ -220,6 +220,64 @@ genomes in 1s and 0s format on the cmd line.
 Mutate a known-good genome and evaluate the fitness at various Hamming
 distances away from the f=1 original.
 
-* Compiles into *mutation4*, *mutation5* and *mutation6*
+* Compiles into **mutation4**, **mutation5** and **mutation6**
 * Results into data/mutations_ff4_n4_*.csv
-* Results plotted by plot_smooth_fit.py *or plot_mutations.py?*
+* Results plotted by plot_smooth_fit.py
+
+### prob_fitinc_bybits.cpp
+
+Take N_Starts randomly generated, but f>0 genomes. Mutate each one
+N_Generations times. Determine the probability distribution of
+mutating to a fitter genome. The number of bits to flip each time is
+provided on the command line.
+
+* Compiles into **prob_fitinc_bybits**
+* Results into data/prob_fitinc_*
+* Results plotted by plot_prob_fitinc_flipbits.py
+
+### prob_fitinc.cpp
+
+Take N_Starts randomly generated, but f>0 genomes. Mutate each one
+N_Generations times. Determine the probability distribution of
+mutating to a fitter genome. The probability of a bit flip (pOn) is
+provided on the command line.
+
+* Compiles into **prob_fitinc**
+* Results into data/prob_fitinc_*
+* Results plotted by plot_prob_fitinc.py
+
+### proprandomfits.cpp
+
+Compute the proportion of random genomes that have f=1. Find the
+proportion of fit genomes by randomly sampling the genome space OR by
+an exhaustive search in the cases where this is computationally
+feasible.
+
+* Compiles into **proprandom3**, **proprandom4**, **proprandom5**, **proprandom6**
+* Results on command line.
+
+### showfitness.cpp
+
+Taking a genome in "1s and 0s format", convert to array<genosect_t,
+N_Genes> and then evaluate the fitness. If no genome is provided on
+the command line, generate a random one.
+
+* Compiles into **showfitness**
+* Results on command line.
+
+
+### showselected.cpp
+
+Show the "selected genome" - the one that is used for Fig 1 of the
+associated paper.
+
+* Compiles into **showselected**
+* Results on command line.
+
+### str2genome.cpp
+
+Opposite of genome2str.cpp. Takes an input in 1's and 0s format and
+outputs in aaaaaaaa-bbbbbbbb-... format.
+
+* Compiles into **str2genome** (and **str2genome6** for ngenes=6)
+* Results on command line.
