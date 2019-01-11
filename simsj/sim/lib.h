@@ -47,7 +47,10 @@ using namespace std;
  * where k=n. In the code, N_Ins is equivalent to Kaufmann's 'k';
  * N_Genes is his 'n'.
  */
-#define N_Ins_EQUALS_N_Genes 1 // Maybe define in CMakeLists
+#ifndef k_equals_n
+# define N_Ins_EQUALS_N_Genes 1 // Maybe define in CMakeLists
+#endif
+
 #ifdef N_Ins_EQUALS_N_Genes // k = n
 #define ExtraOffset  (1)
 #define N_Ins        (N_Genes) // really k_Ins
