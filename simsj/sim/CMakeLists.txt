@@ -45,10 +45,6 @@ target_compile_definitions(drift PUBLIC USE_FITNESS_4)
 add_executable(drift_withf drift.cpp)
 target_compile_definitions(drift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
 
-# Null model - repeatedly generate random genomes
-add_executable(null_withf nullmodel.cpp)
-target_compile_definitions(null_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
-
 # This is essentially a debugging/example program, which sets up a
 # random genome, and evolves it one generation only.
 add_executable(evolve_onegen evolve_onegen.cpp)
@@ -64,11 +60,6 @@ target_compile_definitions(evolve_fit_genome PUBLIC USE_FITNESS_4)
 
 add_executable(evolve_fit_genome6 evolve_fit_genome.cpp)
 target_compile_definitions(evolve_fit_genome6 PUBLIC USE_FITNESS_4 N_Genes=6)
-
-# This evaluates the fitness of the specific genome displayed in
-# Fig. 1 of the paper. N_Genes=5.
-add_executable(onestate onestate.cpp)
-target_compile_definitions(onestate PUBLIC USE_FITNESS_4)
 
 # For N_Genes=5,Randomly select a number of genomes and output numbers
 # for those with fitness 0, those with >0 fitness and those with

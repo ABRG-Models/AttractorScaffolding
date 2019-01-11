@@ -1,6 +1,6 @@
 /*
- * Taking a genome in "Dan string format", convert to
- * array<genosect_t, N_Genes> and then evaluate the fitness.
+ * Show the "selected genome" - the one that is used for Fig 1 of the
+ * associated paper.
  *
  * Author: S James
  * Date: October 2018.
