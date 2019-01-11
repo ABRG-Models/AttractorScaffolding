@@ -1,5 +1,6 @@
 /*
- * Tests the "genome in Dan string format" conversion
+ * Tests the "genome in Dan string format" conversion; outputs in
+ * aaaa-bbbb-ccc... format.
  *
  * Author: S James
  * Date: October 2018.
@@ -17,7 +18,7 @@ using namespace std;
 
 // Choose debugging level.
 //
-#define DEBUG 1
+// #define DEBUG 1
 // #define DEBUG2 1
 
 // Number of genes in a state is set at compile time.
@@ -44,16 +45,15 @@ int main (int argc, char** argv)
     unsigned int l_genosect = 1 << N_Ins;
     unsigned int l_genome = N_Genes * l_genosect;
     if (l == l_genome) {
-        LOG ("String has " << l_genome << " bit chars as required...");
+        DBG ("String has " << l_genome << " bit chars as required...");
     } else {
         LOG ("String does not have " << l_genome << " bit chars as required. Exiting.");
         return 1;
     }
 
-
     array<genosect_t, N_Genes> g = str2genome (s);
 
-    show_genome (g);
+    cout << genome_id (g) << endl;
 
     return 0;
 }

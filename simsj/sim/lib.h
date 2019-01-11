@@ -419,7 +419,7 @@ str2genome (const string& s)
     unsigned int l_genosect = GENOSECT_ONE << N_Ins;
     unsigned int l_genome = N_Genes * l_genosect;
     if (l == l_genome) {
-        LOG ("String has " << l_genome << " bit chars as required...");
+        DBG ("String has " << l_genome << " bit chars as required...");
     } else {
         return g;
     }
