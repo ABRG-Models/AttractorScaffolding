@@ -82,3 +82,10 @@ cd plot
 python plot_figD.py
 python plot_evospeed.py
 ```
+
+The result of exhaustively searching the n=3 gene system can be
+reproduced by running
+
+```
+./build/sim/proprandom3
+```
