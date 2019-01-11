@@ -14,7 +14,9 @@ using std::cerr;
 using std::endl;
 using std::stringstream;
 
-#define N_Genes 5
+#ifndef N_Genes
+# define N_Genes 5
+#endif
 
 int main(int argc, char** argv)
 {

@@ -19,11 +19,13 @@ using namespace std;
 
 // Choose debugging level.
 //
-// #define DEBUG 1
-// #define DEBUG2 1
+#define DEBUG 1
+#define DEBUG2 1
 
 // Number of genes in a state is set at compile time.
-#define N_Genes 5
+#ifndef N_Genes
+# define N_Genes 5
+#endif
 
 // Common code
 #include "lib.h"

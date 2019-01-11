@@ -56,6 +56,9 @@ target_compile_definitions(evolve_onegen PUBLIC USE_FITNESS_4)
 add_executable(evolve_fit_genome evolve_fit_genome.cpp)
 target_compile_definitions(evolve_fit_genome PUBLIC USE_FITNESS_4)
 
+add_executable(evolve_fit_genome6 evolve_fit_genome.cpp)
+target_compile_definitions(evolve_fit_genome6 PUBLIC USE_FITNESS_4 N_Genes=6)
+
 # This evaluates the fitness of the specific genome displayed in
 # Fig. 1 of the paper. N_Genes=5.
 add_executable(onestate onestate.cpp)
@@ -124,9 +127,13 @@ target_compile_definitions(mutatestream PUBLIC USE_FITNESS_4)
 # This accepts a string version of the genome (in 1s and 0s) and
 # displays the genome in tabular form.
 add_executable(str2genome str2genome.cpp)
+add_executable(str2genome6 str2genome.cpp)
+target_compile_definitions(str2genome6 PUBLIC N_Genes=6)
 
 # The opposite of str2genome.
 add_executable(genome2str genome2str.cpp)
+add_executable(genome2str6 genome2str.cpp)
+target_compile_definitions(genome2str6 PUBLIC N_Genes=6)
 
 # This computes a function h(m) which may be discussed in the paper.
 add_executable(h_m h_m.cpp)

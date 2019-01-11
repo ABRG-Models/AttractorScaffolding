@@ -64,14 +64,18 @@ using namespace std;
  */
 #if N_Genes == 7 // or N_Genes == 6 and N_Ins_EQUALS_N_Genes
 typedef unsigned long long int genosect_t;
+#define GENOSECT_ONE 0x1ULL
 #elif N_Genes == 6
 # if defined N_Ins_EQUALS_N_Genes
 typedef unsigned long long int genosect_t;
+#define GENOSECT_ONE 0x1ULL
 # else
 typedef unsigned int genosect_t;
+#define GENOSECT_ONE 0x1UL
 # endif
 #else
 typedef unsigned int genosect_t;
+#define GENOSECT_ONE 0x1UL
 #endif
 
 /*!
@@ -380,8 +384,9 @@ genome2str (array<genosect_t, N_Genes>& genome)
 {
     stringstream rtn;
     for (unsigned int i = 0; i < N_Genes; ++i) {
-        for (unsigned int j = 0; j < (1 << N_Ins); ++j) {
-            genosect_t mask = 0x1 << j;
+        for (unsigned long long int j = 0; j < (1 << N_Ins); ++j) {
+            genosect_t mask = GENOSECT_ONE << j;
+            //LOG ("mask 1<<"<<j<<": " << hex << (unsigned long long int)mask << dec);
             rtn << ((genome[i]&mask) >> j);
         }
     }
@@ -403,7 +408,7 @@ str2genome (const string& s)
 
     // Check length of string.
     unsigned int l = s.length();
-    unsigned int l_genosect = 1 << N_Ins;
+    unsigned int l_genosect = GENOSECT_ONE << N_Ins;
     unsigned int l_genome = N_Genes * l_genosect;
     if (l == l_genome) {
         LOG ("String has " << l_genome << " bit chars as required...");
@@ -415,7 +420,7 @@ str2genome (const string& s)
         for (unsigned int j = 0; j < l_genosect; ++j) {
             bool high = (s[j + i*l_genosect] == '1');
             if (high) {
-                g[i] |= 0x1 << j;
+                g[i] |= GENOSECT_ONE << j;
             } // else do nothing.
         }
     }
@@ -434,7 +439,7 @@ vecbool2genome (const vector<bool>& vb)
 
     // Check length of vector of bools
     unsigned int l = vb.size();
-    unsigned int l_genosect = 1 << N_Ins;
+    unsigned int l_genosect = GENOSECT_ONE << N_Ins;
     unsigned int l_genome = N_Genes * l_genosect;
     if (l == l_genome) {
         DBG ("Vector has " << l_genome << " bit bools as required...");
@@ -445,7 +450,7 @@ vecbool2genome (const vector<bool>& vb)
     for (unsigned int i = 0; i < N_Genes; ++i) {
         for (unsigned int j = 0; j < l_genosect; ++j) {
             if (vb[j + i*l_genosect]) {
-                g[i] |= 0x1 << j;
+                g[i] |= GENOSECT_ONE << j;
             } // else do nothing.
         }
     }
@@ -535,7 +540,7 @@ show_genome (const array<genosect_t, N_Genes>& genome)
     for (unsigned int j = 0; j < (1 << N_Ins); ++j) {
         cout << bitset<N_Ins>(j) << "   ";
         for (unsigned int i = 0; i < N_Genes; ++i) {
-            genosect_t mask = 0x1 << j;
+            genosect_t mask = GENOSECT_ONE << j;
             cout << ((genome[i]&mask) >> j);
         }
         cout << endl;
@@ -595,7 +600,7 @@ evolve_genome (array<genosect_t, N_Genes>& genome, unsigned int bits_to_flip)
     unsigned int numflipped = 0;
 #endif
 
-    unsigned int genosect_w = (1 << N_Ins);
+    unsigned int genosect_w = (GENOSECT_ONE << N_Ins);
     unsigned int lgenome = N_Genes * genosect_w;
 
     // Init a list containing all the indices, lgenome long. As bits
@@ -627,7 +632,7 @@ evolve_genome (array<genosect_t, N_Genes>& genome, unsigned int bits_to_flip)
         ++numflipped;
         DBG ("Flipping bit " << j+(gi*genosect_w));
 #endif
-        gsect ^= (0x1 << j);
+        gsect ^= (GENOSECT_ONE << j);
         genome[gi] = gsect;
 
         --lgenome;
@@ -653,7 +658,7 @@ evolve_genome (array<genosect_t, N_Genes>& genome)
 #ifdef DEBUG
                 ++numflipped;
 #endif
-                gsect ^= (0x1 << j);
+                gsect ^= (GENOSECT_ONE << j);
             }
         }
         genome[i] = gsect;
@@ -668,7 +673,7 @@ void
 bitflip_genome (array<genosect_t, N_Genes>& genome, unsigned int theGenosect, unsigned int extra)
 {
     DBG2("Genosect " << theGenosect << " plus " << extra);
-    genome[theGenosect] ^= (0x1 << extra);
+    genome[theGenosect] ^= (GENOSECT_ONE << extra);
 }
 
 /*!
@@ -684,7 +689,7 @@ evolve_genome (array<genosect_t, N_Genes>& genome, array<unsigned long long int,
             if (randFloat() < pOn) {
                 // Flip bit j
                 ++flipcount[i];
-                gsect ^= (0x1 << j);
+                gsect ^= (GENOSECT_ONE << j);
             }
         }
         genome[i] = gsect;

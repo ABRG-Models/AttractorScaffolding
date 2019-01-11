@@ -2,7 +2,7 @@
 
 This directory contains most of the important simulation code. The key
 files to look at, when referring to the paper are the header files,
-and the programs evolve.cpp, x.cpp, y.cpp. **FIXME**.
+and the program **evolve.cpp** which reproduces the result in the paper.
 
 ## Headers
 
@@ -218,7 +218,7 @@ genomes in 1s and 0s format on the cmd line.
 ### mutation.cpp
 
 Mutate a known-good genome and evaluate the fitness at various Hamming
-distances away from the fitness = 1 original.
+distances away from the f=1 original.
 
 * Compiles into *mutation4*, *mutation5* and *mutation6*
 * Results into data/mutations_ff4_n4_*.csv

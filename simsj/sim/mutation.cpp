@@ -30,7 +30,7 @@ using namespace std;
 
 // Number of genes in a state is set at compile time.
 #ifndef N_Genes
-#define N_Genes 5
+# define N_Genes 5
 #endif
 
 // A cutoff for the number of possible mutated Hamming states at which
