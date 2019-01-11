@@ -30,24 +30,219 @@ python plot_dimension_tree.py 5 # (etc)
 
 ### plot_drift.py
 
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_drift.py
+```
 
 ### plot_evo_analysis.py
-### plot_evospeed_bf.py
-### plot_evospeed_histo_only_multi_bf.py
+
+**Needs attention**
+
+Then plot:
+```
+python plot_.py
+```
+
+### plot_evospeed_bf.py and plot_evospeed_histo_only_multi_bf.py
+
+First run:
+```
+scripts/runevolveb.sh
+```
+Then plot:
+```
+python plot_evospeed_bf.py
+python plot_evospeed_histo_only_multi_bf.py
+```
+
 ### plot_evospeed_histo_only_multi.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_evospeed_powerlaw.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_evospeed.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_figB.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_figC.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_figDloglog.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_figD.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_fitincspeed_histo_multi.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_fitness_dists.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_h_m.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_null_stats_load.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_null_stats.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_p0.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_prob_fitinc_flipbits.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_prob_fitinc.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_smooth_fit.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
+
 ### plot_states_bitflips.py
+
+First run:
+```
+scripts/rundrift.sh
+```
+Then plot:
+```
+python plot_.py
+```
