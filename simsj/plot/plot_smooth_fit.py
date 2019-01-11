@@ -143,7 +143,7 @@ h5_m = readhm ("../data/h5_m.csv")
 h6_m = readhm ("../data/h6_m.csv")
 
 # Set recompute to False to switch off bootstrap computation of stderrs
-recompute=False
+recompute=True
 if recompute:
     # Read all the data into m.
     genes = 4
@@ -211,11 +211,11 @@ else:
     m6y = m6_ff4_final[0::4,1]
 
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,2],
-              fmt='.', marker='s', markersize=ms1, linestyle='None', linewidth=lw1, color=c.mediumpurple1)
+              marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
 plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,2],
-              fmt='.', marker='o', markersize=ms1, linestyle='None', linewidth=lw1, color=c.darkorchid2)
+              marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
 plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,2],
-              fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
+              marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
 # Best ks for h(m,k) fits:
 k4 = 21
@@ -227,7 +227,7 @@ nf5 = 0.371 # Computed by proprandom5_ff4
 k6 = 45
 nf6 = 0.4746 # Computed by proprandom6_ff4
 
-showhm_fit=True
+showhm_fit=False # Because h(m) relates to another fitness function
 if showhm_fit:
     # The fit lines:
     h_tmp = h4_m[h4_m[:,0]==float(k4)]
@@ -289,11 +289,11 @@ else:
     m5y = m5_ff4_final[0::2,7]
     m6y = m6_ff4_final[0::4,7]
 plt.errorbar (m4_ff4_final[:,0]/32,     m4y, yerr=m4_ff4_final[:,8],
-              fmt='.', marker='s', markersize=ms1, linestyle='None', linewidth=lw1, color=c.mediumpurple1)
+              fmt='.', marker='s', markersize=ms1, linestyle='-', linewidth=lw1, color=c.mediumpurple1)
 plt.errorbar (m5_ff4_final[0::2,0]/80,  m5y, yerr=m5_ff4_final[0::2,8],
-              fmt='.', marker='o', markersize=ms1, linestyle='None', linewidth=lw1, color=c.darkorchid2)
+              fmt='.', marker='o', markersize=ms1, linestyle='-', linewidth=lw1, color=c.darkorchid2)
 plt.errorbar (m6_ff4_final[0::4,0]/192, m6y, yerr=m6_ff4_final[0::4,8],
-              fmt='.', marker='v', markersize=ms1, linestyle='None', linewidth=lw1, color=c.indigo)
+              fmt='.', marker='v', markersize=ms1, linestyle='-', linewidth=lw1, color=c.indigo)
 
 # Best ks for h(m,k) fits:
 k4=10
