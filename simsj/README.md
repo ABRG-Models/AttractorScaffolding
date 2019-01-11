@@ -65,5 +65,20 @@ popd
 
 ## Running
 
-Now you can run the programs in build/sim/ or the scripts. (Add more
-info here!).
+See the sim/README.md for details about all the programs that are
+compiled in build/sim/
+
+To reproduce the essential result of this work, first run:
+
+```
+./scripts/runevolve.sh
+```
+
+This will generate data files in data/. These can then be plotted with
+plot/plot_figD.py and plot/plot_evospeed.py:
+
+```
+cd plot
+python plot_figD.py
+python plot_evospeed.py
+```
