@@ -32,10 +32,13 @@ echo "Using build directory ${HN} for executables"
 ./${HN}/sim/evolve_bybits 8  &
 ./${HN}/sim/evolve_bybits 10 &
 ./${HN}/sim/evolve_bybits 12 &
-./${HN}/sim/evolve_bybits 14 &
 ./${HN}/sim/evolve_bybits 16 &
-./${HN}/sim/evolve_bybits 18 &
 ./${HN}/sim/evolve_bybits 20 &
+./${HN}/sim/evolve_bybits 24  &
+./${HN}/sim/evolve_bybits 28  &
+./${HN}/sim/evolve_bybits 32  &
+./${HN}/sim/evolve_bybits 36  &
+./${HN}/sim/evolve_bybits 40  &
 
 wait
 popd
