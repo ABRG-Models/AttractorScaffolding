@@ -210,7 +210,15 @@ masks_init (void)
     }
 }
 
-#if N_Genes == 5
+#if N_Genes == 6
+array<genosect_t, N_Genes>
+selected_genome (void)
+{
+    // The one we'll use in the paper as the bold evolution and for which we show the state transitions
+    array<genosect_t, N_Genes> genome = {{ 0x2a0b00c8d7cee66fULL, 0x1f27d5082715cd95ULL, 0x9e12d18b6b5add34ULL, 0x7ec6c4222c0dc635ULL, 0x3b72c42b80cf5d5cULL, 0x7221967e8c593e2dULL }};
+    return genome;
+}
+#elif N_Genes == 5
 # if defined N_Ins_EQUALS_N_Genes
 /*!
  * A selected genome for k=n
