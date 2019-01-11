@@ -5,6 +5,9 @@
 add_executable(evolve evolve.cpp)
 target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
 
+add_executable(evolve6 evolve.cpp)
+target_compile_definitions(evolve6 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 N_Genes=6)
+
 # The main evolve program operating in the "nodrift" case, where the
 # evolution of a new genome of equal fitness to the old one does NOT
 # replace the old one.
@@ -50,6 +53,9 @@ target_compile_definitions(null_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_
 # random genome, and evolves it one generation only.
 add_executable(evolve_onegen evolve_onegen.cpp)
 target_compile_definitions(evolve_onegen PUBLIC USE_FITNESS_4)
+
+add_executable(evolve_onegen6 evolve_onegen.cpp)
+target_compile_definitions(evolve_onegen6 PUBLIC USE_FITNESS_4 N_Genes=6)
 
 # This starts with a random genome, and evolves it for as many
 # generations as it takes to get to the first fit genome. N_Genes=5.
