@@ -1,5 +1,0 @@
-iteration,numfit,numperfect
-0,1,0
-1000000,838465,9
-LOG: For 5 genes, there were 838465 fit genomes out of 1000000 of which 9 had F=1
-LOG: That's 0.838465 and 9e-06 as proportions.
