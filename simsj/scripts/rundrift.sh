@@ -23,15 +23,10 @@ fi
 echo "Using build directory ${HN} for executables"
 
 # Run several drifts in parallel.
-#./${HN}/sim/drift 0.05 &
 ./${HN}/sim/drift 0.1 &
-#./${HN}/sim/drift 0.15 &
 ./${HN}/sim/drift 0.2 &
-#./${HN}/sim/drift 0.25 &
 ./${HN}/sim/drift 0.3 &
-#./${HN}/sim/drift 0.35 &
 ./${HN}/sim/drift 0.4 &
-#./${HN}/sim/drift 0.45 &
 ./${HN}/sim/drift 0.5 &
 
 wait
