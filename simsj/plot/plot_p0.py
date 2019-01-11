@@ -100,5 +100,5 @@ fig2.set_xlim([0,10])
 fig2.set_axisbelow(True)
 fig2.set_title ("b) Probability of score > 0");
 
-plt.savefig ('png/p0.png')
+plt.savefig ('png/p0.svg')
 plt.show()
