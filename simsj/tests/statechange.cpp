@@ -37,7 +37,7 @@ int main (int argc, char** argv)
     state_t initial_state = 0x10; // 10000
     state_t state = initial_state;
 
-    array<genosect_t, N_Genes> genome = selected_genome1();
+    array<genosect_t, N_Genes> genome = selected_genome();
     compute_next (genome, state);
 
     show_genome (genome);
@@ -51,7 +51,7 @@ int main (int argc, char** argv)
          << "; New state: 0x" << (unsigned int)state << dec << endl;
 
     int rtn = 1;
-    if (state == 0xd) {
+    if (state == 0x17) {
         rtn = 0;
     }
     return rtn;

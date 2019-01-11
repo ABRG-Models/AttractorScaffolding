@@ -58,7 +58,7 @@ the name of your computer's hostname).
 
 ```bash
 pushd build
-CXX=clang++ cmake .. # or CXX=icpc cmake .. or just cmake .. to use the default which is probably g++
+cmake .. # alternatively use `CXX=icpc cmake ..` or `CXX=clang++ cmake ..` to compile with an optimised compiler
 make -j6 # or however many cores you have
 popd
 ```
@@ -84,7 +84,7 @@ python plot_evospeed.py
 ```
 
 The result of exhaustively searching the n=3 gene system can be
-reproduced by running
+reproduced by running:
 
 ```
 ./build/sim/proprandom3

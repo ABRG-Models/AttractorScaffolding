@@ -32,8 +32,8 @@ int main (int argc, char** argv)
     masks_init();
 
     // Try to generate the genome from Fig 1 from its string representation:
-    string stringform = "01101100000001011111100010100010000100001111111000111100000001000100101011111011";
-    array<genosect_t, N_Genes> shouldbe = selected_genome1();
+    string stringform = "0101111010001010101011100001000110000111111000010111100000111010001010111001100111110111011100011111111001100010001111000101100001100011101011000100111011111011";
+    array<genosect_t, N_Genes> shouldbe = selected_genome();
     array<genosect_t, N_Genes> g = str2genome (stringform);
 
 
