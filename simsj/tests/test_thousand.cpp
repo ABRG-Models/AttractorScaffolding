@@ -26,7 +26,7 @@ using namespace std;
 #define N_Genes 5
 
 // Common code
-#define k_equals_n 1
+#define k_equals_n_minus_1 1
 #include "lib.h"
 
 #include "fitness.h"
