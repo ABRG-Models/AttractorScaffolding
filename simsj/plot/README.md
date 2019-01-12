@@ -133,23 +133,11 @@ for details. Plot with:
 python plot_h_m.py
 ```
 
-### plot_null_stats_load.py
+### plot_null_stats.py and plot_null_stats_load.py
 
-First run:
-```
-scripts/rundrift.sh
-```
-Then plot:
-```
-python plot_.py
-```
+Plots statistics of the null model. What script to run to generate the
+null model data?
 
-### plot_null_stats.py
-
-First run:
-```
-scripts/rundrift.sh
-```
 Then plot:
 ```
 python plot_.py
@@ -157,35 +145,41 @@ python plot_.py
 
 ### plot_p0.py
 
-First run:
+Plots the probability of obtaining a zero fitness as a function of the
+length of the limit cycle into which the initial state
+transitions. The results are generated using,, but stored in the
+repository so don't need to be regenerated.
+
 ```
-scripts/rundrift.sh
-```
-Then plot:
-```
-python plot_.py
+python plot_p0.py
 ```
 
 ### plot_prob_fitinc_flipbits.py
 
+Plots statistics for the probability of the fitness increasing as a
+function of the number of bits flipped.
+
 First run:
 ```
-scripts/rundrift.sh
+scripts/run_prob_fitinc_bybits.sh
 ```
 Then plot:
 ```
-python plot_.py
+python plot_prob_fitinc_bybits.py
 ```
 
 ### plot_prob_fitinc.py
 
+Plots statistics for the probability of the fitness increasing as a
+function of the probability of flipping a bit.
+
 First run:
 ```
-scripts/rundrift.sh
+scripts/run_prob_fitinc.sh
 ```
 Then plot:
 ```
-python plot_.py
+python plot_prob_fitinc.py
 ```
 
 ### plot_smooth_fit.py

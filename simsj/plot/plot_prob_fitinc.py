@@ -39,7 +39,7 @@ for ii in range(0,7):
 
     F1 = plt.figure (figsize=(8,8))
 
-    readpath = '../data/prob_fitinc_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '.csv'
+    readpath = '../data/prob_fitinc_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '_ff4.csv'
     A = readDataset(readpath)
 
     # Sort A on col 0.
@@ -91,3 +91,5 @@ for ii in range(0,7):
     plt.savefig (figpath)
     #plt.show()
     plt.clf()
+
+print ("See results in png/prob_fitinc_pOn*.png")

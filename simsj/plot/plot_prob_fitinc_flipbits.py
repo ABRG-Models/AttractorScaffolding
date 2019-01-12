@@ -33,7 +33,7 @@ fnt = {'family' : 'DejaVu Sans',
        'size'   : 14}
 matplotlib.rc('font', **fnt)
 
-flipbits = [1,2,3,4,5,6,8,10,15,20]
+flipbits = [3,4,5,6,8,10,15,20]
 probs_fitter = []
 sds_fitter = []
 probs_equal = []
@@ -316,5 +316,6 @@ f2_4.contourf(X_oa, Y_oa, Zout, zorder=0)
 f2_4.set_xlabel('Num flips/Hamming distance')
 f2_4.set_ylabel('P(less fit)')
 
-plt.savefig ('png/prob_fitinc_flipbits_prob_vs_bits.png');
+plt.savefig ('png/prob_fitinc_flipbits_prob_vs_bits.png')
+print ("See results in png/prob_fitinc_flipbits_*.png")
 plt.clf()
