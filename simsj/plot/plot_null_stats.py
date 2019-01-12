@@ -51,6 +51,7 @@ Z[Z==-np.inf]=0
 f2.contourf(X,Y,Z.T)
 f2.set_ylabel('fitness');
 f2.set_xlabel('Num limit cycles in system');
+f2.set_ylim([0,0.2])
 
 # Mean limit cycle length
 f3 = F1.add_subplot(2,2,3)
@@ -77,6 +78,7 @@ Z[Z==-np.inf]=0
 f3.contourf(X,Y,Z.T)
 f3.set_ylabel('fitness');
 f3.set_xlabel('Mean limit cycle size');
+f3.set_ylim([0,0.2])
 
 # Max limit cycle length
 f4 = F1.add_subplot(2,2,4)
@@ -103,6 +105,7 @@ Z[Z==-np.inf]=0
 f4.contourf(X,Y,Z.T)
 f4.set_ylabel('fitness');
 f4.set_xlabel('Max limit cycle size');
+f4.set_ylim([0,0.2])
 
 #f1.set_xlim([-1, 0.01])
 F1.tight_layout()
