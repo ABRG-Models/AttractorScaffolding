@@ -48,16 +48,16 @@ using namespace std;
  * N_Genes is his 'n'.
  */
 #ifndef k_equals_n_minus_1
-# define N_Ins_EQUALS_N_Genes 1 // Maybe define in CMakeLists
+# define N_Ins_EQUALS_N_Genes 1
 #endif
 
-#ifdef N_Ins_EQUALS_N_Genes // k = n
-#define ExtraOffset  (1)
-#define N_Ins        (N_Genes) // really k_Ins
-#else                       // k = n-1
-#define ExtraOffset  (0)
-#define N_Ins        (N_Genes-1)
-#define N_minus_k    (1)
+#ifdef N_Ins_EQUALS_N_Genes       // k = n
+# define ExtraOffset  (1)
+# define N_Ins        (N_Genes)
+#else                             // k = n-1
+# define ExtraOffset  (0)
+# define N_Ins        (N_Genes-1)
+# define N_minus_k    (1)
 #endif
 
 /*!
@@ -67,18 +67,18 @@ using namespace std;
  */
 #if N_Genes == 7 // or N_Genes == 6 and N_Ins_EQUALS_N_Genes
 typedef unsigned long long int genosect_t;
-#define GENOSECT_ONE 0x1ULL
+# define GENOSECT_ONE 0x1ULL
 #elif N_Genes == 6
 # if defined N_Ins_EQUALS_N_Genes
 typedef unsigned long long int genosect_t;
-#define GENOSECT_ONE 0x1ULL
+#  define GENOSECT_ONE 0x1ULL
 # else
 typedef unsigned int genosect_t;
-#define GENOSECT_ONE 0x1UL
+#  define GENOSECT_ONE 0x1UL
 # endif
 #else
 typedef unsigned int genosect_t;
-#define GENOSECT_ONE 0x1UL
+# define GENOSECT_ONE 0x1UL
 #endif
 
 /*!
@@ -132,31 +132,25 @@ state_t state_mask;
  * Set the global target states for anterior and posterior positions.
  */
 //@{
-#if N_Genes < 3
-#error "You'll need to set up target_ant/target_pos suitably for N_Genes < 3"
-#endif
 #if N_Genes == 3
 state_t target_ant = 0x5; // 101 or 5 dec
 state_t target_pos = 0x2; // 010 or 2 dec
-#endif
-#if N_Genes == 4
+#elif N_Genes == 4
 state_t target_ant = 0xa; // 1010 or 10 dec
 state_t target_pos = 0x5; // 0101 or 5 dec
-#endif
-#if N_Genes == 5
+#elif N_Genes == 5
 state_t target_ant = 0x15; // 10101 or 21 dec
 state_t target_pos = 0xa;  // 01010 or 10 dec
-#endif
-#if N_Genes == 6
+#elif N_Genes == 6
 state_t target_ant = 0x2a; // 101010
 state_t target_pos = 0x15; // 010101
-#endif
-#if N_Genes == 7
+#elif N_Genes == 7
 state_t target_ant = 0x55; // 1010101
 state_t target_pos = 0x2a; // 0101010
-#endif
-#if N_Genes > 7
-#error "You'll need to set up target_ant/target_pos suitably for N_Genes > 7. Also consider the type for genosect_t. Finally, check up on state_t_unset in basins.h to go to N_Genes==8 or higher."
+#elif N_Genes > 7
+# error "You'll need to set up target_ant/target_pos suitably for N_Genes > 7. Also consider the type for genosect_t. Finally, check up on state_t_unset in basins.h to go to N_Genes==8 or higher."
+#else
+# error "You'll need to set up target_ant/target_pos suitably for N_Genes < 3"
 #endif
 //@}
 
@@ -164,20 +158,16 @@ state_t target_pos = 0x2a; // 0101010
 #if N_Genes == 3
 state_t initial_ant = 0x4;  // 100b;
 state_t initial_pos = 0x0;  // 000b;
-#endif
-#if N_Genes == 4
+#elif N_Genes == 4
 state_t initial_ant = 0x8;  // 1000b;
 state_t initial_pos = 0x0;  // 0000b;
-#endif
-#if N_Genes == 5
+#elif N_Genes == 5
 state_t initial_ant = 0x10; // 10000b;
 state_t initial_pos = 0x0;  // 00000b;
-#endif
-#if N_Genes == 6
+#elif N_Genes == 6
 state_t initial_ant = 0x20; // 100000b;
 state_t initial_pos = 0x0;  // 000000b;
-#endif
-#if N_Genes == 7
+#elif N_Genes == 7
 state_t initial_ant = 0x40; // 1000000b;
 state_t initial_pos = 0x0;  // 0000000b;
 #endif
