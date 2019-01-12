@@ -117,6 +117,12 @@ add_executable(proprandom6 proprandomfits.cpp)
 target_compile_definitions(proprandom6 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(proprandom6 facto)
 
+# The null model.
+add_executable(nullmodel nullmodel.cpp)
+target_compile_definitions(nullmodel PUBLIC N_Genes=5 USE_FITNESS_4)
+add_executable(nullmodel_withf nullmodel.cpp)
+target_compile_definitions(nullmodel_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
+
 # This executable displays the genome as it is mutated in a stream of text.
 add_executable(mutatestream mutatestream.cpp)
 target_compile_definitions(mutatestream PUBLIC USE_FITNESS_4)
