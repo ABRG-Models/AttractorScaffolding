@@ -14,7 +14,7 @@ matplotlib.rc('font', **fnt)
 
 F1 = plt.figure (figsize=(8,8))
 
-FF_NAME = 'ff5'
+FF_NAME = 'ff4'
 
 # NB: Run plot_null_stats_load.py first to generate nullstats_A.npy
 A = np.load ('nullstats_A' + FF_NAME + '.npy')

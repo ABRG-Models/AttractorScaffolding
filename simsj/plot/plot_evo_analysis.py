@@ -180,15 +180,15 @@ def doPlot (pOn, driftnodrift):
 
     # This visualisation is for data with integer ranges on both axes
     nc_range = np.linspace(0,32,33)
-    gh_range = np.linspace(0,80,81)
+    gh_range = np.linspace(0,160,161)
     X,Y = np.meshgrid(gh_range, nc_range)
-    Z = np.zeros([33,81])
+    Z = np.zeros([33,161])
     for nc in nct_unq:
         ghselection = genomehamming[np.where(numchangedtrans==nc)]
         ghs_unq = np.unique (ghselection)
         #print ('ghs_unq: {0}'.format(ghs_unq))
         for gh in ghs_unq:
-            if gh != 0 and gh != 80:
+            if gh != 0 and gh != 160:
                 sumat = ghselection[np.where(ghselection == gh)].sum()
                 #print ('sum at gh {0}, nc {1} is {2}'.format(gh, nc, sumat))
                 Z[int(nc),int(gh)] = sumat
@@ -200,10 +200,10 @@ def doPlot (pOn, driftnodrift):
     #fitbins = np.linspace (0, 1.0, nbins-1)
     fitbins = np.logspace(-10,0,nbins-1)
     X, Y = np.meshgrid (gh_range, fitbins)
-    Z = np.zeros([100,81])
+    Z = np.zeros([100,161])
     gh_unq = np.unique (genomehamming)
     for gh in gh_unq:
-        if gh==0 or gh==80:
+        if gh==0 or gh==160:
             continue
         fcsel = fitnesschange[np.where(genomehamming==gh)]
         #fitbins = np.linspace (0, 1.0, nbins)
@@ -266,7 +266,7 @@ def doPlot (pOn, driftnodrift):
 
 driftnodrift = 'drift'
 
-doPlot (0.5, driftnodrift)  # 13 in 1000000 and 119 in 10000000
+#doPlot (0.5, driftnodrift)  # 13 in 1000000 and 119 in 10000000
 doPlot (0.4, driftnodrift)  # 26 in 500000
 doPlot (0.3, driftnodrift)  # 66 in 500000
 doPlot (0.2, driftnodrift)  # 150 in 500000
