@@ -216,6 +216,6 @@ fitf = 'ff4'
 evotype = 'gens'     # for stats on evolutions of F=1 genomes
 #evotype = 'gensplus' # for stats on every fitness increment
 
-M1 = doPlot ('nodrift', fitf, evotype)
+M1 = doPlot ('drift', fitf, evotype)
 
 plt.show()

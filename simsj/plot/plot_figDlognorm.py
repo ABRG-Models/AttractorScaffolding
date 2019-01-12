@@ -78,21 +78,23 @@ for y,fil in enumerate(files):
     D = readDataset (fil)
     if D.size == 0:
         continue
-    bins = np.logspace (np.log10(np.min(D)), np.log10(np.max(D)), base=10, num=nbins)
-    h,b = np.histogram (D, bins)
+    logD = np.log10(D)
+    bins = np.linspace (0, np.max(logD), num=nbins)
+    h,b = np.histogram (logD, bins)
     # Plot points
 
     colo = plt.cm.brg((fcount*0.5)/len(files))
-    a1.plot(np.log10(b[:-1]),np.log10(h),'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    # Difference between Stuart and Seb's graphs is a np.log10() around h, below:
+    a1.plot(b[:-1],h,'.-',color=colo,marker=mkr[y],markersize=ms[y])
 
 a1.legend(lbls,frameon=False)
-a1.set_ylabel(r'log$_{10}$ (evolutions)',fontsize=fs)
+a1.set_ylabel(r'evolutions',fontsize=fs)
 a1.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
 #a1.set_ylim([0,4])
 a1.set_axisbelow(True)
 
 f1.tight_layout()
-plt.savefig ('png/paper_figDloglog.png')
+plt.savefig ('png/paper_figDlognorm.png')
 
 plt.show()
 

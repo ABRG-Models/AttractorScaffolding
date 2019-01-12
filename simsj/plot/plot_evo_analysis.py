@@ -264,12 +264,8 @@ def doPlot (pOn, driftnodrift):
                 nc = nc + 1
             fcount = fcount + 1
 
-driftnodrift = 'nodrift'
+driftnodrift = 'drift'
 
-# I'll have to run 0.7, 0.8 and 0.9 longer to get the stats
-doPlot (0.8, driftnodrift) # need 50000000! 1 hr of computation
-doPlot (0.7, driftnodrift) # Need 20M?
-doPlot (0.6, driftnodrift) # Need 10M?
 doPlot (0.5, driftnodrift)  # 13 in 1000000 and 119 in 10000000
 doPlot (0.4, driftnodrift)  # 26 in 500000
 doPlot (0.3, driftnodrift)  # 66 in 500000

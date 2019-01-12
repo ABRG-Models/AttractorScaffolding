@@ -138,11 +138,11 @@ def doPlot (driftnodrift, plottype):
 
 # Change this to choose which to plot.
 driftnodrift = 'nodrift' # 'nodrift' or 'drift'
+
 #doPlot ('nodrift', '')
 #doPlot ('drift', '')
 #doPlot ('nodrift', 'log')
 #doPlot ('drift', 'log')
-doPlot ('nodrift', 'loglog')
 doPlot ('drift', 'loglog')
 
 plt.show()
