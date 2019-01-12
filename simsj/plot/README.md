@@ -164,9 +164,12 @@ python plot_h_m.py
 
 ### plot_null_stats.py and plot_null_stats_load.py
 
-Plots statistics of the null model. What script to run to generate the
-null model data? I think it was nullmodel.cpp, which I removed from
-the repo, so that probably needs restoring.
+Plots statistics of the null model. Run nullmodel_withf to generate
+the data:
+
+```
+./build/sim/nullmodel_withf
+```
 
 Then plot:
 ```
