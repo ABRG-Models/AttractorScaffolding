@@ -184,13 +184,16 @@ python plot_prob_fitinc.py
 
 ### plot_smooth_fit.py
 
-First run:
+Plots the fitness of genomes as they are mutated away from f=1
+genomes. The data is in the repository, to regenerate it run:
 ```
-scripts/rundrift.sh
+scripts/runmutations4.sh
+scripts/runmutations5.sh
+scripts/runmutations6.sh
 ```
 Then plot:
 ```
-python plot_.py
+python plot_smooth_fit.py
 ```
 
 ### plot_states_bitflips.py
