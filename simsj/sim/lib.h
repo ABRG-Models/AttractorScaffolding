@@ -225,13 +225,6 @@ selected_genome (void)
     array<genosect_t, N_Genes> genome = {{ 0x8875517a, 0x5c1e87e1, 0x8eef99d4, 0x1a3c467f, 0xdf7235c6 }};
     return genome;
 }
-array<genosect_t, N_Genes>
-selected_genome1 (void)
-{
-    // This one is used in a test
-    array<genosect_t, N_Genes> genome = {{ 0xa036, 0x451f, 0x7f08, 0x203c, 0xdf52 }};
-    return genome;
-}
 # else
 /*!
  * A genome for k=n-1
@@ -241,13 +234,6 @@ selected_genome (void)
 {
     // The one we'll use in the paper
     array<genosect_t, N_Genes> genome = {{ 0xa3bc, 0x927f, 0x7b84, 0xf57d, 0xecdc }};
-    return genome;
-}
-array<genosect_t, N_Genes>
-selected_genome1 (void)
-{
-    // The one we'll use in the paper
-    array<genosect_t, N_Genes> genome = {{ 0xa036, 0x451f, 0x7f08, 0x203c, 0xdf52 }};
     return genome;
 }
 # endif

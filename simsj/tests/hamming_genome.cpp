@@ -31,8 +31,8 @@ int main (int argc, char** argv)
     // Initialise masks
     masks_init();
 
-    array<genosect_t, N_Genes> g1 = selected_genome1();
-    array<genosect_t, N_Genes> g2 = selected_genome1();
+    array<genosect_t, N_Genes> g1 = selected_genome();
+    array<genosect_t, N_Genes> g2 = selected_genome();
     g2[0] += 1;
     g2[3] += 1;
 
@@ -41,7 +41,7 @@ int main (int argc, char** argv)
     cout << "Hamming dist: " << h1 << endl;
 
     int rtn = 1;
-    if (h1 == 0x2) {
+    if (h1 == 0x9) {
         rtn = 0;
     }
     return rtn;
