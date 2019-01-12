@@ -207,7 +207,6 @@ masks_init (void)
 array<genosect_t, N_Genes>
 selected_genome (void)
 {
-    // The one we'll use in the paper as the bold evolution and for which we show the state transitions
     array<genosect_t, N_Genes> genome = {{ 0x2a0b00c8d7cee66fULL, 0x1f27d5082715cd95ULL, 0x9e12d18b6b5add34ULL, 0x7ec6c4222c0dc635ULL, 0x3b72c42b80cf5d5cULL, 0x7221967e8c593e2dULL }};
     return genome;
 }
@@ -216,12 +215,13 @@ selected_genome (void)
 /*!
  * A selected genome for k=n
  *
- * This is the genome given in Fig 1 of the paper for N_Genes=5:
+ * This is the genome given in Fig 1 of the paper for N_Genes=5 and
+ * also the one we'll use in the paper as the bold evolution and for
+ * which we show the state transitions.
  */
 array<genosect_t, N_Genes>
 selected_genome (void)
 {
-    // The one we'll use in the paper as the bold evolution and for which we show the state transitions
     array<genosect_t, N_Genes> genome = {{ 0x8875517a, 0x5c1e87e1, 0x8eef99d4, 0x1a3c467f, 0xdf7235c6 }};
     return genome;
 }
@@ -232,7 +232,6 @@ selected_genome (void)
 array<genosect_t, N_Genes>
 selected_genome (void)
 {
-    // The one we'll use in the paper
     array<genosect_t, N_Genes> genome = {{ 0xa3bc, 0x927f, 0x7b84, 0xf57d, 0xecdc }};
     return genome;
 }
