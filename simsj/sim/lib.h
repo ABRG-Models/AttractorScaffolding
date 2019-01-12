@@ -16,6 +16,7 @@
 #include <vector>
 #include <list>
 #include <math.h>
+#include <immintrin.h> // Using intrinsics for computing Hamming distances
 
 using namespace std;
 
@@ -414,6 +415,10 @@ str2genome (const string& s)
     return g;
 }
 
+/*!
+ * Convert a vector of booleans (Stuart's format for the genome) into
+ * an array of genosect_ts.
+ */
 array<genosect_t, N_Genes>
 vecbool2genome (const vector<bool>& vb)
 {
@@ -443,7 +448,8 @@ vecbool2genome (const vector<bool>& vb)
 
     return g;
 }
-/*
+
+/*!
  * Output the genome in a string containing hex representations of the
  * N_Genes genosects.
  */
@@ -723,11 +729,6 @@ random_genome (void)
 
     return genome;
 }
-
-/*!
- * Using intrinsics for computing Hamming distances
- */
-#include <immintrin.h>
 
 /*!
  * Computes the Hamming distance between state and target. This is
