@@ -1,21 +1,31 @@
 # Implementation coded by Seb James
 
-This implementation of the model is written in C++, writing out data
-in text files (comma separated values). It has some python scripts for
-data visualisation.
+This implementation of the Boolean network model is written in C++,
+writing out data in text files (comma separated values) into the
+directory data/. It has some python scripts for data visualisation in
+the subdirectory plot/.
+
+The code is flexible enough to specify 3, 4, 5 or 6 genes for the 'k=n'
+network in which every gene receives input from every other gene,
+including itself. It can also compute an n=k-1 network for 7
+genes. The number of genes, as well as the choice of k=n-1 or k=n and
+some other features are set at compile time.
 
 The code is written in a "procedural C++ style". I've used global
 function definitions and few classes. I use some global variables
-without apology. I chose this approach as the program is not large and
-I consider it to be maintainable in this form.
+without apology. There is a cpp file for every program, though some
+programs are compiled into several binaries, with different #defines
+resulting in different program behaviour. Consult the
+sim/CMakeLists.txt file for details of the compilation.
 
 The state space is represented by the type state_t (which is an
 unsigned char). This contains sufficient bits for 4, 5 or 6 genes. The
 genome space is represented by a fixed size array of genosect_t (which
-is an unsigned int). There are N_Genes genosect_t variables in a full
-genome, but not all bits of each genosect_t may be used. 2^(N_Genes-1)
-bits are required in each genosect_t (That's 8 for N_Genes=4, 16 for
-N_Genes=5 and 32 for N_Genes=6).
+is set to either an unsigned int or an unsigned long long int at
+compile time). There are N_Genes genosect_t variables in a full
+genome, but not all bits of each genosect_t may be used. For 'k=n',
+2^(N_Genes) bits are required in each genosect_t (That's 16 for
+N_Genes=4, 32 for N_Genes=5 and 64 for N_Genes=6).
 
 The code builds using cmake.
 
