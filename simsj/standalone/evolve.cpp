@@ -40,9 +40,6 @@ using namespace std;
 // 100 times smaller than N_Generations.
 #define N_Genview       1000000
 
-// Common code
-// START lib.h /////////////////////////////////////////////////////////////////
-
 #define ExtraOffset  (1)
 #define N_Ins        (N_Genes)
 
@@ -102,9 +99,13 @@ state_t target_ant = 0x15; // 10101 or 21 dec
 state_t target_pos = 0xa;  // 01010 or 10 dec
 //@}
 
-// Initial anterior and posterior states:
+/*!
+ * Initial anterior and posterior states:
+ */
+//@{
 state_t initial_ant = 0x10; // 10000b;
 state_t initial_pos = 0x0;  // 00000b;
+//@}
 
 /*!
  * Initialise the masks based on the value of N_Genes
@@ -219,7 +220,7 @@ randDouble (void)
 void
 copy_genome (const array<genosect_t, N_Genes>& from, array<genosect_t, N_Genes>& to)
 {
-#pragma omp simd
+//#pragma omp simd
     for (unsigned int i = 0; i < N_Genes; ++i) {
         to[i] = from[i];
     }
@@ -254,9 +255,6 @@ random_genome (array<genosect_t, N_Genes>& genome)
         genome[i] = ((genosect_t) rand()) & genosect_mask;
     }
 }
-// END lib.h ///////////////////////////////////////////////////////////////////
-
-// START fitness4.h ////////////////////////////////////////////////////////////
 
 /*!
  * When working with states in a graph of nodes, it may be necessary
@@ -320,7 +318,7 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
                     ++i;
                 }
                 // Divide down now.
-#pragma omp simd
+//#pragma omp simd
                 for (unsigned int j = 0; j < N_Genes; ++j) {
                     sc[j] /= static_cast<double>(lc_len);
                 }
@@ -337,7 +335,6 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 
     return score;
 }
-
 
 /*!
  * For the passed-in genome, find its final state, starting from the
@@ -371,13 +368,13 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
 {
     double ant_score = evaluate_one (genome, initial_ant, target_ant);
     double pos_score = evaluate_one (genome, initial_pos, target_pos);
-
     double fitness = ant_score * pos_score;
-
     return fitness;
 }
-// END fitness4.h //////////////////////////////////////////////////////////////
 
+/*!
+ * A data structure to record information about the fitness increments.
+ */
 struct geninfo {
     geninfo (unsigned long long int _gen, unsigned long long int _gen_0, double _fit)
         : gen(_gen)
@@ -389,138 +386,120 @@ struct geninfo {
     double fit;                   // The fitness
 };
 
-// Perform a loop N_Generations long during which an initially
-// randomly selected genome is evolved until a maximally fit state is
-// achieved.
+// For pOn=0.1 to pOn=0.5, perform a loop N_Generations long during
+// which an initially randomly selected genome is evolved until a
+// maximally fit state is achieved. Once the f=1 state is achieved,
+// the genome is re-randomised and the evolution continues.
 int main (int argc, char** argv)
 {
-    // Obtain pOn from command line.
-    if (argc < 2) {
-        LOG ("Usage: " << argv[0] << " pOn target_ant target_pos");
-        LOG ("   or: " << argv[0] << " pOn nGenerations");
-        LOG ("Supply the probability of flipping a gene during evolution, pOn (float, 0 to 1.0f)");
-        LOG ("Optionally supply the anterior and posterior targets (integer, in range 0 to 31) or number of generations to run for.");
-        return 1;
-    }
-    pOn = static_cast<float>(atof (argv[1]));
-    LOG ("Probability of flipping = " << pOn);
+    // Initialise masks
+    masks_init();
 
     // Seed the RNG.
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
 
-    // Initialise masks
-    masks_init();
-
     unsigned long long int nGenerations = N_Generations;
-    if (argc == 3) {
-        nGenerations = static_cast<unsigned long long int>(atoi (argv[2]));
-    }
 
-    // Alternative target states are set from the command line;
-    // otherwise, the targets default to the standard opposing
-    // gradeints, as initialised in lib.h.
-    if (argc >= 4) {
-        target_ant = static_cast<state_t>(atoi(argv[2]));
-        LOG ("Anterior target: " << target_ant << " which is " << (state_str (target_ant)));
-        target_pos = static_cast<state_t>(atoi(argv[3]));
-        LOG ("Posterior target: " << target_pos << " which is " << (state_str (target_pos)));
-    }
+    for (pOn = 0.1; pOn < 0.6;  pOn += 0.1) {
 
-    // generations records the relative generation number, and the
-    // fitness. Every entry in this records an increase in the fitness
-    // of the genome.
-    vector<geninfo> generations;
+        LOG ("Computing " << nGenerations << " evolutions for p=" << pOn << "...");
 
-    // Holds the genome and a copy of it.
-    array<genosect_t, N_Genes> refg;
-    array<genosect_t, N_Genes> newg;
+        // generations records the relative generation number, and the
+        // fitness. Every entry in this records an increase in the fitness
+        // of the genome.
+        vector<geninfo> generations;
 
-    // The main loop. Repeatedly evolve from a random genome starting
-    // point, recording the number of generations required to achieve a
-    // maximally fit state of 1.
-    unsigned long long int gen = 0;
-    unsigned long long int lastgen = 0;
-    unsigned long long int lastf1 = 0;
+        // Holds the genome and a copy of it.
+        array<genosect_t, N_Genes> refg;
+        array<genosect_t, N_Genes> newg;
 
-    // Count F=1 genomes to print out at the end.
-    unsigned long long int f1count = 0;
+        // The main loop. Repeatedly evolve from a random genome starting
+        // point, recording the number of generations required to achieve a
+        // maximally fit state of 1.
+        unsigned long long int gen = 0;
+        unsigned long long int lastgen = 0;
+        unsigned long long int lastf1 = 0;
 
-    while (gen < nGenerations) {
+        // Count F=1 genomes to print out at the end.
+        unsigned long long int f1count = 0;
 
-        // At the start of the loop, and every time fitness of 1.0 is
-        // achieved, generate a random genome starting point.
-        random_genome (refg);
+        while (gen < nGenerations) {
 
-        // Make a copy of the genome, in case evolving it leads to a
-        // less fit genome, then evaluate the fitness of the genome.
-        double a = evaluate_fitness (refg);
+            // At the start of the loop, and every time fitness of 1.0 is
+            // achieved, generate a random genome starting point.
+            random_genome (refg);
 
-        ++gen; // Because we randomly generated.
+            // Make a copy of the genome, in case evolving it leads to a
+            // less fit genome, then evaluate the fitness of the genome.
+            double a = evaluate_fitness (refg);
 
-        // Note that if a==1.0 after the call to random_genome(), we
-        // should cycle around and call random_genome() again.
+            ++gen; // Because we randomly generated.
 
-        // Test fitness to determine whether we should evolve.
-        while (a < 1.0) {
+            // Note that if a==1.0 after the call to random_genome(), we
+            // should cycle around and call random_genome() again.
 
-            copy_genome (refg, newg);
-            evolve_genome (newg);
-            ++gen; // Because we evolved
+            // Test fitness to determine whether we should evolve.
+            while (a < 1.0) {
 
-            if (gen > 0 && (gen % N_Genview == 0)) {
-                LOG ("[pOn=" << pOn << "] That's " << gen/1000000.0 << "M generations (out of "
-                     << nGenerations/1000000.0 << "M) done...");
-            }
+                copy_genome (refg, newg);
+                evolve_genome (newg);
+                ++gen; // Because we evolved
 
-            if (gen >= nGenerations) {
-                break;
-            }
-            double b = evaluate_fitness (newg);
-
-            if (b < a) { // DRIFT. New fitness < old fitness
-                // do nothing.
-            } else {
-                // Record the fitness increase in generations:
-                generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
-                lastgen = gen;
-                if (b==1.0) {
-                    lastf1 = gen;
-                    LOG ("F=1 at generation " << gen);
-                    ++f1count;
+                if (gen > 0 && (gen % N_Genview == 0)) {
+                    LOG ("[pOn=" << pOn << "] That's " << gen/1000000.0 << "M generations (out of "
+                         << nGenerations/1000000.0 << "M) done...");
                 }
 
-                // Copy new fitness to ref
-                a = b;
-                // Copy new to reference
-                copy_genome (newg, refg);
+                if (gen >= nGenerations) {
+                    break;
+                }
+                double b = evaluate_fitness (newg);
+
+                if (b < a) { // DRIFT. New fitness < old fitness
+                    // do nothing.
+                } else {
+                    // Record the fitness increase in generations:
+                    generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
+                    lastgen = gen;
+                    if (b==1.0) {
+                        lastf1 = gen;
+                        //LOG ("F=1 at generation " << gen);
+                        ++f1count;
+                    }
+
+                    // Copy new fitness to ref
+                    a = b;
+                    // Copy new to reference
+                    copy_genome (newg, refg);
+                }
             }
         }
-    }
 
-    LOG ("Generations size: " << generations.size() << " with " << f1count << " F=1 genomes found.");
+        LOG ("p=" << pOn << ". Generations size: " << generations.size() << " with " << f1count << " F=1 genomes found.");
 
-    // Save data to file.
-    ofstream f;
-    stringstream pathss;
-    pathss << "./";
-    pathss << "evolve_";
-    pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
-    pathss << FF_NAME << "_" << nGenerations << "_gens_" << pOn << ".csv";
+        // Save data to file.
+        ofstream f;
+        stringstream pathss;
+        pathss << "./";
+        pathss << "evolve_";
+        pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
+        pathss << FF_NAME << "_" << nGenerations << "_gens_" << pOn << ".csv";
 
-    f.open (pathss.str().c_str(), ios::out|ios::trunc);
-    if (!f.is_open()) {
-        cerr << "Error opening " << pathss.str() << endl;
-        return 1;
-    }
-
-    for (unsigned int i = 0; i < generations.size(); ++i) {
-        // In the file is recorded the time taken to get to F=1
-        if (generations[i].fit == 1.0) {
-            f << generations[i].gen_0 << endl;
+        f.open (pathss.str().c_str(), ios::out|ios::trunc);
+        if (!f.is_open()) {
+            cerr << "Error opening " << pathss.str() << endl;
+            return 1;
         }
+
+        for (unsigned int i = 0; i < generations.size(); ++i) {
+            // In the file is recorded the time taken to get to F=1
+            if (generations[i].fit == 1.0) {
+                f << generations[i].gen_0 << endl;
+            }
+        }
+        f.close();
     }
-    f.close();
 
     return 0;
 }
