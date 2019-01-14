@@ -52,7 +52,7 @@ This script analyses the genomes found on the way to an f=1 genome. To
 generate the data run
 
 ```
-scripts/run_evolve_withf.sh
+scripts/runevolve_withf.sh
 ```
 
 Then plot:
