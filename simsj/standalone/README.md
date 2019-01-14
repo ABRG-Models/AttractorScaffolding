@@ -15,5 +15,12 @@ g++ -O3 evolve.cpp -o evolve
 ## Run
 
 ```bash
-./evolve 0.1
+./evolve
+```
+(This will take about 15 minutes to run)
+
+## Plot
+
+```bash
+python plot.py
 ```
