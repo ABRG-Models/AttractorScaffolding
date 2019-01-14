@@ -1,4 +1,4 @@
-#Simulation and paper source for the paper
+# Simulation and paper source for the paper
 
 **Self-organization can guide natural selection**
 
