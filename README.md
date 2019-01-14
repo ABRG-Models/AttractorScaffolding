@@ -1,23 +1,21 @@
-Simulation and paper source for the paper
+#Simulation and paper source for the paper
 
-Title of paper here
+**Self-organization can guide natural selection**
 
 The directories here are:
 
-cover/
+## cover/
 
 Contains the covering letter for the paper
 
-paper/
+## paper/
 
-Contains the LaTeX source for the paper
+Contains the authors' draft of the paper
 
-simsj/
+## simsj/
 
 Contains S James' implementation of the model
 
-simsw/
+## simsw/
 
-S Wilson's implementation
-
-etc.
+Contains S Wilson's implementation of the k=n-1 version of the model
