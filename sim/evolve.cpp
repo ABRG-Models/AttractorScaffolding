@@ -146,6 +146,14 @@ int main (int argc, char** argv)
         // less fit genome, then evaluate the fitness of the genome.
         double a = evaluate_fitness (refg);
 
+        // a randomly selected genome can be maximally fit
+        if (a==1.0) {
+            generations.push_back (geninfo(gen-lastgen, gen-lastf1, a));
+            lastgen = gen;
+            lastf1 = gen;
+            ++f1count;
+        }
+
 #ifdef RECORD_ALL_FITNESS
         AllBasins ab_a (refg);
         ni.update(ab_a, gen, a);
