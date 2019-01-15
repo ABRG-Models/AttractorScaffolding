@@ -426,7 +426,7 @@ cycle (the paper model multiplies two such probabilities).
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.9\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/p0.png}
+\includegraphics[width=0.9\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{p0.png}
 \caption{\emph{Probability of zero/non-zero score.} The probability of
 obtaining a zero or non-zero score for randomly selected limit cycle
 state sets of length $l$ in several systems with $3$--$25$ genes.}
@@ -446,7 +446,7 @@ We can plot the gene space transitions in our 5 gene space (Fig.~\ref{fig:genetr
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/states_bitflips_flip000.png}
+\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{states_bitflips_flip000.png}
 \caption{\emph{Sample gene state transitions.} All $2^5=32$ gene
 states in a $5$ gene system. Each state is labelled by colour and by
 its value. The states on the limit cycle are labelled in square
@@ -461,19 +461,19 @@ network, which is specified by the genome `0001111000001001000100011100011011100
 \subsection{Flipping one bit}
 
 Flipping one bit in the genome space always changes exactly two
-transitions in the gene state transition diagram
-(Fig.~\ref{fig:genetrans2}). The reason that two states change for one
-bit change in the genome, relates to the arrangement of this gene
-transition space: only the other $n-1$ inputs determine the next state
-of the gene. Consider bit 0 of the genome, which determines the next
-state of gene a when the inputs to gene a are [0 0 0 0]. There are two
-gene states which give this input to gene a: [0 0 0 0 0] and [1 0 0 0
-0] and so both of these gene states have their transition modified
-when bit 0 of the genome flips.
+transition in the gene state transition diagram (for k=n-1; it's one
+for k=n) (Fig.~\ref{fig:genetrans2}). The reason that two states
+change for one bit change in the genome, relates to the arrangement of
+this gene transition space: only the other $n-1$ inputs determine the
+next state of the gene. Consider bit 0 of the genome, which determines
+the next state of gene a when the inputs to gene a are [0 0 0
+0]. There are two gene states which give this input to gene a: [0 0 0
+0 0] and [1 0 0 0 0] and so both of these gene states have their
+transition modified when bit 0 of the genome flips.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/states_bitflips_flip02.png}
+\includegraphics[width=0.6\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{states_bitflips_flip02.png}
 \caption{\emph{Flip one bit.} The result of flipping bit 2 of the
 genome given in Fig.~\ref{fig:genetrans}. Gene state 18 no longer
 transitions to gene state 00. Instead, it transitions to gene state
@@ -494,7 +494,7 @@ shown in Fig.~\ref{fig:prob_fitter}
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/prob_fitinc_flipbits_prob_vs_bits.png}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{prob_fitinc_flipbits_prob_vs_bits.png}
 \caption{\emph{Probability of finding a fitter state.}
 The probability of finding a fitter, equally fit, or less fit state
 plotted against the number of bits that are flipped to generate a new
@@ -512,7 +512,7 @@ somewhat independent of the number of bits flipped, with a very wide variance.}
 % /home/seb/models/Wilson2018EvoGene/simsj/plot/png/evolution_histos_loglog1_nodrift_ff4_fb.png
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/evolution_histos_loglog1_nodrift_ff4_fb.png}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{evolution_histos_loglog1_nodrift_ff4_fb.png}
 \caption{\emph{Evolution rates as function of number of bit flips per
 generation.} No drift.}
 \label{fig:ev_bf}
@@ -521,7 +521,7 @@ generation.} No drift.}
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{../../simsj/plot/png/evolution_histos_loglog1_nodrift_ff4.png}
+\includegraphics[width=0.7\textwidth,clip=true,trim=0cm 0cm 0cm 0cm]{evolution_histos_loglog1_nodrift_ff4.png}
 \caption{\emph{Evolution rates as function of probability of flipping
 a big when evolving.} No drift}
 \label{fig:ev_prob}
