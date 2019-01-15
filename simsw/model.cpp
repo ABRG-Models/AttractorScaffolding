@@ -1,7 +1,7 @@
 /*
- Implementation of a Boolean network model of the evolution of cortical development
- as described by Wilson, Whiteley, and Krubitzer in a manuscript submitted to
- PLoS Computational Biology in 2018.
+ * Implementation of a Boolean network model of the evolution of
+ * cortical development as described by Wilson, James, Whiteley, and
+ * Krubitzer
  */
 
 #include <iostream>
