@@ -1,5 +1,4 @@
-# Implementation of the model described in the paper
-  'Self-organization can guid natural selection'
+# Implementation of the model described in the paper 'Self-organization can guide natural selection'
 
 This implementation of the Boolean network model is written in C++,
 writing out data in text files (comma separated values) into the
