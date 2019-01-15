@@ -1,4 +1,5 @@
-# Implementation coded by Seb James
+# Implementation of the model described in the paper
+  'Self-organization can guid natural selection'
 
 This implementation of the Boolean network model is written in C++,
 writing out data in text files (comma separated values) into the
@@ -99,3 +100,39 @@ reproduced by running:
 ```
 ./build/sim/proprandom3
 ```
+
+## Directories
+
+### combinatorics
+
+Contains a document analysing the probability of fit states as a
+function of the ending limit cycle size.
+
+### data
+
+A directory into which the results of simulations are written.
+
+### factorial
+
+Contains factorial code from Peter Luschny and some test programs
+using this library.
+
+### figures
+
+Contains some images which have been used to create figures.
+
+### plot
+
+Scripts to plot results from data found in **data/**.
+
+### sim
+
+Simulation programs and header files.
+
+### standalone
+
+The standalone implementation, evolve.cpp.
+
+### tests
+
+A few unit testing programs.
