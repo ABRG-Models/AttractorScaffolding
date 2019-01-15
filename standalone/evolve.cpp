@@ -25,23 +25,17 @@
 
 using namespace std;
 
-// A macro for logging to stdout
+//! A macro for logging to stdout
 #define LOG(s)  cout << "LOG: " << s << endl;
 
-// Number of genes in a state is set at compile time.
+//! Number of genes in a state is set at compile time.
 #define N_Genes 5
 
-// The number of generations to evolve for. 100,000,000 takes roughly
-// 3 minutes and 30 seconds on an Intel Core i9-8950HK CPU, for n=5
-// and k=n.
-#define N_Generations   100000000
+//! The number of generations to evolve for.
+#define N_Generations 100000000
 
-// How often to make a message print out about progress. Make 10 or
-// 100 times smaller than N_Generations.
-#define N_Genview       1000000
-
-#define ExtraOffset  (1)
-#define N_Ins        (N_Genes)
+//! 'k=n'
+#define N_Ins N_Genes
 
 /*!
  * The genome has a section for each gene. The length of the
@@ -154,9 +148,9 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
         genosect_t inpit = (0x1 << inputs[i]);
         state_t num = ((gs & inpit) ? 0x1 : 0x0);
         if (num) {
-            state |= (0x1 << (N_Ins-(i+ExtraOffset)));
+            state |= (0x1 << (N_Ins-(i+1)));
         } else {
-            state &= ~(0x1 << (N_Ins-(i+ExtraOffset)));
+            state &= ~(0x1 << (N_Ins-(i+1)));
         }
     }
 }
@@ -252,8 +246,6 @@ random_genome (array<genosect_t, N_Genes>& genome)
  * bit to use.
  */
 #define state_t_unset 0x80
-
-#define FF_NAME "ff4"
 
 /*!
  * Evaluates the fitness of one context (anterior or posterior).
@@ -390,7 +382,7 @@ int main (int argc, char** argv)
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
 
-    for (pOn = 0.1; pOn < 0.6;  pOn += 0.1) {
+    for (pOn = 0.1; pOn < 0.6; pOn += 0.1) {
 
         LOG ("Computing " << N_Generations << " evolutions for p=" << pOn << "...");
 
@@ -439,7 +431,7 @@ int main (int argc, char** argv)
                 evolve_genome (newg);
                 ++gen; // Because we mutated
 
-                if (gen > 0 && (gen % N_Genview == 0)) {
+                if (gen > 0 && (gen % 1000000 == 0)) {
                     LOG ("[pOn=" << pOn << "] That's " << gen/1000000.0 << "M generations (out of "
                          << N_Generations/1000000.0 << "M) done...");
                 }
@@ -475,13 +467,13 @@ int main (int argc, char** argv)
 
         LOG ("p=" << pOn << ". Generations size: " << generations.size() << " with " << f1count << " F=1 genomes found.");
 
-        // Save data to file.
+        // Save data from memory (vector<geninfo> generations) out to a file.
         ofstream f;
         stringstream pathss;
         pathss << "./";
         pathss << "evolve_";
-        pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
-        pathss << FF_NAME << "_" << N_Generations << "_gens_" << pOn << ".csv";
+        pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos;
+        pathss << "_ff4_" << N_Generations << "_gens_" << pOn << ".csv";
 
         f.open (pathss.str().c_str(), ios::out|ios::trunc);
         if (!f.is_open()) {
