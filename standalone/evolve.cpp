@@ -18,10 +18,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <array>
-#include <list>
 #include <math.h>
 #include <immintrin.h> // Using intrinsics for computing Hamming distances
-#include <set>
 
 using namespace std;
 
