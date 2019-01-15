@@ -211,11 +211,11 @@ copy_genome (const array<genosect_t, N_Genes>& from, array<genosect_t, N_Genes>&
 }
 
 /*!
- * The evolution function. Note that this function depends on the
+ * The mutation function. Note that this function depends on the
  * existence of a global variable pOn.
  */
 void
-evolve_genome (array<genosect_t, N_Genes>& genome)
+mutate_genome (array<genosect_t, N_Genes>& genome)
 {
     for (unsigned int i = 0; i < N_Genes; ++i) {
         genosect_t gsect = genome[i];
@@ -422,13 +422,14 @@ int main (int argc, char** argv)
                 ++f1count;
             }
 
-            // Test fitness to determine whether we should evolve.
+            // Test fitness to determine whether we should mutate or
+            // loop back and re-randomise to start a new cycle.
             while (a < 1.0) {
 
                 // Copy the genome
                 copy_genome (refg, newg);
                 // Mutate the copy
-                evolve_genome (newg);
+                mutate_genome (newg);
                 ++gen; // Because we mutated
 
                 if (gen > 0 && (gen % 1000000 == 0)) {
@@ -444,10 +445,9 @@ int main (int argc, char** argv)
                 // Evaluate the fitness of the mutated copy
                 double b = evaluate_fitness (newg);
 
-                if (b < a) { // DRIFT. New fitness < old fitness
+                if (b < a) {
                     // Mutated genome is less fit; do nothing else
                 } else {
-
                     // Mutated genome is as fit or fitter, so record
                     // the fitness increase in generations
                     generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
@@ -456,10 +456,9 @@ int main (int argc, char** argv)
                         lastf1 = gen;
                         ++f1count;
                     }
-
-                    // Update the current, best fitness stored in 'a'
+                    // update the current, best fitness stored in 'a'
                     a = b;
-                    // Copy the new, fitter, mutated genome to refg
+                    // and copy the new, fitter, mutated genome to refg
                     copy_genome (newg, refg);
                 }
             }

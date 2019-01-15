@@ -43,8 +43,9 @@ matplotlib.rc('font', **fnt)
 
 scale = 1000.
 
-f1 = plt.figure(figsize=(8,8)) # Figure object
-a1 = f1.add_subplot (1,1,1)
+f1 = plt.figure(figsize=(17,8)) # Figure object
+a1 = f1.add_subplot (1,2,1)
+a2 = f1.add_subplot (1,2,2)
 
 M = np.zeros([nf,3])
 
@@ -79,11 +80,19 @@ for y,fil in enumerate(files):
     D = readDataset (fil)
     if D.size == 0:
         continue
+
+    # linlog
     bins = np.linspace(1,0.5*np.max(D),nbins)
     h,b = np.histogram (D, bins)
-    # Plot points
     colo = plt.cm.brg((fcount*0.5)/len(files))
     pp = a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
+
+    # loglog
+    bins = np.logspace (np.log10(np.min(D)), np.log10(np.max(D)), base=10, num=nbins)
+    h,b = np.histogram (D, bins)
+    colo = plt.cm.brg((fcount*0.5)/len(files))
+    a2.plot(np.log10(b[:-1]),np.log10(h),'.-',color=colo,marker=mkr[y],markersize=ms[y])
+
 
 # Plot the best fit lines.
 fcount = 0
@@ -129,6 +138,13 @@ a1.set_xlabel('1000 generations',fontsize=fs)
 a1.set_ylim([0,10])
 a1.set_xlim([-5,100])
 a1.set_axisbelow(True)
+
+a2.legend(lbls,frameon=False)
+a2.set_ylabel(r'log$_{10}$ (evolutions)',fontsize=fs)
+a2.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
+#a2.set_ylim([0,10])
+#a2.set_xlim([-5,100])
+a2.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
 slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
