@@ -211,11 +211,11 @@ copy_genome (const array<genosect_t, N_Genes>& from, array<genosect_t, N_Genes>&
 }
 
 /*!
- * The mutation function. Note that this function depends on the
- * existence of a global variable pOn.
+ * The mutation function (which should really be called
+ * mutate_genome).
  */
 void
-mutate_genome (array<genosect_t, N_Genes>& genome)
+evolve_genome (array<genosect_t, N_Genes>& genome)
 {
     for (unsigned int i = 0; i < N_Genes; ++i) {
         genosect_t gsect = genome[i];
@@ -429,7 +429,7 @@ int main (int argc, char** argv)
                 // Copy the genome
                 copy_genome (refg, newg);
                 // Mutate the copy
-                mutate_genome (newg);
+                evolve_genome (newg);
                 ++gen; // Because we mutated
 
                 if (gen > 0 && (gen % 1000000 == 0)) {
