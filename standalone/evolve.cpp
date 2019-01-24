@@ -14,12 +14,9 @@
 #include <sstream>
 #include <fstream>
 #include <string>
-#include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <array>
-#include <math.h>
-#include <immintrin.h> // Using intrinsics for computing Hamming distances
 
 using namespace std;
 
