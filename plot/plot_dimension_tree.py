@@ -40,4 +40,6 @@ for layer in range(0,n+1):
     xolast = xo
 
 #f1.set_xlim([0,10])
+fname = './png/dimtree{0}.png'.format(n)
+plt.savefig(fname);
 plt.show()
