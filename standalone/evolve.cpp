@@ -1,5 +1,12 @@
 /*
- * Standalone evolve program.
+ * SUPPLEMENTARY CODE S1
+ *
+ * C++ PROGRAM FOR GENERATING DATAFILES REQUIRED TO RECREATE FIGURE 4
+ * FROM THE TEXT. SAVE THIS TEXT INTO A FILE WITH A .cpp EXTENSION,
+ * e.g., 'evolve.cpp'. COMPILE FROM THE COMMAND LINE USING e.g.,
+ * 'g++ -O3 evolve.cpp -o evolve' THEN RUN USING e.g., './evolve' TO
+ * GENERATE THE NECESSARY DATA FILES. RUN THE SCRIPT IN S2 TO GENERATE
+ * A PLOT.
  *
  * Evolves genome repeatedly according to the fitness function
  * described in the paper associated with this code.
