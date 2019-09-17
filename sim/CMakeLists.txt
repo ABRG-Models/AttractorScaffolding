@@ -124,6 +124,9 @@ target_link_libraries(proprandom6 facto)
 add_executable(propcanalyzing propcanalyzing.cpp)
 target_compile_definitions(propcanalyzing PUBLIC N_Genes=5)
 
+add_executable(prop_fit_canalyzing prop_fit_canalyzing.cpp)
+target_compile_definitions(prop_fit_canalyzing PUBLIC N_Genes=5 USE_FITNESS_4)
+
 # The null model.
 add_executable(nullmodel nullmodel.cpp)
 target_compile_definitions(nullmodel PUBLIC N_Genes=5 USE_FITNESS_4)
