@@ -87,7 +87,7 @@ struct Implicant
     }
 };
 
-class Quin
+class Quine
 {
 public:
     int combs;
@@ -105,7 +105,7 @@ public:
     unsigned int outof = 0;
     size_t ind = 0;
 
-    Quin (int x, int _vars)
+    Quine (int x, int _vars)
         : vars(_vars) {
         combs = 1 << vars;
     }

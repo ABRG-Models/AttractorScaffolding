@@ -1,11 +1,11 @@
-#include "quin.h"
+#include "quine.h"
 
 using namespace std;
 
 int main()
 {
     int ngenes = 3;
-    Quin Q(1, ngenes);
+    Quine Q(1, ngenes);
     Q.addMinterm(0);
     Q.addMinterm(1);
     Q.addMinterm(3);
