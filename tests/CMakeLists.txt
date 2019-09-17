@@ -1,3 +1,6 @@
+# Include the header code from sim/include
+include_directories (../sim/include)
+
 add_executable(statechange statechange.cpp)
 target_compile_definitions(statechange PUBLIC USE_FITNESS_1)
 add_test(statechange statechange)

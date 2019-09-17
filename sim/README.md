@@ -6,7 +6,7 @@ and the program **evolve.cpp** which reproduces the result in the paper.
 
 ## Headers
 
-The code is stored in the following headers:
+The code is stored in the following headers, in sim/include/:
 
 ### lib.h
 

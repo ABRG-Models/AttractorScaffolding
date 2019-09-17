@@ -1,3 +1,6 @@
+# Include the headers in ./include
+include_directories (include)
+
 # The main evolve program, compiled with various fitness functions,
 # but always with N_Genes=5. Operates in the "drift" case, where the
 # evolution of a new genome of equal fitness to the old one DOES
