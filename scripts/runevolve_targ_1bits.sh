@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Evolve algo, n=5 genes, 5 bits difference in targets. Initial states 16/0.
+# Evolve algo, n=5 genes, 1 bits difference in targets. Initial states 16/0. Target states 10101 and 10100
 #
 
 PWD=`pwd | awk -F'/' '{ print $NF }'`
@@ -28,7 +28,7 @@ fi
 echo "Using build directory ${HN} for executables"
 
 TA=21 # 10101
-TP=10 # 01010
+TP=20 # 10100
 
 IA=16 # 10000
 IP=0  # 00000

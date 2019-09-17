@@ -952,4 +952,98 @@ stringToVector (const string& s, const string& separator,
     return theVec;
 }
 
+/*!
+ * Is the function defined by the genosect_t @gs a canalysing function?
+ */
+unsigned int
+isCanalyzing (const genosect_t& gs)
+{
+    array<bool, N_Ins> acanal_set;
+    array<bool, N_Ins> acanal_unset;
+    array<int, N_Ins> setbitivalue;
+    array<int, N_Ins> unsetbitivalue;
+    unsigned int canal = 0;
+
+    for (unsigned int i = 0; i < N_Ins; ++i) {
+        acanal_set[i] = false;
+        acanal_unset[i] = false;
+        setbitivalue[i] = -1;
+        unsetbitivalue[i] = -1;
+    }
+
+    // Test each bit. If bit's state always leads to same result in gs, then canalysing is true
+    // for that bit.
+    for (unsigned int i = 0; i < N_Ins; ++i) {
+
+        DBG2 ("*** Testing bit " << i << " ***");
+        // Test bit i. First assume it IS canalysing for this bit
+        acanal_set[i] = true;
+        acanal_unset[i] = true;
+
+        for (unsigned int j = 0; j < (0x1 << N_Ins); ++j) {
+
+            // if (bit i in row j is on)
+            if ((j & (1UL<<i)) == (1UL<<i)) {
+                if (setbitivalue[i] == -1) {
+                    // Haven't yet recorded an output from gs, so record it:
+                    setbitivalue[i] = (int)(1UL&(gs>>j));
+                    DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs << " by j=" << j << " bits to get " << setbitivalue[i]);
+                } else {
+                    DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs << " by j=" << j << " bits and compare with " << setbitivalue[i]);
+                    if (setbitivalue[i] != (int)(1UL&(gs>>j))) {
+                        // Cannot be canalysing
+                        DBG2 ("Cannot be canalysing for bit " <<i<< " on");
+                        acanal_set[i] = false;
+                    }
+                }
+            } else {
+                // (bit i in row j is off)
+                if (unsetbitivalue[i] == -1) {
+                    // Haven't yet recorded an output from gs, so record it:
+                    unsetbitivalue[i] = (int)(1UL&(gs>>j));
+                    DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs << " by j=" << j << " bits to get " << unsetbitivalue[i]);
+                } else {
+                    DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs << " by j=" << j << " bits and compare with " << unsetbitivalue[i]);
+                    if (unsetbitivalue[i] != (int)(1UL&(gs>>j))) {
+                        // Cannot be canalysing
+                        DBG2 ("Cannot be canalysing for bit " <<i<< " off");
+                        acanal_unset[i] = false;
+                    }
+                }
+            }
+        }
+    }
+
+    // Count up
+    for (unsigned int i = 0; i < N_Ins; ++i) {
+        if (acanal_set[i] == true) {
+            canal++;
+            DBG2 ("Bit " << i << "=1 produces a consistent output value");
+        }
+        if (acanal_unset[i] == true) {
+            canal++;
+            DBG2 ("Bit " << i << "=0 produces a consistent output value");
+        }
+    }
+
+    return canal;
+}
+
+/*!
+ * Test each section of the genosect and determine how many of the truth tables are canalysing
+ * functions. Return the number of truth tables that are canalysing.
+ */
+unsigned int
+canalyzingness (const array<genosect_t, N_Genes>& g1)
+{
+    unsigned int canal = 0;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        DBG2 ("=== isCanalysing? genome section " << i << " ===");
+        unsigned int _canal = isCanalyzing (g1[i]);
+        DBG2 ("Section " << i << " has canalysing value: " << _canal);
+        canal += _canal;
+    }
+    return canal;
+}
+
 #endif // __LIB_H__

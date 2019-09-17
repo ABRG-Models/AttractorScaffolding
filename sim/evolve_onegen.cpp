@@ -66,12 +66,15 @@ int main (int argc, char** argv)
     array<genosect_t, N_Genes> genome = selected_genome();
     double f = evaluate_fitness (genome);
     LOG ("BEFORE The fitness of the selected genome is " << f);
+    //LOG ("and canalyzingness is " << canalyzingness(genome));
     show_genome (genome);
 
     evolve_genome (genome);
     show_genome (genome);
     f = evaluate_fitness (genome);
     LOG ("AFTER The fitness of the selected genome is " << f);
+    LOG ("and canalyzingness is " << canalyzingness(genome));
     LOG ("pOn: " << pOn);
+    show_genome (genome);
     return 0;
 }

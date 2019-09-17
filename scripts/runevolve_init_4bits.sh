@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #
-# Evolve algo, n=5 genes, 5 bits difference in targets. Initial states 16/0.
+# Evolve algo, n=5 genes, 4 bits difference in initial state.
+# Initial states 10000/01110 (Target states 10101 and 01010)
 #
 
 PWD=`pwd | awk -F'/' '{ print $NF }'`
@@ -31,7 +32,7 @@ TA=21 # 10101
 TP=10 # 01010
 
 IA=16 # 10000
-IP=0  # 00000
+IP=14 # 01110
 
 # Run several evolves in parallel.
 # evolve pOn targ_ant targ_pos init_ant init_pos

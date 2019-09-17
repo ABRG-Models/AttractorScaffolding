@@ -73,7 +73,7 @@ int main (int argc, char** argv)
 {
     // Obtain pOn from command line.
     if (argc < 2) {
-        LOG ("Usage: " << argv[0] << " pOn target_ant target_pos");
+        LOG ("Usage: " << argv[0] << " pOn target_ant target_pos [inital_ant inital_pos]");
         LOG ("   or: " << argv[0] << " pOn nGenerations");
         LOG ("Supply the probability of flipping a gene during evolution, pOn (float, 0 to 1.0f)");
         LOG ("Optionally supply the anterior and posterior targets (integer, in range 0 to 31) or number of generations to run for.");
@@ -90,6 +90,7 @@ int main (int argc, char** argv)
     masks_init();
 
     unsigned long long int nGenerations = N_Generations;
+    // Special case; set nGenerations with exactly 2 argments on the cmd line.
     if (argc == 3) {
         nGenerations = static_cast<unsigned long long int>(atoi (argv[2]));
     }
@@ -99,9 +100,17 @@ int main (int argc, char** argv)
     // gradeints, as initialised in lib.h.
     if (argc >= 4) {
         target_ant = static_cast<state_t>(atoi(argv[2]));
-        LOG ("Anterior target: " << target_ant << " which is " << (state_str (target_ant)));
+        LOG ("Anterior target: " << (unsigned int)target_ant << " which is " << (state_str (target_ant)));
         target_pos = static_cast<state_t>(atoi(argv[3]));
-        LOG ("Posterior target: " << target_pos << " which is " << (state_str (target_pos)));
+        LOG ("Posterior target: " << (unsigned int)target_pos << " which is " << (state_str (target_pos)));
+    }
+
+    // Also, optionally change initial_ant/pos
+    if (argc >= 6) {
+        initial_ant = static_cast<state_t>(atoi(argv[4]));
+        LOG ("Anterior initial state: " << (unsigned int)initial_ant << " which is " << (state_str (initial_ant)));
+        initial_pos = static_cast<state_t>(atoi(argv[5]));
+        LOG ("Posterior initial state: " << (unsigned int)initial_pos << " which is " << (state_str (initial_pos)));
     }
 
     // generations records the relative generation number, and the
@@ -281,6 +290,7 @@ int main (int argc, char** argv)
 #ifdef RECORD_ALL_FITNESS
     pathss << "withf_";
 #endif
+    pathss << "ia" << (unsigned int)initial_ant << "_ip" << (unsigned int)initial_pos << "_";
     pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
     stringstream pathss1;
     pathss1 << pathss.str();
@@ -334,6 +344,7 @@ int main (int argc, char** argv)
 #else
             pathss2 << "./data/evolutions/evolve_nodrift_withf_";
 #endif
+            pathss2 << "ia" << (unsigned int)initial_ant << "_ip" << (unsigned int)initial_pos << "_";
             pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
             pathss2 << FF_NAME << "_" << nGenerations <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";

@@ -120,6 +120,10 @@ add_executable(proprandom6 proprandomfits.cpp)
 target_compile_definitions(proprandom6 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(proprandom6 facto)
 
+# How many genomes are canalysing in any way?
+add_executable(propcanalyzing propcanalyzing.cpp)
+target_compile_definitions(propcanalyzing PUBLIC N_Genes=5)
+
 # The null model.
 add_executable(nullmodel nullmodel.cpp)
 target_compile_definitions(nullmodel PUBLIC N_Genes=5 USE_FITNESS_4)

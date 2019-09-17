@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 import sys
 import csv
 
-# Change this to choose which to plot.
-driftnodrift = 'drift' # 'nodrift' or 'drift'
-ff='ff4'
+#
+# Different target states (only 3 bits opposite) to show algorithm not
+# reliant on target choice. Targets: 10101 and 10010 (18)
+#
 
 # Read csv files.
 def readDataset (filepath):
@@ -22,31 +23,17 @@ def readDataset (filepath):
 
 maxgens='100000000'
 #maxgens='1000000000' # takes too long. Use 10^8 for paper.
-if driftnodrift == 'drift':
-    filetag = ''
-    files = ['../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.05.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.1.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.15.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.2.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.25.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.3.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.35.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.4.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.45.csv',
-             '../data/evolve_ia16_ip0_a21_p10_'+ff+'_'+maxgens+'_gens_0.5.csv']
-else:
-    filetag = '_nodrift'
-    files = ['../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.05.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.1.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.15.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.2.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.25.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.3.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.35.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.4.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.45.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.5.csv']
-
+filetag = ''
+files = ['../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.05.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.1.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.15.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.2.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.25.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.3.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.35.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.4.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.45.csv',
+         '../data/evolve_ia16_ip0_a21_p18_ff4_'+maxgens+'_gens_0.5.csv']
 
 lbls = ['p=0.10',
         'p=0.20',
@@ -195,7 +182,7 @@ slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
 slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
-plt.savefig ('png/paper_figD.svg')
+plt.savefig ('png/paper_figD_targ3bit.svg')
 
 plt.show()
 
