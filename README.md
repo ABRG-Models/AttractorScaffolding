@@ -29,12 +29,13 @@ N_Genes=4, 32 for N_Genes=5 and 64 for N_Genes=6).
 
 The code builds using cmake.
 
-Program code is in the directory sim/. There are some CTests in
-tests/. Results are written into data/. There are python scripts in
-plot/ to visualise the results. factorial/ contains some code by Peter
-Luschny for computing factorials. You should build in build/ or in a
-directory whose name is the same as is returned by the hostname
-command on your computer.
+The main, reported program code is in the directory
+sim/. Supplementary analysis code is in sim_supp/. There are some
+CTests in tests/. Results are written into data/. There are python
+scripts in plot/ to visualise the results. factorial/ contains some
+code by Peter Luschny for computing factorials. You should build in
+build/ or in a directory whose name is the same as is returned by the
+hostname command on your computer.
 
 ## Prerequisites:
 
