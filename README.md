@@ -129,6 +129,10 @@ Scripts to plot results from data found in **data/**.
 
 Simulation programs and header files.
 
+### sim_supp
+
+Supplementary simulation programs.
+
 ### standalone
 
 The standalone implementation, evolve.cpp.
