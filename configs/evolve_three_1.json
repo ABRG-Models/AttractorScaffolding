@@ -1,0 +1,10 @@
+/*
+ * Evolve with three contexts
+ */
+{
+    "logdir":       "./dataj",
+    "nGenerations":      100000000,
+    "pOn":                  0.05,
+    "initial": [ "10000", "00100", "00001" ],
+    "target":  [ "10100", "00101", "01010" ]
+}
