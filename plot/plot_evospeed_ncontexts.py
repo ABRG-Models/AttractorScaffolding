@@ -21,18 +21,27 @@ def readDataset (filepath):
     return f[:-1,:]
 
 expfitstartidx = 4 # index of 0.05 in p, below
-p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+#p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+
+#p = [0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+p = [0.03, 0.05, 0.1, 0.2, 0.3]
 
 directry = 'dataj'
 
 # 3 contexts
 #contexttag = 'nc3_I16-4-1_T20-5-10'
+#maxgens='1000000000'
+#or
+#maxgens='100000000'
+
 # 4 contexts
 #contexttag = 'nc4_I16-4-1-8_T20-10-5-9'
+#maxgens='5000000000'
+#or
+#maxgens='100000000'
 
-contexttag = 'nc4_I16-4-1-8_T20-10-5-9'
-
-maxgens='100000000'
+contexttag = 'nc3_I16-4-1_T20-5-10'
+maxgens='1000000000'
 
 # Make file names
 files = []
@@ -187,7 +196,7 @@ a2.set_ylabel('m (slope of best fit) [' + driftnodrift + ']')
 log_means = np.log(M[expfitstartidx:,2])
 means_fit = np.polyfit (M[expfitstartidx:,1], log_means, 1)
 print ('Exponential fit to curve ({2}): {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0], driftnodrift))
-expx = np.arange(0.05,0.5,0.001)
+expx = np.arange(min(p),max(p),0.001)
 expfit = np.exp (means_fit[1]) * np.exp (means_fit[0]*expx)
 
 
@@ -209,7 +218,7 @@ a3.set_xlim([0,0.62])
 #a3.set_ylim([0,180000])
 
 f1.tight_layout()
-plt.savefig ('png/evospeed' + filetag + '_'+ff+'.svg')
+plt.savefig ('png/evospeed' + filetag + '_'+contexttag+'_'+ff+'.svg')
 
 plt.show()
 

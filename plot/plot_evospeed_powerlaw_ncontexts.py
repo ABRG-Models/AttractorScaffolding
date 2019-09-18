@@ -38,10 +38,11 @@ def doPlot (driftnodrift, ff, evotype):
 
     # Make files from directory listing
 
-    numgens = '100000000'
+    numgens = '1000000000'
     directry = 'dataj'
     contexttag = 'nc3_I16-4-1_T20-5-10'
-    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+#    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
 
     # Make file names
     files = []
@@ -57,7 +58,7 @@ def doPlot (driftnodrift, ff, evotype):
             files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
             lbls.append('p={0}'.format(pp))
 
-    graphtag = driftnodrift + ', powerlaw. Red: data, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
+    graphtag = driftnodrift + ', powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
 
     # num files
     print ('files has length {0}'.format(len(files)))
@@ -138,28 +139,36 @@ def doPlot (driftnodrift, ff, evotype):
 
         if bestfitter == 1:
             Rex, pex = fit.distribution_compare('power_law', 'exponential')
-            print('Comparison with exponential: R={0}, p={1}'.format(Rex,pex))
+            print('Comparison with exponential: R={0}, p={1} (+ve: powerlaw more likely, -ve: exponential more likely)'.format(Rex,pex))
             if pex < 0.05:
                 if Rex < 0:
-                    bestfitter = 3
+                    bestfitter = 3 # exp
                 else:
-                    bestfitter = 1
+                    bestfitter = 1 # powerlaw
 
             Rln, pln = fit.distribution_compare('power_law', 'lognormal')
-            print('Comparison with lognormal: R={0}, p={1}'.format(Rln,pln))
+            print('Comparison with lognormal: R={0}, p={1} (+ve: powerlaw more likely, -ve: lognormal more likely)'.format(Rln,pln))
             if pln < 0.05:
                 if Rln < 0:
-                    bestfitter = 2
+                    bestfitter = 2 # ln
                 else:
                     print ('Power to the law!')
-                    bestfitter = 4
+                    bestfitter = 4 # powerlaw
+        else:
+            Rlnex, plnex = fit.distribution_compare('lognormal', 'exponential')
+            print('Comparison lognormal to exponential: R={0}, p={1} (+ve: lognormal more likely, -ve: exponential more likely)'.format(Rlnex,plnex))
+            if plnex < 0.05:
+                if Rlnex < 0:
+                    bestfitter = 3 # exp
+                else:
+                    bestfitter = 2 # ln
 
         # Create subplot
         print ('gcount+1 is {0}'.format (gcount+1))
-        ax = f1.add_subplot (2,7,gcount+1)
+        ax = f1.add_subplot (2,len(p)/2,gcount+1)
         a1.append(ax)
 
-        bestfitter = 6 # hack
+        ## bestfitter = 6 # hack
 
         # Plot the data
         powerlaw.plot_pdf (D[:,0], color=col.darkviolet, ax=a1[gcount])
