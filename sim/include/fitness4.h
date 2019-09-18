@@ -160,4 +160,27 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
     return fitness;
 }
 
+/*
+ * A version of evaluate_fitness which takes vectors of initial and target states and computes a
+ * fitness score.
+ */
+double
+evaluate_fitness (array<genosect_t, N_Genes>& genome,
+                  vector<state_t> initials, vector<state_t> targets)
+{
+    if (initials.size() != targets.size()) {
+        throw runtime_error ("initials vector is a different length from the targets vector");
+    }
+
+    vector<double> scores (initials.size(), 0.0);
+
+    double fitness = 1.0;
+    for (unsigned int i = 0; i < initials.size(); ++i) {
+        double score = evaluate_one (genome, initials[i], targets[i]);
+        fitness *= score;
+    }
+
+    return fitness;
+}
+
 #endif // __FITNESS_FUNCTION__

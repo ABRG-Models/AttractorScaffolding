@@ -7,8 +7,6 @@
     "nGenerations": 1000000,
     "drift":             true,
     "pOn":                0.1,
-    "initial_ant":          1,
-    "initial_pos":          0,
-    "target_ant":          21,
-    "target_pos":          10
+    "initial": [ "10000", "00000", "00100" ],
+    "target":  [ "10101", "01010", "11100" ]
 }

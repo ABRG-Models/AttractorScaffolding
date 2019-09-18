@@ -314,6 +314,40 @@ state_str (const state_t& state)
 }
 
 /*!
+ * Accept a list of 1 and 0 and convert this into a state_t. Characters other than 1 and 0 are
+ * ignored.
+ */
+state_t
+str2state (const string& statestr)
+{
+    // Collect only 1 and 0 chars, in order
+    string sstr("");
+    for (unsigned int i = 0; i < statestr.size(); ++i) {
+        if (statestr[i] == '1' || statestr[i] == '0') {
+            sstr += statestr[i];
+        }
+    }
+
+    // Check length of string of 1s and 0s is not longer than N_Genes
+    if (sstr.size() != N_Genes) {
+        stringstream ee;
+        ee << "Wrong number of 1s and 0s (should be " << N_Genes << ")";
+        throw runtime_error (ee.str());
+    }
+
+    // Build up the return state
+    state_t thestate = (state_t)0x0;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        unsigned int j = N_Genes-i-1;
+        if (sstr[i] == '1') {
+            thestate |= (0x1UL << j);
+        }
+    }
+
+    return thestate;
+}
+
+/*!
  * Output a text representation of the state to stdout.
  */
 void

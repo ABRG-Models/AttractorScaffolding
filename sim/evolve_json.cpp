@@ -108,6 +108,7 @@ int main (int argc, char** argv)
         cerr << "json config file " << paramsfile << " not found." << endl;
         return 1;
     }
+
     // Parse the JSON
     ifstream jsonfile (paramsfile, ifstream::binary);
     Json::Value root;
@@ -121,39 +122,52 @@ int main (int argc, char** argv)
         return 1;
     }
 
-    // Set up simulation parameters from JSON
-    if (pOnCmd > -1.0f) {
-        pOn = pOnCmd;
-    } else {
-        pOn = root.get ("pOn", 0.5).asFloat();
-    }
+    // Set up simulation parameters from JSON (or command line, if overridden)
+    pOn = pOnCmd > -1.0f ? pOnCmd : root.get ("pOn", 0.5).asFloat();
+
+    // How many generations in total to evolve for (counting f=1 genomes as you go)
     const unsigned long long int nGenerations =
         static_cast<unsigned long long int>(root.get ("nGenerations", N_Generations).asUInt64());
-    const unsigned int nGenView = root.get ("nGenerations", N_Generations/100).asUInt();
+
+    // How often to output a progress message on stdout
+    const unsigned int nGenView = root.get ("nGenView", N_Generations/100).asUInt();
+
+    // Requested targets/initial states.
+    vector<state_t> initials;
+    vector<state_t> targets;
     {
-        state_t ta = static_cast<state_t>(root.get ("target_ant", target_ant).asUInt());
-        if (ta != target_ant) {
-            target_ant = ta;
-        }
-        state_t tp = static_cast<state_t>(root.get ("target_pos", target_pos).asUInt());
-        if (tp != target_pos) {
-            target_pos = tp;
-        }
-        ta = static_cast<state_t>(root.get ("initial_ant", initial_ant).asUInt());
-        if (ta != initial_ant) {
-            initial_ant = ta;
-        }
-        tp = static_cast<state_t>(root.get ("initial_pos", initial_pos).asUInt());
-        if (tp != initial_pos) {
-            initial_pos = tp;
+        const Json::Value I = root["initial"];
+        const Json::Value T = root["target"];
+        for (unsigned int i=0; i<I.size() && i < T.size(); ++i) {
+            string init = I[i].asString();
+            string targ = T[i].asString();
+            state_t init_st = str2state (init);
+            state_t targ_st = str2state (targ);
+            initials.push_back (init_st);
+            targets.push_back (targ_st);
         }
     }
+    if (initials.empty() || (initials.size() != targets.size())) {
+        throw runtime_error ("Please set up initial/target states in JSON");
+    }
+
+    // Run the "drift" algorithm by default. Set false in config to run "nodrift"
     const bool drift = root.get ("drift", true).asBool();
+
+    // Where to save out the logs
     const string logdir = root.get ("logdir", "./data").asString();
+
     // Done getting params
-    LOG ("pOn:" << pOn
-         << "; initial a/p: " << state_str(initial_ant) << "/" << state_str(initial_pos)
-         << "; target a/p: " << state_str(target_ant) << "/" << state_str(target_pos));
+    LOG ("pOn: " << pOn);
+    LOG ("Initial states:");
+    for (auto is : initials) {
+        cout << "       " << state_str (is) << endl;
+    }
+    LOG ("Target states:");
+    for (auto ts : targets) {
+        cout << "       " << state_str (ts) << endl;
+    }
+
     if (drift == false) {
         LOG ("Running the 'no drift' algorithm and saving data into " << logdir);
     } else {
@@ -197,7 +211,7 @@ int main (int argc, char** argv)
 
         // Make a copy of the genome, in case evolving it leads to a less fit genome, then
         // evaluate the fitness of the genome.
-        double a = evaluate_fitness (refg);
+        double a = evaluate_fitness (refg, initials, targets);
 
         // a randomly selected genome can be maximally fit
         if (a==1.0) {

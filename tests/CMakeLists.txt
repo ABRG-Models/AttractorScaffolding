@@ -18,3 +18,6 @@ add_test(tstr2genome tstr2genome)
 add_executable(test_thousand test_thousand.cpp)
 target_compile_definitions(test_thousand PUBLIC USE_FITNESS_4)
 add_test(test_thousand test_thousand)
+
+add_executable(state2string2state state2string2state.cpp)
+add_test(state2string2state state2string2state)
