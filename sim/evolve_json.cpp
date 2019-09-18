@@ -159,6 +159,9 @@ int main (int argc, char** argv)
     // Where to save out the logs
     const string logdir = root.get ("logdir", "./data").asString();
 
+    // Whether to save the larger "gensplus" files.
+    const bool save_gensplus = root.get ("save_gensplus", true).asBool();
+
     // Done getting params
     LOG ("pOn: " << pOn);
     LOG ("Initial states:");
@@ -359,22 +362,25 @@ int main (int argc, char** argv)
         return 1;
     }
 
-    f1.open(pathss1.str().c_str(), ios::out|ios::trunc);
-    if (!f1.is_open()) {
-        cerr << "Error opening " << pathss1.str() << endl;
-        return 1;
+    if (save_gensplus) {
+        f1.open(pathss1.str().c_str(), ios::out|ios::trunc);
+        if (!f1.is_open()) {
+            cerr << "Error opening " << pathss1.str() << endl;
+            return 1;
+        }
     }
-
     for (unsigned int i = 0; i < generations.size(); ++i) {
         // One file has the time taken to get to F=1
         if (generations[i].fit == 1.0) {
             f << generations[i].gen_0 << endl;
         }
-        // The other has the time (i.e. generations) taken to get to a fitness increment
-        f1 << generations[i].gen << endl;
+        if (save_gensplus) {
+            // The other has the time (i.e. generations) taken to get to a fitness increment
+            f1 << generations[i].gen << endl;
+        }
     }
     f.close();
-    f1.close();
+    if (save_gensplus) { f1.close(); }
 
 #ifdef RECORD_ALL_FITNESS
     // Preprocess the vector of vectors.
