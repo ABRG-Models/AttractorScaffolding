@@ -40,6 +40,13 @@ else()
   endif()
 endif()
 
+if(APPLE)
+  set (JSONLIBLINK /usr/local/lib/libjsoncpp.dylib)
+else()
+  set (JSONLIBLINK /usr/local/lib/libjsoncpp.a)
+endif(APPLE)
+# Test if JSONLIBLINK exists, and only if so, compile evolve_json.cpp.
+
 set (LIB_TYPE SHARED) # STATIC or SHARED
 string(TOLOWER ${LIB_TYPE} SEARCH_TYPE)
 #find_package (HDF5) # Find non-cmake built HDF5, as installed on Ubuntu
