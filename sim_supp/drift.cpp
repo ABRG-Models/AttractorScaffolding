@@ -1,7 +1,9 @@
 /*
- * Drift with low p value (actually whatever is provided by the user
- * on the command line)
+ * 'Drift' with the p value provided by the user on the command line.
  *
+ * The drifting algorithm evolves the genome at every generation, recording how often an f=1 genome
+ * is happened upon. With the drift algorithm, all p values should give the same mean time to f=1.
+
  * Author: S James
  * Date: October 2018.
  */

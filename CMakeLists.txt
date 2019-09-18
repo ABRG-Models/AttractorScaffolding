@@ -67,7 +67,11 @@ add_subdirectory(factorial)
 include_directories (${CMAKE_SOURCE_DIR}/factorial)
 
 include_directories (${CMAKE_SOURCE_DIR}/sim)
+include_directories (${CMAKE_SOURCE_DIR}/sim/include)
+# Main results in sim/
 add_subdirectory(sim)
+# Supplementary analysis in sim_supp/
+add_subdirectory(sim_supp)
 
 # Unit testing using the ctest framework
 enable_testing()
