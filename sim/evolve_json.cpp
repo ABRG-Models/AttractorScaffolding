@@ -150,6 +150,8 @@ int main (int argc, char** argv)
     if (initials.empty() || (initials.size() != targets.size())) {
         throw runtime_error ("Please set up initial/target states in JSON");
     }
+    // Save the number of contexts, for inclusion in file names
+    unsigned int nContexts = initials.size();
 
     // Run the "drift" algorithm by default. Set false in config to run "nodrift"
     const bool drift = root.get ("drift", true).asBool();
@@ -332,8 +334,18 @@ int main (int argc, char** argv)
 #ifdef RECORD_ALL_FITNESS
     pathss << "withf_";
 #endif
-    pathss << "ia" << (unsigned int)initial_ant << "_ip" << (unsigned int)initial_pos << "_";
-    pathss << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
+    pathss << "nc" << nContexts;
+    pathss << "_I";
+    for (unsigned int i = 0; i < nContexts; ++i) {
+        if (i) { pathss << "-"; }
+        pathss << (unsigned int)initials[i];
+    }
+    pathss << "_T";
+    for (unsigned int i = 0; i < nContexts; ++i) {
+        if (i) { pathss << "-"; }
+        pathss << (unsigned int)targets[i];
+    }
+    pathss << "_";
     stringstream pathss1;
     pathss1 << pathss.str();
 
@@ -386,10 +398,18 @@ int main (int argc, char** argv)
             } else {
                 pathss2 << logdir << "/evolutions/evolve_nodrift_withf_";
             }
-            pathss2 << "ia" << (unsigned int)initial_ant
-                    << "_ip" << (unsigned int)initial_pos << "_";
-            pathss2 << "a" << (unsigned int)target_ant << "_p" << (unsigned int)target_pos << "_";
-            pathss2 << FF_NAME << "_" << nGenerations <<  "_fitness_" << pOn
+            pathss2 << "nc" << nContexts;
+            pathss2 << "_I";
+            for (unsigned int i = 0; i < nContexts; ++i) {
+                if (i) { pathss2 << "-"; }
+                pathss2 << (unsigned int)initials[i];
+            }
+            pathss2 << "_T";
+            for (unsigned int i = 0; i < nContexts; ++i) {
+                if (i) { pathss2 << "-"; }
+                pathss2 << (unsigned int)targets[i];
+            }
+            pathss2 << "_" << FF_NAME << "_" << nGenerations <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
             f.open (pathss2.str().c_str());
             if (!f.is_open()) {
