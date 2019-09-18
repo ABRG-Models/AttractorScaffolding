@@ -76,6 +76,11 @@ int main (int argc, char** argv)
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
 
+    // Set up our better RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
+
     // Initialise masks
     masks_init();
 

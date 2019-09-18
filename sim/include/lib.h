@@ -18,6 +18,12 @@
 #include <math.h>
 #include <immintrin.h> // Using intrinsics for computing Hamming distances
 
+// Using rng.h for random numbers means that RngData has to be properly set up in evolve_json.cpp etc.
+#include "rng.h"
+#define DUMMYARG 11
+// To avoid use of RngData:
+//#define USE_SIMPLE_RAND 1
+
 using namespace std;
 
 /*!
@@ -172,6 +178,11 @@ state_t initial_pos = 0x0;  // 000000b;
 state_t initial_ant = 0x40; // 1000000b;
 state_t initial_pos = 0x0;  // 0000000b;
 #endif
+
+/*!
+ * A global RNG. Init in each main() function
+ */
+RngData rd;
 
 /*!
  * Initialise the masks based on the value of N_Genes
@@ -579,7 +590,11 @@ show_genome (const array<genosect_t, N_Genes>& genome)
 float
 randFloat (void)
 {
+#ifndef USE_SIMPLE_RAND
+    return static_cast<float>(UNI((&rd)));
+#else
     return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+#endif
 }
 
 /*!
@@ -588,7 +603,11 @@ randFloat (void)
 double
 randDouble (void)
 {
+#ifndef USE_SIMPLE_RAND
+    return static_cast<double>(UNI_D((&rd)));
+#else
     return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+#endif
 }
 
 /*!
@@ -731,6 +750,7 @@ random_genome_sw (array<genosect_t, N_Genes>& genome) {
     long int nbits = N_Genes * (1<<N_Ins);
     vector<bool> G(nbits, false);
     for(long int i=0;i<nbits;i++){
+        // Don't use RngData for this random number, as we're reproducing SW's result
         double rd = ((double) rand())/(double)RAND_MAX;
         G[i] = (rd<0.5) ? true : false;
         //cout << "rand double = " << rd << "G["<<i<<"]=" << G[i] << endl;
@@ -746,7 +766,11 @@ void
 random_genome (array<genosect_t, N_Genes>& genome)
 {
     for (unsigned int i = 0; i < N_Genes; ++i) {
+#ifndef USE_SIMPLE_RAND
+        genome[i] = ((genosect_t) SHR3((&rd))) & genosect_mask;
+#else
         genome[i] = ((genosect_t) rand()) & genosect_mask;
+#endif
     }
 }
 
@@ -758,7 +782,11 @@ random_genome (void)
 {
     array<genosect_t, N_Genes> genome;
     for (unsigned int i = 0; i < N_Genes; ++i) {
+#ifndef USE_SIMPLE_RAND
+        genome[i] = ((genosect_t) SHR3((&rd))) & genosect_mask;
+#else
         genome[i] = ((genosect_t) rand()) & genosect_mask;
+#endif
     }
 
     return genome;
