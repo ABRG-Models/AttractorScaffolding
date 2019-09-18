@@ -258,7 +258,7 @@ int main (int argc, char** argv)
             if (gen >= nGenerations) {
                 break;
             }
-            double b = evaluate_fitness (newg);
+            double b = evaluate_fitness (newg, initials, targets);
 
             // DRIFT: New fitness < old fitness; NO DRIFT: New fitness <= old fitness
             if (drift ? b < a : b <= a) {
