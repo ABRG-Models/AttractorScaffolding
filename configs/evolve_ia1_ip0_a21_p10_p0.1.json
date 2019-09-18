@@ -1,12 +1,11 @@
 /*
- * Evolve, with drift, using the default inital ant/pos of 00001/00000
+ * Evolve using the default inital ant/pos of 10000/00000
  * and the default target ant/pos of 101010/01010.
  */
 {
     "logdir":       "./datatest",
-    "nGenerations": 1000000,
-    "drift":             true,
-    "pOn":                0.1,
-    "initial": [ "10000", "00000", "00100" ],
-    "target":  [ "10101", "01010", "11100" ]
+    "nGenerations":      1000000,
+    "pOn":                  0.05,
+    "initial": [ "10000", "00000" ],
+    "target":  [ "10101", "01010" ]
 }
