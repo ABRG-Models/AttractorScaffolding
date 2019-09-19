@@ -5,7 +5,7 @@ using namespace std;
 int main()
 {
     int ngenes = 3;
-    Quine Q(1, ngenes);
+    Quine Q(ngenes);
     Q.addMinterm(0);
     Q.addMinterm(1);
     Q.addMinterm(3);

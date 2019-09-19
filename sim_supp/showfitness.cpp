@@ -1,9 +1,9 @@
 /*
- * Taking a genome in "Dan string format", convert to
- * array<genosect_t, N_Genes> and then evaluate the fitness.
+ * Taking a genome in "Dan string format", convert to array<genosect_t, N_Genes> and then evaluate
+ * the fitness. Also evaluate the comlexity and canalysingness
  *
  * Author: S James
- * Date: October 2018.
+ * Date: October 2018. Complexity work, September 2019.
  */
 
 #include <iostream>
@@ -15,6 +15,7 @@
 #include <string>
 #include <sys/types.h>
 #include <unistd.h>
+#include "quine.h"
 
 using namespace std;
 
@@ -41,6 +42,10 @@ int main (int argc, char** argv)
     // Seed the RNG
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
+    // Set up the Mersenne Twister RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
 
     //probability of flipping
     pOn = 0.1;
@@ -96,6 +101,19 @@ int main (int argc, char** argv)
 
     double f = evaluate_fitness (g);
     LOG ("Fitness (using " << FF_NAME << ") for that genome is " << f);
+
+    double cmplx;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        Quine Q(N_Genes);
+        for (unsigned int j = 0; j<(1<<N_Genes); ++j) {
+            if ((g[i]>>j)&0x1) {
+                Q.addMinterm(j);
+            }
+        }
+        Q.go();
+        cmplx += Q.complexity();
+    }
+    cout << "Mean complexity: " << (cmplx/(double)N_Genes) << "/" << (1<<N_Genes) << endl;
 
     return 0;
 }

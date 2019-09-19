@@ -105,9 +105,9 @@ public:
     unsigned int outof = 0;
     size_t ind = 0;
 
-    Quine (int x, int _vars)
+    Quine (int _vars)
         : vars(_vars) {
-        combs = 1 << vars;
+        combs = 1 << this->vars;
     }
 
     void addMinterm (int m) {
