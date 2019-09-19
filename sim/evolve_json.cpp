@@ -72,11 +72,10 @@ struct geninfo {
 // until a maximally fit state is achieved.
 int main (int argc, char** argv)
 {
-    // Seed the RNG.
+    // Seed the system RNG.
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
-
-    // Set up our better RNG
+    // Set up the Mersenne Twister RNG
     rngDataInit (&rd);
     zigset (&rd, DUMMYARG);
     rd.seed = seed;
@@ -295,7 +294,9 @@ int main (int argc, char** argv)
                 netinfo.back().push_back (niinc);
 #endif
                 // Record the fitness increase in generations:
-                generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
+                if (save_gensplus || b==1.0) {
+                    generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
+                }
                 lastgen = gen;
                 if (b==1.0) {
                     lastf1 = gen;

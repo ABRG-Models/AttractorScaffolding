@@ -39,7 +39,7 @@ def doPlot (driftnodrift, ff, evotype):
     # Make files from directory listing
 
     numgens = '1000000000'
-    directry = 'dataj'
+    directry = 'dataj2'
     contexttag = 'nc3_I16-4-1_T20-5-10'
 #    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
     p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
@@ -204,7 +204,7 @@ def doPlot (driftnodrift, ff, evotype):
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
 
     f1.text (0.2, 0.9, graphtag, fontsize=20)
-    plt.savefig ('png/evospeed' + filetag + '_' + evotype + '_' + ff + contexttag + '.png')
+    plt.savefig ('png/evospeed_pl_' + filetag + '_' + evotype + '_' + ff + contexttag + '.png')
 
     return M
 

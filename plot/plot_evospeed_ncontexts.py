@@ -26,7 +26,7 @@ expfitstartidx = 4 # index of 0.05 in p, below
 #p = [0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 p = [0.03, 0.05, 0.1, 0.2, 0.3]
 
-directry = 'dataj'
+directry = 'dataj2'
 
 # 3 contexts
 #contexttag = 'nc3_I16-4-1_T20-5-10'

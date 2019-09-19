@@ -85,6 +85,10 @@ int main (int argc, char** argv)
     // Seed the RNG.
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
+    // Set up the Mersenne Twister RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
 
     // Initialise masks
     masks_init();

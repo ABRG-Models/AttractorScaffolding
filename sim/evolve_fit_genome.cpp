@@ -45,6 +45,10 @@ int main (int argc, char** argv)
     unsigned int seed = 4;
 #endif
     srand (seed);
+    // Set up the Mersenne Twister RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
 
     // You can set alternative target states:
     //target_ant = 0x1b; // 11011
