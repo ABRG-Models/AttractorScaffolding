@@ -19,53 +19,28 @@ def readDataset (filepath):
 
 def doPlot (driftnodrift, plottype):
 
+    p = [0.1, 0.2, 0.3, 0.4, 0.5]
+    directry = 'data_fitinc'
+    contexttag = 'nc2_I16-0_T21-10'
+    maxgens='1000000'
+    ff='ff4'
+
+    # Make file names
+    files = []
     if driftnodrift == 'drift':
         filetag = ''
+        for pp in p:
+            print ('Append file for p={0}'.format(pp))
+            files.append ('../{4}/evolve_{3}_{0}_{1}_gensplus_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
     else:
         filetag = '_nodrift'
-    # Make files from directory listing
-    p = Path('../data')
-    ##files = list(p.glob('*evolve'+filetag+'_a21_p10_ff4_100000000_gens_*.csv')) # order is wrong
-    if driftnodrift=='drift':
-        files = ['../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.15.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.2.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.25.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.3.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.35.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.4.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.45.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.5.csv']
+        for pp in p:
+            files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gensplus_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
-        lbls = ['p=0.15',
-                'p=0.20',
-                'p=0.25',
-                'p=0.30',
-                'p=0.35',
-                'p=0.40',
-                'p=0.45',
-                'p=0.50']
-    else:
-        files = ['../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.05.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.1.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.15.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.2.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.25.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.3.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.35.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.4.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.45.csv',
-                 '../data/evolve'+filetag+'_a21_p10_ff4_100000000_gensplus_0.5.csv']
-
-        lbls = ['p=0.05',
-                'p=0.10',
-                'p=0.15',
-                'p=0.20',
-                'p=0.25',
-                'p=0.30',
-                'p=0.35',
-                'p=0.40',
-                'p=0.45',
-                'p=0.50']
+    # Make labels
+    lbls = []
+    for pp in p:
+        lbls.append ('p={0}'.format(pp))
 
     # num files
     nf = len(files)
@@ -111,7 +86,7 @@ def doPlot (driftnodrift, plottype):
         colo = plt.cm.plasma(gcount/10)
 
         # Create subplot
-        ax = f1.add_subplot (2,5,gcount+1)
+        ax = f1.add_subplot (1,5,gcount+1)
         a1.append(ax)
 
         # Plot on it
@@ -136,12 +111,7 @@ def doPlot (driftnodrift, plottype):
     f1.tight_layout()
     plt.savefig ('png/fitinc_histos_' + plottype + filetag + '_ff4.png')
 
-# Change this to choose which to plot.
-driftnodrift = 'nodrift' # 'nodrift' or 'drift'
-
-#doPlot ('nodrift', '')
 #doPlot ('drift', '')
-#doPlot ('nodrift', 'log')
 #doPlot ('drift', 'log')
 doPlot ('drift', 'loglog')
 

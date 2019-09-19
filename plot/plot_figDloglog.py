@@ -20,23 +20,27 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
+p = [0.1, 0.2, 0.3, 0.4, 0.5]
+directry = 'dataj'
+contexttag = 'nc2_I16-0_T21-10'
 maxgens='100000000'
-#maxgens='1000000000' # lengthy, best graph
+
+# Make file names
+files = []
 if driftnodrift == 'drift':
     filetag = ''
-    files = ['../data/evolve_a21_p10_'+ff+'_'+maxgens+'_gens_0.1.csv',
-             '../data/evolve_a21_p10_'+ff+'_'+maxgens+'_gens_0.3.csv',
-             '../data/evolve_a21_p10_'+ff+'_'+maxgens+'_gens_0.5.csv']
+    for pp in p:
+        print ('Append file for p={0}'.format(pp))
+        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 else:
     filetag = '_nodrift'
-    files = ['../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.1.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.3.csv',
-             '../data/evolve_nodrift_a21_p10_'+ff+'_'+maxgens+'_gens_0.5.csv']
+    for pp in p:
+        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
-
-lbls = ['p=0.10',
-        'p=0.30',
-        'p=0.50']
+# Make labels
+lbls = []
+for pp in p:
+    lbls.append ('p={0}'.format(pp))
 
 # num files
 nf = len(files)

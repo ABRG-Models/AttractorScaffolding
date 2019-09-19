@@ -22,9 +22,9 @@ def readDataset (filepath):
 
 
 p = [0.1, 0.2, 0.3, 0.4, 0.5]
-directry = 'dataj'
+directry = 'data_fitinc'
 contexttag = 'nc2_I16-0_T21-10'
-maxgens='100000000'
+maxgens='10000000'
 
 # Make file names
 files = []
@@ -32,11 +32,11 @@ if driftnodrift == 'drift':
     filetag = ''
     for pp in p:
         print ('Append file for p={0}'.format(pp))
-        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+        files.append ('../{4}/evolve_{3}_{0}_{1}_gensplus_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 else:
     filetag = '_nodrift'
     for pp in p:
-        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gensplus_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
 # Make labels
 lbls = []
@@ -94,17 +94,16 @@ for y,fil in enumerate(files):
     # Plot points
 
     colo = plt.cm.brg((fcount*0.5)/len(files))
-    # Difference between Stuart and Seb's graphs is a np.log10() around h, below:
-    a1.plot(b[:-1],h,'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    a1.plot(b[:-1],np.log(h),'.-',color=colo,marker=mkr[y],markersize=ms[y])
 
 a1.legend(lbls,frameon=False)
-a1.set_ylabel(r'evolutions',fontsize=fs)
+a1.set_ylabel(r'log$_{10}$ (fitness increments)',fontsize=fs)
 a1.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
 #a1.set_ylim([0,4])
 a1.set_axisbelow(True)
 
 f1.tight_layout()
-plt.savefig ('png/paper_figDlognorm.png')
+plt.savefig ('png/fitinc_loglog.png')
 
 plt.show()
 

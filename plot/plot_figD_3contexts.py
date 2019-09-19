@@ -1,3 +1,7 @@
+#
+# Plot result for three contexts
+#
+
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
@@ -20,28 +24,38 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-p = [0.1, 0.2, 0.3, 0.4, 0.5]
+contexttag = 'nc3_I16-4-1_T20-5-10'
 
-directry = 'dataj'
-contexttag = 'nc2_I16-0_T21-10'
 maxgens='100000000'
 
-# Make file names
-files = []
-if driftnodrift == 'drift':
-    filetag = ''
-    for pp in p:
-        print ('Append file for p={0}'.format(pp))
-        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-else:
-    filetag = '_nodrift'
-    for pp in p:
-        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+filetag = ''
+files = ['../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.05.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.1.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.15.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.2.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.25.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.3.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.35.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.4.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.45.csv',
+         '../dataj/evolve_'+contexttag+'_'+ff+'_'+maxgens+'_gens_0.5.csv']
 
-# Make labels
-lbls = []
-for pp in p:
-    lbls.append ('p={0}'.format(pp))
+lbls = ['p=0.10',
+        'p=0.20',
+        'p=0.30',
+        'p=0.40',
+        'p=0.50']
+
+lbls2 = ['p=0.05',
+         'p=0.10',
+         'p=0.15',
+         'p=0.20',
+         'p=0.25',
+         'p=0.30',
+         'p=0.35',
+         'p=0.40',
+         'p=0.45',
+         'p=0.50']
 
 mkr=['.','o',
      'v','s',
@@ -99,7 +113,8 @@ for y,fil in enumerate(files):
     h,b = np.histogram (D, bins)
     # Plot points
     colo = plt.cm.brg((fcount*0.5)/len(files))
-    pp = a1.plot(b[0]/scale,np.log(h)[0],'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    if (fcount%graphskip == 0):
+        pp = a1.plot(b[0]/scale,np.log(h)[0],'.-',color=colo,marker=mkr[y],markersize=ms[y])
 
 fcount = 0
 # Plot points proper
@@ -114,13 +129,14 @@ for y,fil in enumerate(files):
     h,b = np.histogram (D, bins)
     # Plot points
     colo = plt.cm.brg((fcount*0.5)/len(files))
-    pp = a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
+    if (fcount%graphskip == 0):
+        pp = a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
 
 # Plot the best fit lines.
 fcount = 0
 printlines = 1
 for y,fil in enumerate(files):
-    print ('Processing best fit for file: {0}'.format(fil))
+    print ('Processing file: {0}'.format(fil))
     fcount = fcount+1
     nbins = nbins_g
     D = readDataset (fil)
@@ -144,7 +160,7 @@ for y,fil in enumerate(files):
         # Slope is fit[0], Record for a later graph.
         M[y,0] = fit[0]     # slope
         colo = plt.cm.brg((fcount*0.5)/len(files))
-        if printlines:
+        if (fcount%graphskip == 0) and printlines:
             print ('Plotting file {0}'.format(fil))
             ll = a1.plot(bx,fit_fn(bx),'-',linewidth=2,color=colo)
 
@@ -154,17 +170,23 @@ for y,fil in enumerate(files):
     M[y,1] = (y+1)*0.05 # p, the flip probability.
     M[y,2] = np.mean(D) # mean generations, in 10K
 
+#washere
+
 a1.legend(lbls,frameon=False)
+#from matplotlib.legend_handler import HandlerTuple
+#a1.legend([(ll,pp)],['abc'],handler_map={(ll,pp): HandlerTuple(ndivide=0, pad=0.)},frameon=False)
 
 a1.set_ylabel(r'log (evolutions)',fontsize=fs)
 a1.set_xlabel('1000 generations',fontsize=fs)
 a1.set_ylim([0,10])
-a1.set_xlim([-5,200])
+a1.set_xlim([-5,300])
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
 slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
 slope_fit_fn = np.poly1d (slope_fit)
+
+a1.set_title (contexttag);
 
 f1.tight_layout()
 plt.savefig ('png/paper_figD.svg')

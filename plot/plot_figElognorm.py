@@ -21,10 +21,10 @@ def readDataset (filepath):
     return f[:-1,:]
 
 
-p = [0.1, 0.2, 0.3, 0.4, 0.5]
+p = [0.05, 0.1, 0.15, 0.2, 0.3]
 directry = 'dataj'
-contexttag = 'nc2_I16-0_T21-10'
-maxgens='100000000'
+contexttag = 'nc3_I16-4-1_T20-5-10'
+maxgens='1000000000'
 
 # Make file names
 files = []
@@ -85,11 +85,6 @@ for y,fil in enumerate(files):
         continue
     logD = np.log10(D)
     bins = np.linspace (0, np.max(logD), num=nbins)
-
-    # Save logD and bins
-    np.save ('tmp/logD{0}.npy'.format(y), logD)
-    np.save ('tmp/bins{0}.npy'.format(y), bins)
-
     h,b = np.histogram (logD, bins)
     # Plot points
 
@@ -104,7 +99,7 @@ a1.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
 a1.set_axisbelow(True)
 
 f1.tight_layout()
-plt.savefig ('png/paper_figDlognorm.png')
+plt.savefig ('png/paper_figElognorm.png')
 
 plt.show()
 
