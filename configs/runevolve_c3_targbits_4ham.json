@@ -1,0 +1,8 @@
+{
+    "save_gensplus":     false,
+    "logdir":        "./data_targbits",
+    "nGenerations": 100000000,
+    "pOn":                0.05,
+    "initial": [ "01000", "00100", "00001" ],
+    "target":  [ "10000", "00000", "00010" ]
+}
