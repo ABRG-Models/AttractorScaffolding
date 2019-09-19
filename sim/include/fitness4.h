@@ -24,15 +24,11 @@ using namespace std;
 #define FF_NAME "ff4"
 
 /*!
- * Evaluates the fitness of one context (anterior or posterior).
+ * Evaluates the fitness of one context (anterior or posterior in the 2-context system).
  */
 double
 evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
 {
-#ifdef DEBUGF
-    DBGF ("Evaluating fitness for initial state " << state_str(state)
-          << " and target state " << state_str (target));
-#endif
     double score = 0.0;
 
     state_t state_last = state_t_unset;
@@ -43,29 +39,23 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
         compute_next (genome, state);
 
         if (visited.count (state)) {
-            // Already visited this state so it's a limit cycle
-            DBGF ("Repeat state: " << state_str(state)
-                  << "! (last state: " << state_str(state_last) << ")");
 
-            if (state == state_last) {
-                DBGF ("Point attractor");
-                if (state == target) {
-                    score = 1.0;
-                } // else score is definitely 0.
+            // Already visited this state so it's a limit cycle or point attractor
 
-            } else {
-                DBGF ("Limit cycle");
+            if (state == state_last) { // Point attractor
 
-                // Determine the states in the limit cycle by going
-                // around it once more.
+                score = (state == target) ? 1.0 : score; // score is 0
+
+            } else { // Limit cycle
+
+                // Determine the states in the limit cycle by going around it once more.
                 set<state_t> lc;
                 unsigned int lc_len = 0;
                 while (lc.count (state) == 0) {
-                    // Check if we have one or both target states on
-                    // this limit cycle
+                    // Check if we have one or both target states on this limit cycle
                     lc.insert (state);
                     lc_len++;
-                    DBGF ("Limit cycle contains: " << state_str (state));
+                    // DBGF ("Limit cycle contains: " << state_str (state));
                     compute_next (genome, state);
                 }
 
@@ -83,27 +73,12 @@ evaluate_one (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
                     }
                     ++i;
                 }
-                // Divide down now.
-#pragma omp simd
-                for (unsigned int j = 0; j < N_Genes; ++j) {
-                    sc[j] /= static_cast<double>(lc_len);
-                }
 
-#ifdef DEBUGF
-                DBGF("Score:");
-                cout << sc[0];
-#endif
-                score = sc[0];
-                for (unsigned int j = 1; j < N_Genes; ++j) {
-#ifdef DEBUGF
-                    cout << "," << sc[j];
-#endif
-                    score = score * sc[j];
+                score = pow(static_cast<double>(lc_len), -N_Genes);
+                for (unsigned int j = 0; j < N_Genes; ++j) {
+                    score *= sc[j];
                 }
             }
-#ifdef DEBUGF
-            cout << endl;
-#endif
             break;
         }
         visited.insert (state);
@@ -166,20 +141,16 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
  */
 double
 evaluate_fitness (array<genosect_t, N_Genes>& genome,
-                  vector<state_t> initials, vector<state_t> targets)
+                  vector<state_t>& initials, vector<state_t>& targets)
 {
     if (initials.size() != targets.size()) {
         throw runtime_error ("initials vector is a different length from the targets vector");
     }
-
-    vector<double> scores (initials.size(), 0.0);
-
     double fitness = 1.0;
     for (unsigned int i = 0; i < initials.size(); ++i) {
         double score = evaluate_one (genome, initials[i], targets[i]);
         fitness *= score;
     }
-
     return fitness;
 }
 
