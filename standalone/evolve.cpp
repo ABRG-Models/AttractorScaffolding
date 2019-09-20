@@ -194,6 +194,11 @@ mix (unsigned int a, unsigned int b, unsigned int c)
 
 /*!
  * Return a random double precision number between 0 and 1.
+ *
+ * Here, the system rand() function is used to generate uniformly distributed
+ * pseudo random numbers. Improved results are presented in the paper using a
+ * Mersenne Twister algorithm as the core RNG, but to keep this code file
+ * short, that algorithm is omitted and rand() is used in its place.
  */
 double
 randDouble (void)
@@ -213,8 +218,7 @@ copy_genome (const array<genosect_t, N_Genes>& from, array<genosect_t, N_Genes>&
 }
 
 /*!
- * The mutation function (which should really be called
- * mutate_genome).
+ * The mutation function (which should really be called mutate_genome).
  */
 void
 evolve_genome (array<genosect_t, N_Genes>& genome)
