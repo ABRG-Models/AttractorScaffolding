@@ -11,7 +11,7 @@ if [ ${PWD} = 'scripts' ]; then
 elif [ ${PWD} = 'AttractorScaffolding' ]; then # This line will change
     pushd .
 else
-    echo "Please run this from simsj or the scripts directory."
+    echo "Please run this from AttractorScaffolding or the scripts directory."
 fi
 
 # Find out where to run from.
