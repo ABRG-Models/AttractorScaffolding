@@ -14,6 +14,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <vector>
+#include <bitset>
 #include <list>
 #include <math.h>
 #include <immintrin.h> // Using intrinsics for computing Hamming distances
@@ -1016,12 +1017,17 @@ stringToVector (const string& s, const string& separator,
 
 /*!
  * Is the function defined by the genosect_t @gs a canalysing function?
+ *
+ * If not, return (unsigned int)0, otherwise return the number of bits for which the function is
+ * canalysing - this may be called canalysing "depth".
  */
 unsigned int
 isCanalyzing (const genosect_t& gs)
 {
-    array<bool, N_Ins> acanal_set;
-    array<bool, N_Ins> acanal_unset;
+    bitset<N_Ins> acanal_set;
+    //array<bool, N_Ins> acanal_set;
+    bitset<N_Ins> acanal_unset;
+    //array<bool, N_Ins> acanal_unset;
     array<int, N_Ins> setbitivalue;
     array<int, N_Ins> unsetbitivalue;
     unsigned int canal = 0;
@@ -1037,25 +1043,28 @@ isCanalyzing (const genosect_t& gs)
     // for that bit.
     for (unsigned int i = 0; i < N_Ins; ++i) {
 
-        DBG2 ("*** Testing bit " << i << " ***");
+        //DBG2 ("*** Testing bit " << i << " ***");
         // Test bit i. First assume it IS canalysing for this bit
-        acanal_set[i] = true;
-        acanal_unset[i] = true;
+        acanal_set.set(i);
+        acanal_unset.set(i);
 
+        // Iterate over the rows in the truth table
         for (unsigned int j = 0; j < (0x1 << N_Ins); ++j) {
 
             // if (bit i in row j is on)
             if ((j & (1UL<<i)) == (1UL<<i)) {
                 if (setbitivalue[i] == -1) {
-                    // Haven't yet recorded an output from gs, so record it:
+                    // -1 means we haven't yet recorded an output from gs, so record it:
                     setbitivalue[i] = (int)(1UL&(gs>>j));
-                    DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs << " by j=" << j << " bits to get " << setbitivalue[i]);
+                    //DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs
+                    //      << " by j=" << j << " bits to get " << setbitivalue[i]);
                 } else {
-                    DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs << " by j=" << j << " bits and compare with " << setbitivalue[i]);
+                    //DBG2 ("bit "<<i<<" in "<<j<<" is on. Right shift gs=" << gs
+                    //      << " by j=" << j << " bits and compare with " << setbitivalue[i]);
                     if (setbitivalue[i] != (int)(1UL&(gs>>j))) {
-                        // Cannot be canalysing
-                        DBG2 ("Cannot be canalysing for bit " <<i<< " on");
-                        acanal_set[i] = false;
+                        // Cannot be canalysing for bit i set to 1.
+                        //DBG2 ("Cannot be canalysing for bit " <<i<< " on");
+                        acanal_set.reset(i);
                     }
                 }
             } else {
@@ -1063,13 +1072,15 @@ isCanalyzing (const genosect_t& gs)
                 if (unsetbitivalue[i] == -1) {
                     // Haven't yet recorded an output from gs, so record it:
                     unsetbitivalue[i] = (int)(1UL&(gs>>j));
-                    DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs << " by j=" << j << " bits to get " << unsetbitivalue[i]);
+                    //DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs
+                    //      << " by j=" << j << " bits to get " << unsetbitivalue[i]);
                 } else {
-                    DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs << " by j=" << j << " bits and compare with " << unsetbitivalue[i]);
+                    //DBG2 ("bit "<<i<<" in "<<j<<" is off. Right shift gs=" << gs
+                    //      << " by j=" << j << " bits and compare with " << unsetbitivalue[i]);
                     if (unsetbitivalue[i] != (int)(1UL&(gs>>j))) {
-                        // Cannot be canalysing
-                        DBG2 ("Cannot be canalysing for bit " <<i<< " off");
-                        acanal_unset[i] = false;
+                        // Cannot be canalysing for bit i set to 0
+                        //DBG2 ("Cannot be canalysing for bit " <<i<< " off");
+                        acanal_unset.reset(i) = false;
                     }
                 }
             }
@@ -1078,11 +1089,11 @@ isCanalyzing (const genosect_t& gs)
 
     // Count up
     for (unsigned int i = 0; i < N_Ins; ++i) {
-        if (acanal_set[i] == true) {
+        if (acanal_set.test(i) == true) {
             canal++;
             DBG2 ("Bit " << i << "=1 produces a consistent output value");
         }
-        if (acanal_unset[i] == true) {
+        if (acanal_unset.test(i) == true) {
             canal++;
             DBG2 ("Bit " << i << "=0 produces a consistent output value");
         }
