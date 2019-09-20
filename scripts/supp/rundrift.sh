@@ -8,7 +8,6 @@ elif [ ${PWD} = 'AttractorScaffolding' ]; then # This line will change
 else
     echo "Please run this from AttractorScaffolding or the scripts directory."
 fi
-
 # Find out where to run from.
 HN=`hostname`
 if [ ! -d ${HN} ]; then
@@ -23,17 +22,12 @@ fi
 
 echo "Using build directory ${HN} for executables"
 
-# Run several in parallel.
-./${HN}/sim/compute_pnot0 3 &
-./${HN}/sim/compute_pnot0 4 &
-./${HN}/sim/compute_pnot0 5 &
-./${HN}/sim/compute_pnot0 6 &
-./${HN}/sim/compute_pnot0 7 &
-./${HN}/sim/compute_pnot0 9 &
-./${HN}/sim/compute_pnot0 12 &
-./${HN}/sim/compute_pnot0 15 &
-./${HN}/sim/compute_pnot0 18 &
-./${HN}/sim/compute_pnot0 25 &
+# Run several drifts in parallel.
+./${HN}/sim_supp/drift 0.1 &
+./${HN}/sim_supp/drift 0.2 &
+./${HN}/sim_supp/drift 0.3 &
+./${HN}/sim_supp/drift 0.4 &
+./${HN}/sim_supp/drift 0.5 &
 
 wait
 popd
