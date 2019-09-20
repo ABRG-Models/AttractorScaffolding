@@ -17,49 +17,37 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-def doPlot (driftnodrift, plottype, ff):
-
-    if driftnodrift == 'drift':
-        filetag = ''
-    else:
-        filetag = '_nodrift'
-    # Make files from directory listing
-    p = Path('../data')
-    ##files = list(p.glob('*evolve'+filetag+'_a21_p10_ff4_100000000_gens_*.csv')) # order is wrong
-    files = ['../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.01.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.02.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.05.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.1.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.15.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.2.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.25.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.3.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.35.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.4.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.45.csv',
-             '../data/evolve'+filetag+'_a21_p10_'+ff+'_100000000_gens_0.5.csv']
+def doPlot (plottype, ff):
 
     if plottype == 'loglog1':
-        graphtag = driftnodrift + ', log/log (log hist bins)'
+        graphtag = 'log/log (log hist bins)'
     elif plottype == 'loglog2':
-        graphtag = driftnodrift + ', log/log (linear hist bins)'
+        graphtag = 'log/log (linear hist bins)'
     elif plottype == 'log':
-        graphtag = driftnodrift + ', lin/log'
+        graphtag = 'lin/log'
     else:
-        graphtag = driftnodrift + ', lin/lin'
+        graphtag = 'lin/lin'
 
-    lbls = ['p=0.01',
-            'p=0.02',
-            'p=0.05',
-            'p=0.10',
-            'p=0.15',
-            'p=0.20',
-            'p=0.25',
-            'p=0.30',
-            'p=0.35',
-            'p=0.40',
-            'p=0.45',
-            'p=0.50']
+    p = [0.1, 0.2, 0.3, 0.4, 0.5]
+
+    directry = 'data'
+    contexttag = 'nc2_I16-0_T21-10'
+    maxgens='100000000'
+
+    # Make file names
+    files = []
+    filetag = ''
+    for pp in p:
+        print ('Append file for p={0}'.format(pp))
+        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+
+    # Make labels
+    lbls = []
+    for pp in p:
+        lbls.append ('p=.{0}'.format(int(round(10*pp))))
+
+    mkr=['o','s','v','^','h',  'o','s','v','^','h']
+    ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
 
     # num files
     nf = len(files)
@@ -88,11 +76,6 @@ def doPlot (driftnodrift, plottype, ff):
 
     nbins = 30
 
-    # Some markers
-    mkr=['.', 'o', 'v', 's', 's', 'v', 'o', '^', '^', 'h','s', 's']
-    # And marker sizes
-    ms=[6, 6, 7, 6, 7, 7, 8, 7, 8, 6, 7, 8]
-
     gcount=0
     a1 = [] # list of axes
     for y,fil in enumerate(files):
@@ -113,8 +96,6 @@ def doPlot (driftnodrift, plottype, ff):
         else:
             bins = np.linspace (0, np.max(D), nbins)
 
-        #print ('D min: {0} occurs {1} times, D max: {2} occurs {3} times.'
-        #       .format (np.min(D), (D==np.min(D)).sum(), np.max(D), (D==np.max(D)).sum()))
         h,b = np.histogram (D, bins)
         print ('h: {0}'.format(h))
         print ('b: {0}'.format(b))
@@ -129,8 +110,6 @@ def doPlot (driftnodrift, plottype, ff):
 
         # Plot on it
         if plottype == 'loglog1':
-            #bx = np.log(b[:-1]/scale)
-            #bx = np.vstack ((bx, np.log(h))).T
             bx = np.log10(b[:-1]/scale) # logginess of x axis captured by np.logspace bins
             bx = np.vstack ((bx, np.log10(h))).T
             a1[gcount].set_ylabel('log$_{10}$ (evolutions)',fontsize=fs)
@@ -159,13 +138,12 @@ def doPlot (driftnodrift, plottype, ff):
 
         bx = bx[np.where(np.isfinite(bx[:,1]))]
         bx = bx[np.where(np.isfinite(bx[:,0]))]
-        #print ('bx: {0}'.format(bx))
+
         a1[gcount].plot(bx[:,0], bx[:,1], color=colo, linestyle='-', marker=mkr[y], markersize=ms[y])
 
         print ('gcount={0}'.format(gcount))
         if plottype=='loglog1' and (gcount == 2 or gcount == 7 or gcount == 11):
             ax2.plot(bx[:,0], bx[:,1], color=plt.cm.gnuplot2((gcount*0.6)/11), linestyle='--', marker=mkr[y], markersize=12)
-            #ax2.bar(bx[:,0], bx[:,1], width=0.1, edgecolor=plt.cm.gnuplot2((gcount*0.6)/(len(files)-1)), color=plt.cm.gnuplot2((gcount*0.6)/(len(files)-1)), alpha=0.2)
         elif plottype=='log':
             ax2.plot(bx[:,0], bx[:,1], color=plt.cm.gnuplot2((gcount*0.6)/11), linestyle='--', marker=mkr[y], markersize=10)
 
@@ -174,26 +152,17 @@ def doPlot (driftnodrift, plottype, ff):
         print ('fit, residuals, rank, singular_values, rcond: {4} : {0} : {1} : {2} : {3} '
                .format(residuals, rank, singular_values, rcond, fit))
         fit_fn = np.poly1d (fit)
-        #print (fit_fn)
         M[y,0] = fit[0]     # slope
-        #M[y,1] = residuals
-        #a1[gcount].plot (bx[:,0], fit_fn(bx[:,0]), '-', linewidth=2, color=colo)
 
         # Set some common features of the subplot
         a1[gcount].set_title(lbls[gcount])
         a1[gcount].set_axisbelow(True)
-        #a1[gcount].text (1, 1, graphtag)
         gcount = gcount + 1
 
 
     ax2.set_ylabel('log$_{10}$ (F=1 evolutions)',fontsize=fs)
     ax2.set_xlabel('log$_{10}$ (generations to evolve)',fontsize=fs)
-    #ax2.set_xlim([1,6])
-    #ax2.set_ylim([0,5])
     ax2.legend(('p=0.05','p=0.3','p=0.5'))
-    ##ax2.legend(lbls)
-    f2.suptitle (driftnodrift);
-    #f2.tight_layout()
     plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'_format2.png')
 
     # rect=[left bottom right top]
@@ -204,20 +173,7 @@ def doPlot (driftnodrift, plottype, ff):
     return M
 
 # Change this to choose which to plot.
-driftnodrift = 'nodrift' # 'nodrift' or 'drift'
 fitf = 'ff4'
-#doPlot ('nodrift', '', fitf)
-#doPlot ('drift', '', fitf)
-#M1 = doPlot ('nodrift', 'log', fitf)
-#doPlot ('drift', 'log', fitf)
-#M2 = doPlot ('nodrift', 'loglog1', fitf)
-M3 = doPlot ('drift', 'loglog1', fitf)
-#doPlot ('drift', 'loglog', fitf)
-
-#P = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5])
-#f1 = plt.figure(figsize=(6,6))
-#ax = f1.add_subplot (1,1,1)
-#ax.plot (P, M1[:,1])
-#ax.plot (P, M2[:,1])
+M3 = doPlot ('loglog1', fitf)
 
 plt.show()
