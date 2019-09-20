@@ -6,7 +6,6 @@ import sys
 import csv
 
 # Change this to choose which to plot.
-driftnodrift = 'drift' # 'nodrift' or 'drift'
 ff='ff4'
 
 # Read csv files.
@@ -20,13 +19,10 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-expfitstartidx = 4 # index of 0.05 in p, below
-#p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+expfitstartidx = 0 # index of 0.05 in p, below
+p = [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
 
-#p = [0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
-p = [0.03, 0.05, 0.1, 0.2, 0.3]
-
-directry = 'dataj2'
+directry = 'data'
 
 # 3 contexts
 #contexttag = 'nc3_I16-4-1_T20-5-10'
@@ -45,14 +41,9 @@ maxgens='1000000000'
 
 # Make file names
 files = []
-if driftnodrift == 'drift':
-    filetag = ''
-    for pp in p:
-        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-else:
-    filetag = '_nodrift'
-    for pp in p:
-        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+filetag = ''
+for pp in p:
+    files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
 # Make labels
 lbls = []
@@ -172,8 +163,8 @@ for y,fil in enumerate(files):
     a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
 
 a1.legend(lbls,frameon=False)
-a1.set_ylabel(r'log (evolutions) [' + driftnodrift + ']',fontsize=fs)
-a1.set_xlabel('1000 generations',fontsize=fs)
+a1.set_ylabel(r'log (evolutions)', fontsize=fs)
+a1.set_xlabel('1000 generations', fontsize=fs)
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
@@ -187,7 +178,7 @@ a2 = f1.add_subplot (1,3,2)
 a2.plot (M[:,1], (M[:,0]/scale), marker='o', linestyle='None', color=col.gray20, markersize=12)
 ##a2.plot (M[:,1], slope_fit_fn(M[:,1]), marker='None', linestyle='-', color=col.gray20, markersize=12)
 a2.set_xlabel('p')
-a2.set_ylabel('m (slope of best fit) [' + driftnodrift + ']')
+a2.set_ylabel('m (slope of best fit)')
 #a2.set_xlim([0,0.55])
 #a2.set_ylim([-0.001,0])
 
@@ -195,7 +186,7 @@ a2.set_ylabel('m (slope of best fit) [' + driftnodrift + ']')
 # the first couple of points
 log_means = np.log(M[expfitstartidx:,2])
 means_fit = np.polyfit (M[expfitstartidx:,1], log_means, 1)
-print ('Exponential fit to curve ({2}): {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0], driftnodrift))
+print ('Exponential fit to curve: {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0]))
 expx = np.arange(min(p),max(p),0.001)
 expfit = np.exp (means_fit[1]) * np.exp (means_fit[0]*expx)
 
@@ -211,9 +202,9 @@ a3.plot (expx, expfit/scale, marker='None', linestyle='-', color=col.crimson, ma
 # 5516/4 x 10^8 gives 72516
 # 5787/4 x 10^8 gives 69120 (repeat)
 a3.plot ([0,0.8], [69120,69120], marker='None', linestyle='-', color=col.navy)
-a3.legend(['Mean gens to evolve','Fit: {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0], driftnodrift),'Random discovery rate'])
+a3.legend(['Mean gens to evolve','Fit: {0:.2f} exp ({1:.2f}*p)'.format(np.exp(means_fit[1]), means_fit[0]),'Random discovery rate'])
 a3.set_xlabel('p')
-a3.set_ylabel('$\mu$ (mean gens to evolve [' + driftnodrift + '] $f=1$)')
+a3.set_ylabel('$\mu$ (mean gens to evolve $f=1$)')
 a3.set_xlim([0,0.62])
 #a3.set_ylim([0,180000])
 

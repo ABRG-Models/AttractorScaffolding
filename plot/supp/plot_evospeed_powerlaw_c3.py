@@ -29,50 +29,27 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-def doPlot (driftnodrift, ff, evotype):
-
-    if driftnodrift == 'drift':
-        filetag = ''
-    else:
-        filetag = '_nodrift'
+def doPlot (ff, evotype):
 
     # Make files from directory listing
-    p = Path('../data')
-    ##files = list(p.glob('*evolve'+filetag+'_a21_p10_ff4_100000000_gens_*.csv')) # order is wrong
-    numgens = '100000000'
-    #numgens = '1000000000'
-    targs = '_a21_p10_' # n=5
-    #targs = '_a42_p21_' # n=6
-    files = [
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.01.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.02.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.05.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.1.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.15.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.2.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.25.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.3.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.35.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.4.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.45.csv',
-        '../data/evolve'+filetag+targs+ff+'_'+numgens+'_'+evotype+'_0.5.csv']
 
-    graphtag = driftnodrift + ', powerlaw. Red: data, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
+    numgens = '1000000000'
+    directry = 'data'
+    contexttag = 'nc3_I16-4-1_T20-5-10'
+#    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
 
-    lbls = ['p=0.01',
-            'p=0.02',
-            'p=0.05',
-            'p=0.10',
-            'p=0.15',
-            'p=0.20',
-            'p=0.25',
-            'p=0.30',
-            'p=0.35',
-            'p=0.40',
-            'p=0.45',
-            'p=0.50']
+    # Make file names
+    files = []
+    lbls = []
+    for pp in p:
+        files.append ('../../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
+        lbls.append('p={0}'.format(pp))
+
+    graphtag = driftnodrift + ', powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
 
     # num files
+    print ('files has length {0}'.format(len(files)))
     nf = len(files)
 
     # Font size for plotting
@@ -148,29 +125,38 @@ def doPlot (driftnodrift, ff, evotype):
         else:
             bestfitter = 0 # 0 unknown, 1 powerlaw better than exp, 2 lognormal, 3 exponential, 4 powerlaw better than lognormal
 
-        if bestfitter == 1 or bestfitter == 0:
+        if bestfitter == 1:
             Rex, pex = fit.distribution_compare('power_law', 'exponential')
-            print('Comparison with exponential: R={0}, p={1}'.format(Rex,pex))
+            print('Comparison with exponential: R={0}, p={1} (+ve: powerlaw more likely, -ve: exponential more likely)'.format(Rex,pex))
             if pex < 0.05:
                 if Rex < 0:
-                    bestfitter = 3
+                    bestfitter = 3 # exp
                 else:
-                    bestfitter = 1
+                    bestfitter = 1 # powerlaw
 
             Rln, pln = fit.distribution_compare('power_law', 'lognormal')
-            print('Comparison with lognormal: R={0}, p={1}'.format(Rln,pln))
+            print('Comparison with lognormal: R={0}, p={1} (+ve: powerlaw more likely, -ve: lognormal more likely)'.format(Rln,pln))
             if pln < 0.05:
                 if Rln < 0:
-                    bestfitter = 2
+                    bestfitter = 2 # ln
                 else:
                     print ('Power to the law!')
-                    bestfitter = 4
+                    bestfitter = 4 # powerlaw
+        else:
+            Rlnex, plnex = fit.distribution_compare('lognormal', 'exponential')
+            print('Comparison lognormal to exponential: R={0}, p={1} (+ve: lognormal more likely, -ve: exponential more likely)'.format(Rlnex,plnex))
+            if plnex < 0.05:
+                if Rlnex < 0:
+                    bestfitter = 3 # exp
+                else:
+                    bestfitter = 2 # ln
 
         # Create subplot
-        ax = f1.add_subplot (2,6,gcount+1)
+        print ('gcount+1 is {0}'.format (gcount+1))
+        ax = f1.add_subplot (2,len(p)/2,gcount+1)
         a1.append(ax)
 
-        bestfitter = 6 # hack
+        ## bestfitter = 6 # hack
 
         # Plot the data
         powerlaw.plot_pdf (D[:,0], color=col.darkviolet, ax=a1[gcount])
@@ -206,7 +192,7 @@ def doPlot (driftnodrift, ff, evotype):
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
 
     f1.text (0.2, 0.9, graphtag, fontsize=20)
-    plt.savefig ('png/evospeed' + filetag + '_' + evotype + '_' + ff + targs + '.png')
+    plt.savefig ('figures/evospeed_pl_' + evotype + '_' + ff + contexttag + '.png')
 
     return M
 
@@ -216,6 +202,6 @@ fitf = 'ff4'
 evotype = 'gens'     # for stats on evolutions of F=1 genomes
 #evotype = 'gensplus' # for stats on every fitness increment
 
-M1 = doPlot ('drift', fitf, evotype)
+M1 = doPlot (fitf, evotype)
 
 plt.show()

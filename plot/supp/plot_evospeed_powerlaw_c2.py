@@ -29,36 +29,21 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-def doPlot (driftnodrift, ff, evotype):
+def doPlot (ff, evotype):
 
-    if driftnodrift == 'drift':
-        filetag = ''
-    else:
-        filetag = '_nodrift'
-
-    # Make files from directory listing
-
-    numgens = '1000000000'
-    directry = 'dataj2'
-    contexttag = 'nc3_I16-4-1_T20-5-10'
-#    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    numgens = '100000000'
+    directry = 'data'
+    contexttag = 'nc2_I16-0_T21-10'
     p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
 
     # Make file names
     files = []
     lbls = []
-    if driftnodrift == 'drift':
-        filetag = ''
-        for pp in p:
-            files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
-            lbls.append('p={0}'.format(pp))
-    else:
-        filetag = '_nodrift'
-        for pp in p:
-            files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
-            lbls.append('p={0}'.format(pp))
+    for pp in p:
+        files.append ('../../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
+        lbls.append('p={0}'.format(pp))
 
-    graphtag = driftnodrift + ', powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
+    graphtag = 'powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
 
     # num files
     print ('files has length {0}'.format(len(files)))
@@ -171,7 +156,7 @@ def doPlot (driftnodrift, ff, evotype):
         ## bestfitter = 6 # hack
 
         # Plot the data
-        powerlaw.plot_pdf (D[:,0], color=col.darkviolet, ax=a1[gcount])
+        ##powerlaw.plot_pdf (D[:,0], color=col.darkviolet, ax=a1[gcount])
         # or
         fit.plot_pdf (color=col.red2, ax=a1[gcount], linewidth=3)
 
@@ -204,16 +189,14 @@ def doPlot (driftnodrift, ff, evotype):
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
 
     f1.text (0.2, 0.9, graphtag, fontsize=20)
-    plt.savefig ('png/evospeed_pl_' + filetag + '_' + evotype + '_' + ff + contexttag + '.png')
+    plt.savefig ('figures/evospeed_pl_' + evotype + '_' + ff + contexttag + '.png')
 
     return M
 
 # Change this to choose which to plot.
-driftnodrift = 'drift' # 'nodrift' or 'drift'
 fitf = 'ff4'
 evotype = 'gens'     # for stats on evolutions of F=1 genomes
 #evotype = 'gensplus' # for stats on every fitness increment
-
-M1 = doPlot ('drift', fitf, evotype)
+M1 = doPlot (fitf, evotype)
 
 plt.show()
