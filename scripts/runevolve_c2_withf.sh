@@ -25,13 +25,10 @@ if [ ! -d ${HN} ]; then
     fi
 fi
 
-cat <<EOF > configs/runevolve_c2_tmp.json
-/*
- * Evolve with three contexts
- */
+cat <<EOF > configs/runevolve_c2.json
 {
     "save_gensplus":     false,
-    "logdir":        "./dataj",
+    "logdir":        "./data",
     "nGenerations":  100000000,
     "pOn":                0.05,
     "initial": [ "10000", "00000" ],
@@ -42,20 +39,14 @@ EOF
 echo "Using build directory ${HN} for executables"
 
 # Run several evolve_js in parallel.
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.01 &
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.02 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.03 &
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.04 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.05 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.10 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.15 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.20 &
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.25 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.3  &
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.35 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.4  &
-#./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.45 &
-./${HN}/sim/evolve_j configs/runevolve_c2_tmp.json 0.5  &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.03 &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.05 &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.10 &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.15 &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.20 &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.3  &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.4  &
+./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.5  &
 
 wait
 popd

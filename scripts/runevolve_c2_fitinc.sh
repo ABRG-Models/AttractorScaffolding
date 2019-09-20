@@ -30,7 +30,7 @@ echo "Using build directory ${HN} for executables"
 cat <<EOF > configs/runevolve_c2_fitinc.json
 {
     "save_gensplus":     true,
-    "logdir":       "./data_fitinc",
+    "logdir":       "./data/fitinc",
     "nGenerations":        10000000,
     "pOn":                      0.1,
     "initial": [ "10000", "00000" ],

@@ -32,7 +32,7 @@ echo "Using build directory ${HN} for executables"
 cat <<EOF > configs/runevolve_c3_targbits_4ham.json
 {
     "save_gensplus":     false,
-    "logdir":        "./data_targbits",
+    "logdir":        "./data/targbits",
     "nGenerations": 100000000,
     "pOn":                0.05,
     "initial": [ "01000", "00100", "00001" ],
@@ -45,7 +45,7 @@ EOF
 cat <<EOF > configs/runevolve_c3_targbits_6ham.json
 {
     "save_gensplus":     false,
-    "logdir":        "./data_targbits",
+    "logdir":        "./data/targbits",
     "nGenerations": 100000000,
     "pOn":                0.1,
     "initial": [ "01000", "00100", "00001" ],
@@ -58,7 +58,7 @@ EOF
 cat <<EOF > configs/runevolve_c3_targbits_8ham.json
 {
     "save_gensplus":     false,
-    "logdir":        "./data_targbits",
+    "logdir":        "./data/targbits",
     "nGenerations": 100000000,
     "pOn":                0.1,
     "initial": [ "01000", "00100", "00001" ],
@@ -72,7 +72,7 @@ EOF
 cat <<EOF > configs/runevolve_c3_targbits_10ham.json
 {
     "save_gensplus":     false,
-    "logdir":        "./data_targbits",
+    "logdir":        "./data/targbits",
     "nGenerations": 100000000,
     "pOn":                0.1,
     "initial": [ "01000", "00100", "00001" ],
@@ -85,7 +85,7 @@ EOF
 cat <<EOF > configs/runevolve_c3_targbits_12ham.json
 {
     "save_gensplus":     false,
-    "logdir":        "./data_targbits",
+    "logdir":        "./data/targbits",
     "nGenerations": 100000000,
     "pOn":                0.1,
     "initial": [ "10000", "00100", "00001" ],

@@ -117,7 +117,7 @@ for f in files:
 
 
 # Plot one of them in bold:
-sfnum = 1
+sfnum = 0
 specialfile=files[sfnum]
 print ('Special file: {0}'.format(specialfile))
 A, B = readDataset(specialfile)
