@@ -41,18 +41,10 @@ else:
 # Make labels
 lbls = []
 for pp in p:
-    lbls.append ('p={0}'.format(pp))
+    lbls.append ('p=.{0}'.format(int(round(10*pp))))
 
-mkr=['.','o',
-     'v','s',
-     's','v',
-     'o','^',
-     '^','h']
-ms=[8,8,
-    9,8,
-    9,9,
-    10,9,
-    10,8]
+mkr=['o','s','v','^','h',  'o','s','v','^','h']
+ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
 
 # num files
 nf = len(files)
@@ -159,7 +151,7 @@ a1.legend(lbls,frameon=False)
 a1.set_ylabel(r'log (evolutions)',fontsize=fs)
 a1.set_xlabel('1000 generations',fontsize=fs)
 a1.set_ylim([0,10])
-a1.set_xlim([-5,200])
+a1.set_xlim([-5,100])
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
