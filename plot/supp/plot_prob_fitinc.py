@@ -3,6 +3,8 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
+import sys
+sys.path.insert(0,'../include')
 import sebcolour
 col = sebcolour.Colour
 
@@ -39,7 +41,7 @@ for ii in range(0,7):
 
     F1 = plt.figure (figsize=(8,8))
 
-    readpath = '../data/prob_fitinc_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '_ff4.csv'
+    readpath = '../../data/prob_fitinc_' + str(nevolutions) +'_evolutions_pOn_' + str(pOn) + '_ff4.csv'
     A = readDataset(readpath)
 
     # Sort A on col 0.
@@ -82,14 +84,10 @@ for ii in range(0,7):
     f4.plot(b[:-1],h,'.',color=col.darkviolet, marker='o', markersize=8)
     f4.set_xlabel('log (P(fitter))');
     f4.set_ylabel('Freq');
-    #f4.set_xlim([-8,0])
-    #f4.set_ylim([0,300])
 
-    #f1.set_xlim([-1, 0.01])
     F1.tight_layout()
-    figpath = 'png/prob_fitinc_pOn_' + str(pOn) + '.png'
+    figpath = 'figures/prob_fitinc_pOn_' + str(pOn) + '.png'
     plt.savefig (figpath)
-    #plt.show()
     plt.clf()
 
-print ("See results in png/prob_fitinc_pOn*.png")
+print ("See results in figures/prob_fitinc_pOn*.png")

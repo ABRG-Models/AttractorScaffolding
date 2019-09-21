@@ -55,6 +55,10 @@ int main (int argc, char** argv)
     // Seed the RNG.
     unsigned int seed = mix(clock(), time(NULL), getpid());
     srand (seed);
+    // Set up the Mersenne Twister RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
 
     // Initialise masks
     masks_init();
@@ -98,7 +102,7 @@ int main (int argc, char** argv)
     // Experiment with the probability of evolving fitter
     for (unsigned int g = 0; g < N_Starts; ++g) {
         if (g % 100 == 0) {
-            LOG ("[flipbits=" << flipbits << "] Processing genome starting point number " << g);
+            LOG ("[flipbits=" << flipbits << "] Processing genome starting point number " << g << "/" << N_Starts);
         }
         for (unsigned int e = 0; e < N_Generations; ++e) {
             array<genosect_t, N_Genes> testg;

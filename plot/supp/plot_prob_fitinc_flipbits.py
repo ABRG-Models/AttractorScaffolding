@@ -3,6 +3,8 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
+import sys
+sys.path.insert (0, '../include')
 import sebcolour
 col = sebcolour.Colour
 
@@ -57,7 +59,7 @@ for ii in range(0,len(flipbits)):
 
     F1 = plt.figure (figsize=(16,8))
 
-    readpath = '../data/prob_fitinc_' + str(nevolutions) +'_evolutions_flipbits_' + str(fb) + '_ff4.csv'
+    readpath = '../../data/prob_fitinc_' + str(nevolutions) +'_evolutions_flipbits_' + str(fb) + '_ff4.csv'
     A = readDataset(readpath)
 
     prob_fitter = np.mean (A[:,1])
@@ -281,7 +283,7 @@ for ii in range(0,len(flipbits)):
 
     #f1.set_xlim([-1, 0.01])
     F1.tight_layout()
-    figpath = 'png/prob_fitinc_flipbits_' + '{0:02d}'.format(fb) + '.png'
+    figpath = 'figures/prob_fitinc_flipbits_' + '{0:02d}'.format(fb) + '.png'
     plt.savefig (figpath)
     #plt.show()
     plt.clf()
@@ -316,6 +318,6 @@ f2_4.contourf(X_oa, Y_oa, Zout, zorder=0)
 f2_4.set_xlabel('Num flips/Hamming distance')
 f2_4.set_ylabel('P(less fit)')
 
-plt.savefig ('png/prob_fitinc_flipbits_prob_vs_bits.png')
-print ("See results in png/prob_fitinc_flipbits_*.png")
+plt.savefig ('figures/prob_fitinc_flipbits_prob_vs_bits.png')
+print ("See results in figures/prob_fitinc_flipbits_*.png")
 plt.clf()

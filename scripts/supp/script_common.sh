@@ -1,12 +1,8 @@
 PWD=`pwd | awk -F'/' '{ print $NF }'`
-if [ ${PWD} = 'scripts/supp' ]; then
+if [ ${PWD} = 'supp' ]; then
     pushd ../..
-if [ ${PWD} = 'scripts' ]; then
-    pushd ..
-elif [ ${PWD} = 'AttractorScaffolding' ]; then
-    pushd .
 else
-    echo "Please run this from AttractorScaffolding or the scripts/supp directory."
+    echo "Please run this from the scripts/supp directory."
 fi
 # Find out where to run from.
 HN=`hostname`
