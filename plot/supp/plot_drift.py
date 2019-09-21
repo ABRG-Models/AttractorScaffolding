@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert(0,'../include')
 import csv
 
 # Read csv files.
@@ -16,17 +17,13 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-files = ['../data/drift_a21_p10_ff4_100000000_gens_0.1.csv',
-         '../data/drift_a21_p10_ff4_100000000_gens_0.2.csv',
-         '../data/drift_a21_p10_ff4_100000000_gens_0.3.csv',
-         '../data/drift_a21_p10_ff4_100000000_gens_0.4.csv',
-         '../data/drift_a21_p10_ff4_100000000_gens_0.5.csv']
+files = ['../../data/drift_a21_p10_ff4_100000000_gens_0.1.csv',
+         '../../data/drift_a21_p10_ff4_100000000_gens_0.2.csv',
+         '../../data/drift_a21_p10_ff4_100000000_gens_0.3.csv',
+         '../../data/drift_a21_p10_ff4_100000000_gens_0.4.csv',
+         '../../data/drift_a21_p10_ff4_100000000_gens_0.5.csv']
 
-lbls = ['p=0.10',
-        'p=0.20',
-        'p=0.30',
-        'p=0.40',
-        'p=0.50']
+lbls = ['p=.1', 'p=.2', 'p=.3', 'p=.4', 'p=.5']
 
 # num files
 nf = len(files)
@@ -90,16 +87,8 @@ for y,file in enumerate(files):
         plt.plot(bx,fit_fn(bx),'-',linewidth=2,color=cols[y])
 
 # Plot the points after plotting all the best fit lines
-mkr=['.','o',
-     '.','s',
-     '.','v',
-     '.','^',
-     '.','h']
-ms=[1,6,
-    1,6,
-    1,7,
-    1,7,
-    1,6]
+mkr=['o','s','v','^','h',  'o','s','v','^','h']
+ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
 
 fcount=0
 for y,file in enumerate(files):
