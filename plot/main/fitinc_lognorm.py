@@ -1,8 +1,9 @@
+import sys
+sys.path.insert(0,'../include') # To get states lib
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
-import sys
 import csv
 
 # Change this to choose which to plot.
@@ -43,6 +44,9 @@ lbls = []
 for pp in p:
     lbls.append ('p={0}'.format(pp))
 
+mkr=['o','s','v','^','h',  'o','s','v','^','h']
+ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
+
 # num files
 nf = len(files)
 
@@ -64,17 +68,6 @@ M = np.zeros([nf,3])
 nbins_g = 50
 
 # Plot the points only for this version of the script
-mkr=['.','o',
-     'v','s',
-     's','v',
-     'o','^',
-     '^','h']
-ms=[6,6,
-    7,6,
-    7,7,
-    8,7,
-    8,6]
-
 fcount=0
 for y,fil in enumerate(files):
     print ('Processing file: {0}'.format(fil))
@@ -94,7 +87,6 @@ for y,fil in enumerate(files):
     # Plot points
 
     colo = plt.cm.brg((fcount*0.5)/len(files))
-    # Difference between Stuart and Seb's graphs is a np.log10() around h, below:
     a1.plot(b[:-1],h,'.-',color=colo,marker=mkr[y],markersize=ms[y])
 
 a1.legend(lbls,frameon=False)
@@ -104,7 +96,8 @@ a1.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
 a1.set_axisbelow(True)
 
 f1.tight_layout()
-plt.savefig ('png/fitinc_lognorm.png')
+plt.savefig ('figures/fitinc_lognorm.png')
+plt.savefig ('figures/fitinc_lognorm.svg')
 
 plt.show()
 

@@ -22,7 +22,7 @@ def readDataset (filepath):
 
 
 p = [0.1, 0.2, 0.3, 0.4, 0.5]
-directry = 'dataj'
+directry = '../../data'
 contexttag = 'nc2_I16-0_T21-10'
 maxgens='100000000'
 
@@ -32,11 +32,11 @@ if driftnodrift == 'drift':
     filetag = ''
     for pp in p:
         print ('Append file for p={0}'.format(pp))
-        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+        files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 else:
     filetag = '_nodrift'
     for pp in p:
-        files.append ('../{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+        files.append ('{4}/evolve_nodrift_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
 # Make labels
 lbls = []
@@ -104,7 +104,8 @@ a1.set_xlabel('log$_{10}$ (generations)',fontsize=fs)
 a1.set_axisbelow(True)
 
 f1.tight_layout()
-plt.savefig ('png/paper_figDlognorm.png')
+plt.savefig ('figures/figDlognorm.png')
+plt.savefig ('figures/figDlognorm.svg')
 
 plt.show()
 

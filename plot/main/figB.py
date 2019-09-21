@@ -14,8 +14,8 @@ kequalsn = True
 docolour = False
 sl.plot_states (net, f1.axes, hexstates, kequalsn, docolour)
 plt.tight_layout()
-plt.savefig('figures/paper_figB.svg')
-plt.savefig('figures/paper_figB.png')
-print ('Wrote paper_figB')
+plt.savefig('figures/figB.svg')
+plt.savefig('figures/figB.png')
+print ('Wrote figB')
 
 plt.show()

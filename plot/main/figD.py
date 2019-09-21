@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0,'../include') # To get states lib and sebcolour
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
@@ -152,8 +154,8 @@ slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
 
-plt.savefig ('figures/paper_figD.png')
-plt.savefig ('figures/paper_figD.svg')
+plt.savefig ('figures/figD.png')
+plt.savefig ('figures/figD.svg')
 
 plt.show()
 

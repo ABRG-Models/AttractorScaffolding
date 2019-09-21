@@ -1,8 +1,9 @@
+import sys
+sys.path.insert(0,'../include')
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
-import sys
 import csv
 
 # Change this to choose which to plot.

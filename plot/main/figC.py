@@ -60,7 +60,7 @@ FromValue = 1000
 pOn = 0.1
 
 # Make files from directory listing
-p = Path('../data/evolutions/')
+p = Path('../../data/evolutions/')
 globstr = '*evolve_withf_nc2_I16-0_T21-10_ff4_100000_fitness_'+str(pOn)+'*.csv'
 print (globstr)
 files = list(p.glob(globstr))
@@ -119,6 +119,8 @@ if len(sys.argv) < 2:
 sfnum = int(sys.argv[1])
 
 print ('I found {0} files.'.format(len(files)))
+if len(files) == 0:
+    exit (0)
 specialfile=files[sfnum]
 print ('Special file: {0}'.format(specialfile))
 A, B = readDataset(specialfile)
@@ -127,6 +129,7 @@ if plot_states:
     f1.legend()
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
-plt.savefig ('png/paper_figC.svg')
+plt.savefig ('figures/figC.png')
+plt.savefig ('figures/figC.svg')
 
 plt.show()
