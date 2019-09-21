@@ -1,7 +1,8 @@
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
-
+import sys
+sys.path.insert(0,'../include') # To get states lib
 import states_lib as sl
 
 # Chosen network for figure is 8875517a-5c1e87e1-8eef99d4-1a3c467f-df7235c6 or:
@@ -13,7 +14,8 @@ kequalsn = True
 docolour = False
 sl.plot_states (net, f1.axes, hexstates, kequalsn, docolour)
 plt.tight_layout()
-plt.savefig('png/paper_figB.svg')
-print ('Wrote paper_figB.svg')
+plt.savefig('figures/paper_figB.svg')
+plt.savefig('figures/paper_figB.png')
+print ('Wrote paper_figB')
 
 plt.show()
