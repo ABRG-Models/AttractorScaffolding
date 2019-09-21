@@ -37,7 +37,7 @@ greycol = (0.4, 0.4, 0.4)
 
 for layer in range(0,n+1):
     print ('Layer {0}'.format(layer))
-    o = np.loadtxt ('../data/node_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
+    o = np.loadtxt ('../../data/node_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
     #print ('{0} size {1}'.format(o, np.size(o)))
     x = np.array(range(0,np.size(o)))
 
@@ -81,6 +81,6 @@ for layer in range(0,n+1):
 f1.set_xlabel ('Gene space position x')
 f1.set_ylabel ('Gene space position y')
 f1.set_zlabel ('Fitness')
-fname = './png/dimtree{0}.png'.format(n)
+fname = './figures/dimtree{0}.png'.format(n)
 plt.savefig(fname);
 plt.show()

@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert (0, '../include')
 import csv
 
 # Change this to choose which to plot.
@@ -24,13 +25,14 @@ expfitstartidx = 4 # index of 0.05 in p, below
 p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
 
 maxgens='100000000'
+contexttag = 'nc2_I16-0_T21-10'
 
 # Make file names
 files = []
 if driftnodrift == 'drift':
     filetag = ''
     for pp in p:
-        files.append ('../data/evolve_nc2_I16-0_T21-10_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp))
+        files.append ('../../data/evolve_nc2_I16-0_T21-10_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp))
 else:
     filetag = '_nodrift'
     for pp in p:
@@ -110,26 +112,8 @@ for y,fil in enumerate(files):
 
 
 # Plot the points after plotting all the best fit lines
-mkr=['.','o',
-     'v','s',
-     's','v',
-     'o','^',
-     '^','h',
-     '.','o',
-     'v','s',
-     's','v',
-     'o','^',
-     '^','h']
-ms=[6,6,
-    7,6,
-    7,7,
-    8,7,
-    8,6,
-    6,6,
-    7,6,
-    7,7,
-    8,7,
-    8,6]
+mkr=['o','s','v','^','h',  'o','s','v','^','h']
+ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
 
 fcount=0
 for y,fil in enumerate(files):
@@ -200,7 +184,7 @@ a3.set_xlim([0,0.62])
 #a3.set_ylim([0,180000])
 
 f1.tight_layout()
-plt.savefig ('png/evospeed' + filetag + '_'+ff+'.svg')
+plt.savefig ('figures/evospeed' + filetag + '_'+contexttag+'_'+ff+'.svg')
 
 plt.show()
 

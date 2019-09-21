@@ -1,7 +1,8 @@
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
-
+import sys
+sys.path.insert(0,'../include')
 import states_lib as sl
 
 # F>0
@@ -11,7 +12,7 @@ F1 = plt.figure (figsize=(8,8))
 f1 = F1.add_subplot (111)
 sl.plot_states (net, f1.axes)
 plt.tight_layout()
-plt.savefig('png/states_bitflips_flip000.png', dpi=600)
+plt.savefig('figures/states_bitflips_flip000.png', dpi=600)
 
 for i in range(0,1):
     netflip = list(net)
@@ -26,7 +27,7 @@ for i in range(0,1):
     f1 = F1.add_subplot (111)
     sl.plot_states (netflip, f1.axes)
     plt.tight_layout()
-    plt.savefig('png/states_bitflips_flip{0:02d}.png'.format(i), dpi=600)
+    plt.savefig('figures/states_bitflips_flip{0:02d}.png'.format(i), dpi=600)
 
-print ('See results in png/states_bitflips*.png')
+print ('See results in figures/states_bitflips*.png')
 #plt.show()

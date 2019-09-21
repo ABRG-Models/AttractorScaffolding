@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert (0, '../include')
 import csv
 import powerlaw
 # A nice colour array
@@ -34,19 +35,19 @@ def doPlot (ff, evotype):
     # Make files from directory listing
 
     numgens = '1000000000'
-    directry = 'data'
+    directry = '../../data'
     contexttag = 'nc3_I16-4-1_T20-5-10'
-#    p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+#   p = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
     p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
 
     # Make file names
     files = []
     lbls = []
     for pp in p:
-        files.append ('../../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
+        files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
         lbls.append('p={0}'.format(pp))
 
-    graphtag = driftnodrift + ', powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
+    graphtag = 'powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
 
     # num files
     print ('files has length {0}'.format(len(files)))
@@ -197,10 +198,8 @@ def doPlot (ff, evotype):
     return M
 
 # Change this to choose which to plot.
-driftnodrift = 'drift' # 'nodrift' or 'drift'
 fitf = 'ff4'
 evotype = 'gens'     # for stats on evolutions of F=1 genomes
-#evotype = 'gensplus' # for stats on every fitness increment
 
 M1 = doPlot (fitf, evotype)
 

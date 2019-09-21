@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert (0, '../include')
 import csv
 
 # Read csv files.
@@ -19,16 +20,16 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-files = ['../data/pnot0_n3.csv',
-         '../data/pnot0_n4.csv',
-         '../data/pnot0_n5.csv',
-         '../data/pnot0_n6.csv',
-         '../data/pnot0_n7.csv',
-         '../data/pnot0_n9.csv',
-         '../data/pnot0_n12.csv',
-         '../data/pnot0_n15.csv',
-         '../data/pnot0_n18.csv',
-         '../data/pnot0_n25.csv'
+files = ['../../data/pnot0_n3.csv',
+         '../../data/pnot0_n4.csv',
+         '../../data/pnot0_n5.csv',
+         '../../data/pnot0_n6.csv',
+         '../../data/pnot0_n7.csv',
+         '../../data/pnot0_n9.csv',
+         '../../data/pnot0_n12.csv',
+         '../../data/pnot0_n15.csv',
+         '../../data/pnot0_n18.csv',
+         '../../data/pnot0_n25.csv'
 ]
 
 lbls = ['n=3',
@@ -100,5 +101,5 @@ fig2.set_xlim([0,10])
 fig2.set_axisbelow(True)
 fig2.set_title ("b) Probability of score > 0");
 
-plt.savefig ('png/p0.svg')
+plt.savefig ('figures/p0.svg')
 plt.show()

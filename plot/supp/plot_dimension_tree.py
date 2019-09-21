@@ -17,7 +17,7 @@ greycol = (0.4,0.4,0.4)
 
 for layer in range(0,n+1):
     print ('Layer {0}'.format(layer))
-    o = np.loadtxt ('../data/node_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
+    o = np.loadtxt ('../../data/node_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
     #print ('{0} size {1}'.format(o, np.size(o)))
     x = np.array(range(0,np.size(o)))
     xo = np.vstack((x, o))
@@ -26,7 +26,7 @@ for layer in range(0,n+1):
     print ('nodes zorder: {0}, arrows zorder: {1}'.format(nodes_zorder, arrows_zorder))
     f1.scatter (x, np.ones((1, np.size(o)))*layer, zorder=nodes_zorder)
     if layer > 0:
-        t = np.loadtxt ('../data/node_trans_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
+        t = np.loadtxt ('../../data/node_trans_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
         # For each row in t, plot an arrow
         #print ('Arrows for layer {0}'.format(layer))
         for ti in t:
@@ -40,6 +40,6 @@ for layer in range(0,n+1):
     xolast = xo
 
 #f1.set_xlim([0,10])
-fname = './png/dimtree{0}.png'.format(n)
+fname = './figures/dimtree{0}.png'.format(n)
 plt.savefig(fname);
 plt.show()

@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert (0, '../include')
 import csv
 import powerlaw
 # A nice colour array
@@ -32,7 +33,7 @@ def readDataset (filepath):
 def doPlot (ff, evotype):
 
     numgens = '100000000'
-    directry = 'data'
+    directry = '../../data'
     contexttag = 'nc2_I16-0_T21-10'
     p = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3]
 
@@ -40,7 +41,7 @@ def doPlot (ff, evotype):
     files = []
     lbls = []
     for pp in p:
-        files.append ('../../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
+        files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, numgens, pp, contexttag, directry))
         lbls.append('p={0}'.format(pp))
 
     graphtag = 'powerlaw. Violet: data PDF, Red: truncated PDF, Blue: powerlaw fit, Green: lognormal, Pink: exponential'
