@@ -28,8 +28,8 @@ maxgens='100000000'
 files = []
 lbls = []
 
-pp=0.1
-pp_='.1'
+pp=0.5
+pp_='.5'
 
 # 1 Hamming
 contexttag = 'nc2_I16-0_T21-23'
@@ -156,8 +156,8 @@ a1.legend(lbls,frameon=False)
 
 a1.set_ylabel(r'log (evolutions)',fontsize=fs)
 a1.set_xlabel('1000 generations',fontsize=fs)
-a1.set_ylim([0,10])
-a1.set_xlim([-3,28])
+a1.set_ylim([0,6])
+a1.set_xlim([-3,200])
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
@@ -165,8 +165,8 @@ slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
 slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
-plt.savefig ('figures/2ctxt_targbits_p0.1.png')
-plt.savefig ('figures/2ctxt_targbits_p0.1.svg')
+plt.savefig ('figures/2ctxt_targbits_p0.5.png')
+plt.savefig ('figures/2ctxt_targbits_p0.5.svg')
 
 plt.show()
 

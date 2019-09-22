@@ -61,7 +61,7 @@ for layer in range(0,n+1):
         ii = ii + 1
 
     if layer > 0:
-        t = np.loadtxt ('../data/node_trans_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
+        t = np.loadtxt ('../../data/node_trans_layer_{0}_n{1}.csv'.format(layer,n), delimiter=',')
         # For each row in t, plot an arrow
         #print ('Arrows for layer {0}'.format(layer))
         for ti in t:
