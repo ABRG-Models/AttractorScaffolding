@@ -9,6 +9,7 @@ source script_common.sh
 echo "Using build directory ${HN} for executables"
 
 NCPU=`nproc`
+#NCPU=32
 
 NGEN=100000000000
 #NGEN=9999999 # for debug
@@ -37,10 +38,10 @@ popd
 
 # Collect results
 DFILE=../data/evolve_nc4_I16-4-1-8_T20-10-5-9_ff4_${NGEN}_gens_0.5.csv
-if [ -f ${DFILE} ]; then
-    rm -f ${DFILE}
-fi
-for i in 1:${NCPU}; do
+#if [ -f ${DFILE} ]; then
+#    rm -f ${DFILE}
+#fi
+for i in $(seq 1 ${NCPU}); do
     cat ../data/null/${i}/evolve_nc4_I16-4-1-8_T20-10-5-9_ff4_${NGEN_PERPROC}_gens_0.5.csv >> ${DFILE}
 done
 
