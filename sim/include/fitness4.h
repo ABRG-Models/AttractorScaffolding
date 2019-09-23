@@ -23,6 +23,37 @@ using namespace std;
 
 #define FF_NAME "ff4"
 
+double
+evaluate_one_async (array<genosect_t, N_Genes>& genome, state_t state, state_t target)
+{
+    double score = 0.0;
+    unsigned int twoN = N_Genes * (1<<N_Genes);
+
+    array<double, N_Genes> sc;
+    for (unsigned int j = 0; j < N_Genes; ++j) {
+        sc[j] = 0.0;
+    }
+
+    // Just "develop" the state 2N times and add up the total of the scores. Simpler than the sync
+    // case.
+    for (unsigned int t=0; t<twoN; ++t) {
+
+        compute_next_async (genome, state);
+
+        state_t a = (state ^ ~target) & state_mask;
+        for (unsigned int j = 0; j < N_Genes; ++j) {
+            sc[j] += static_cast<double>( (a >> j) & 0x1 );
+        }
+    }
+
+    score = pow(static_cast<double>(twoN), -N_Genes);
+    for (unsigned int j = 0; j < N_Genes; ++j) {
+        score *= sc[j];
+    }
+
+    return score;
+}
+
 /*!
  * Evaluates the fitness of one context (anterior or posterior in the 2-context system).
  */
@@ -141,15 +172,22 @@ evaluate_fitness (array<genosect_t, N_Genes>& genome)
  */
 double
 evaluate_fitness (array<genosect_t, N_Genes>& genome,
-                  vector<state_t>& initials, vector<state_t>& targets)
+                  vector<state_t>& initials, vector<state_t>& targets, const bool& async_devel)
 {
     if (initials.size() != targets.size()) {
         throw runtime_error ("initials vector is a different length from the targets vector");
     }
     double fitness = 1.0;
-    for (unsigned int i = 0; i < initials.size(); ++i) {
-        double score = evaluate_one (genome, initials[i], targets[i]);
-        fitness *= score;
+    if (async_devel) {
+        for (unsigned int i = 0; i < initials.size(); ++i) {
+            double score = evaluate_one_async (genome, initials[i], targets[i]);
+            fitness *= score;
+        }
+    } else {
+        for (unsigned int i = 0; i < initials.size(); ++i) {
+            double score = evaluate_one (genome, initials[i], targets[i]);
+            fitness *= score;
+        }
     }
     return fitness;
 }

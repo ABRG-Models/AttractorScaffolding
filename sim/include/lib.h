@@ -186,6 +186,32 @@ state_t initial_pos = 0x0;  // 0000000b;
 RngData rd;
 
 /*!
+ * Return a random single precision number between 0 and 1.
+ */
+float
+randFloat (void)
+{
+#ifndef USE_SIMPLE_RAND
+    return static_cast<float>(UNI((&rd)));
+#else
+    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+#endif
+}
+
+/*!
+ * Return a random double precision number between 0 and 1.
+ */
+double
+randDouble (void)
+{
+#ifndef USE_SIMPLE_RAND
+    return static_cast<double>(UNI_D((&rd)));
+#else
+    return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+#endif
+}
+
+/*!
  * Initialise the masks based on the value of N_Genes
  */
 void
@@ -251,6 +277,53 @@ selected_genome (void)
 # endif
 #endif
 
+void
+compute_next_common (const state_t& state, array<state_t, N_Genes>& inputs)
+{
+    //@{ Common code with compute_next()
+#ifndef N_Ins_EQUALS_N_Genes
+    state_t lo_mask = lo_mask_start;
+    state_t hi_mask = hi_mask_start;
+#endif
+
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+
+#ifdef N_Ins_EQUALS_N_Genes
+        inputs[i] = ((state << i) & state_mask) | (state >> (N_Genes-i));
+#else
+        inputs[i] = (state & lo_mask) | ((state & hi_mask) >> N_minus_k);
+        hi_mask = (hi_mask >> 1) | 0x80;
+        lo_mask >>= 1;
+#endif
+    }
+    //@} End common code
+}
+
+/*!
+ * Choose one gene out of N_Genes to update at random.
+ */
+void
+compute_next_async (const array<genosect_t, N_Genes>& genome, state_t& state)
+{
+    array<state_t, N_Genes> inputs;
+    compute_next_common (state, inputs);
+    //state = 0x0; // Don't reset state.
+
+    // For one gene only
+    unsigned int i = floor(randDouble()*N_Genes);
+    //for (unsigned int i = 0; i < N_Genes; ++i) {
+    DBG2 ("Setting state for gene " << i);
+    genosect_t gs = genome[i];
+    genosect_t inpit = (0x1 << inputs[i]);
+    state_t num = ((gs & inpit) ? 0x1 : 0x0);
+    if (num) {
+        state |= (0x1 << (N_Ins-(i+ExtraOffset)));
+    } else {
+        state &= ~(0x1 << (N_Ins-(i+ExtraOffset)));
+    }
+    //}
+}
+
 /*!
  * Given a state for N_Genes, and a genome, compute the next
  * state. This is "develop" rather than "evolve".
@@ -265,10 +338,6 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
     state_t hi_mask = hi_mask_start;
 #endif
 
-#ifdef DEBUG
-    bitset<8> bs_st(state);
-    DBG2 ("state: " << bs_st);
-#endif
     for (unsigned int i = 0; i < N_Genes; ++i) {
 
 #ifdef N_Ins_EQUALS_N_Genes
@@ -277,11 +346,6 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
         inputs[i] = (state & lo_mask) | ((state & hi_mask) >> N_minus_k);
         hi_mask = (hi_mask >> 1) | 0x80;
         lo_mask >>= 1;
-#endif
-
-#ifdef DEBUG
-        bitset<8> bs_in(inputs[i]);
-        DBG2 ("input[" << i << "]: " << bs_in << " or 0x" << hex << (unsigned int)inputs[i]<< dec);
 #endif
     }
 
@@ -293,14 +357,7 @@ compute_next (const array<genosect_t, N_Genes>& genome, state_t& state)
         DBG2 ("Setting state for gene " << i);
         genosect_t gs = genome[i];
         genosect_t inpit = (0x1 << inputs[i]);
-#ifdef DEBUG
-        bitset<Genosect_Width> bs_gs(gs);
-        bitset<Genosect_Width> bs_inpit(inpit);
-        DBG2 ("genome sect            : "<< bs_gs);
-        DBG2 ("iterator into that sect: " << bs_inpit << "...");
-#endif
         state_t num = ((gs & inpit) ? 0x1 : 0x0);
-        //DBG2 ("... which gives " << (unsigned int)num);
         if (num) {
             state |= (0x1 << (N_Ins-(i+ExtraOffset)));
         } else {
@@ -583,32 +640,6 @@ show_genome (const array<genosect_t, N_Genes>& genome)
         }
         cout << endl;
     }
-}
-
-/*!
- * Return a random single precision number between 0 and 1.
- */
-float
-randFloat (void)
-{
-#ifndef USE_SIMPLE_RAND
-    return static_cast<float>(UNI((&rd)));
-#else
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-#endif
-}
-
-/*!
- * Return a random double precision number between 0 and 1.
- */
-double
-randDouble (void)
-{
-#ifndef USE_SIMPLE_RAND
-    return static_cast<double>(UNI_D((&rd)));
-#else
-    return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-#endif
 }
 
 /*!

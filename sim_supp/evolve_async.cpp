@@ -1,12 +1,9 @@
 /*
- * Evolves genome repeatedly according to the fitness function described in the paper associated
- * with this code.
+ * Evolves genome repeatedly with asynchronous updating of the state.
  *
  * This version of the program takes parameter info from a JSON file.
  *
- * Additionally, this version of the program (will be) is able to evolve towards any number of
- * target state contexts. The original version (including the standalone version) was constrained
- * to work with 2 contexts; 'anterior' and 'posterior'.
+ * As 'async' option in JSON may mean we can incorporate this way of running into evolve.cpp
  *
  * Author: S James
  * Date: September 2019.
@@ -166,11 +163,6 @@ int main (int argc, char** argv)
     // Whether to save the larger "gensplus" files.
     const bool save_gensplus = root.get ("save_gensplus", true).asBool();
 
-    // Whether to evaluate fitness with asynchronous updating of gene states or (by default)
-    // synchronous updating.
-    const bool async_devel = root.get ("async_devel", false).asBool();
-    const double async_threshold = root.get ("async_threshold", 0.95).asDouble();
-
     // Done getting params
     LOG ("pOn: " << pOn);
     LOG ("Initial states:");
@@ -217,10 +209,6 @@ int main (int argc, char** argv)
     // Count F=1 genomes to print out at the end.
     unsigned long long int f1count = 0;
 
-    // Set the fitness threshold at which we say the system is fully fit. For synchronous
-    // development, this should be exactly 1.
-    double fitness_threshold = async_devel ? async_threshold : 1.0;
-
     while (gen < nGenerations) {
 
         // At the start of the loop, and every time fitness of 1.0 is achieved, generate a random
@@ -229,10 +217,10 @@ int main (int argc, char** argv)
 
         // Make a copy of the genome, in case evolving it leads to a less fit genome, then
         // evaluate the fitness of the genome.
-        double a = evaluate_fitness (refg, initials, targets, async_devel);
+        double a = evaluate_fitness (refg, initials, targets);
 
         // a randomly selected genome can be maximally fit
-        if (a>=fitness_threshold) {
+        if (a==1.0) {
             generations.push_back (geninfo(gen-lastgen, gen-lastf1, a));
             lastgen = gen;
             lastf1 = gen;
@@ -251,7 +239,7 @@ int main (int argc, char** argv)
         // random_genome() again.
 
         // Test fitness to determine whether we should evolve.
-        while (a < fitness_threshold) {
+        while (a < 1.0) {
             copy_genome (refg, newg);
 #ifdef RECORD_ALL_FITNESS
             AllBasins ab1 (newg);
@@ -274,7 +262,7 @@ int main (int argc, char** argv)
             if (gen >= nGenerations) {
                 break;
             }
-            double b = evaluate_fitness (newg, initials, targets, async_devel);
+            double b = evaluate_fitness (newg, initials, targets);
 
             // DRIFT: New fitness < old fitness; NO DRIFT: New fitness <= old fitness
             if (drift ? b < a : b <= a) {
@@ -303,11 +291,11 @@ int main (int argc, char** argv)
                 netinfo.back().push_back (niinc);
 #endif
                 // Record the fitness increase in generations:
-                if (save_gensplus || b>=fitness_threshold) {
+                if (save_gensplus || b==1.0) {
                     generations.push_back (geninfo(gen-lastgen, gen-lastf1, b));
                 }
                 lastgen = gen;
-                if (b>=fitness_threshold) {
+                if (b==1.0) {
                     lastf1 = gen;
                     DBG ("F=1 at generation " << gen);
                     ++f1count;
@@ -353,9 +341,6 @@ int main (int argc, char** argv)
     pathss << "withf_";
 #endif
     pathss << "nc" << nContexts;
-    if (async_devel == true) {
-        pathss << "_async";
-    }
     pathss << "_I";
     for (unsigned int i = 0; i < nContexts; ++i) {
         if (i) { pathss << "-"; }
@@ -389,7 +374,7 @@ int main (int argc, char** argv)
     }
     for (unsigned int i = 0; i < generations.size(); ++i) {
         // One file has the time taken to get to F=1
-        if (generations[i].fit >= fitness_threshold) {
+        if (generations[i].fit == 1.0) {
             f << generations[i].gen_0 << endl;
         }
         if (save_gensplus) {
@@ -423,9 +408,6 @@ int main (int argc, char** argv)
                 pathss2 << logdir << "/evolutions/evolve_nodrift_withf_";
             }
             pathss2 << "nc" << nContexts;
-            if (async_devel == true) {
-                pathss2 << "_async";
-            }
             pathss2 << "_I";
             for (unsigned int i = 0; i < nContexts; ++i) {
                 if (i) { pathss2 << "-"; }

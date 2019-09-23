@@ -30,9 +30,9 @@ struct Implicant
               int m = 0, bool
               u = false)
         : implicant(i)
-        , vars(_vars)
         , mask(m)
         , ones(0)
+        , vars(_vars)
         , used(u)
     {
         if (t == "") {
@@ -280,9 +280,9 @@ public:
                 this->ind = i;
             }
         }
-        bool f;
         this->fin = false;
 #ifdef VERBOSEOUT
+        bool f;
         cout << "-------------------------------------------------------\n";
         for (size_t j = 0; j < M0.size(); ++j) {
             cout << "\tF = ";
@@ -312,7 +312,7 @@ public:
     }
 
     //! Run after go()
-    unsigned int complexity (void) {
+    double complexity (void) {
         this->cplexity = 0;
 
         this->outof = 1 << this->vars;
@@ -322,7 +322,7 @@ public:
                 this->cplexity++;
             }
         }
-        return this->cplexity;
+        return (double)this->cplexity/(double)this->outof;
     }
 
     //! Run after go()

@@ -102,7 +102,7 @@ int main (int argc, char** argv)
     double f = evaluate_fitness (g);
     LOG ("Fitness (using " << FF_NAME << ") for that genome is " << f);
 
-    double cmplx;
+    double cmplx = 0.0;
     for (unsigned int i = 0; i < N_Genes; ++i) {
         Quine Q(N_Genes);
         for (unsigned int j = 0; j<(1<<N_Genes); ++j) {

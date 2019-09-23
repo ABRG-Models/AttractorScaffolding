@@ -12,6 +12,7 @@
 #include <string>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fstream>
 
 using namespace std;
 
@@ -29,6 +30,7 @@ using namespace std;
 // Common code
 #include "lib.h"
 #include "quine.h"
+#include "basins.h"
 
 // The fitness function used here
 #include "fitness.h"
@@ -61,7 +63,18 @@ int main (int argc, char** argv)
 
     unsigned int ntrials = 10000;
 
+    double numBasins = 0.0;
+    double meanAttractorLen = 0.0;
+
     array<genosect_t, N_Genes > genome;
+
+    ofstream fout;
+    fout.open ("./data/complexity_fit.csv", ios::out|ios::trunc);
+    if (!fout.is_open()) {
+        cerr << "Failed to open output file." << endl;
+        return -1;
+    }
+    // Header: canalyzingness,QMcomplexity,numBasins,meanAttractorLen
 
     for (unsigned int i = 0; i < ntrials; ++i) {
         //cout << "+" << flush;
@@ -75,6 +88,7 @@ int main (int argc, char** argv)
             cout << i << flush;
         }
         canalvalues[c] += 1;
+        fout << c << ",";
 
         // Determine complexity (Quine-McCluskey algorithm)
         double cmplx = 0.0;
@@ -88,11 +102,25 @@ int main (int argc, char** argv)
             Q.go();
             cmplx += Q.complexity();
         }
-        //cout << "Mean complexity: " << (cmplx/(double)N_Genes) << "/" << (1<<N_Genes) << endl;
+        cmplx /= (double)N_Genes; // mean complexity per gene
         complexity += cmplx;
+        fout << cmplx << ",";
+
+        // Basins analysis
+        AllBasins ab (genome);
+        unsigned int nb = ab.getNumBasins();
+        fout << nb << ",";
+        numBasins += static_cast<double>(nb);
+        double mal = ab.meanAttractorLength();
+        fout << mal << endl;
+        meanAttractorLen += mal;
     }
     complexity /= (double)N_Genes;
     complexity /= (double)ntrials;
+    numBasins /= (double)ntrials;
+    meanAttractorLen /= (double)ntrials;
+
+    fout.close();
 
     // Output results
     cout << "Number of fit genomes tested: " << ntrials << endl;
@@ -102,6 +130,8 @@ int main (int argc, char** argv)
         ++m;
     }
     cout << "Mean complexity of fit genomes: " << complexity << endl;
+    cout << "Mean number of basins of attraction: " << numBasins << endl;
+    cout << "Mean attractor length: " << meanAttractorLen << endl;
 
     return 0;
 }

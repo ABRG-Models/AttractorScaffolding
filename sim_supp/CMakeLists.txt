@@ -53,12 +53,13 @@ add_executable(mutation6 mutation.cpp)
 target_compile_definitions(mutation6 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(mutation6 facto)
 
-# How many genomes are canalysing in any way?
-add_executable(propcanalyzing propcanalyzing.cpp)
-target_compile_definitions(propcanalyzing PUBLIC N_Genes=5)
+# Analyse complexity of random genomes
+add_executable(complexity_random complexity_random.cpp)
+target_compile_definitions(complexity_random PUBLIC N_Genes=5)
 
-add_executable(prop_fit_canalyzing prop_fit_canalyzing.cpp)
-target_compile_definitions(prop_fit_canalyzing PUBLIC N_Genes=5 USE_FITNESS_4)
+# Analyse complexity of fit genomes
+add_executable(complexity_fit complexity_fit.cpp)
+target_compile_definitions(complexity_fit PUBLIC N_Genes=5 USE_FITNESS_4)
 
 # The null model.
 add_executable(nullmodel nullmodel.cpp)

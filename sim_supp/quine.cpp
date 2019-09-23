@@ -13,6 +13,6 @@ int main()
     Q.addMinterm(5);
     Q.addMinterm(7);
     Q.go();
-    cout << "Complexity: " << Q.complexity() << "/" << Q.outof << endl;
+    cout << "Complexity: " << Q.complexity() << endl;
     cout << "Minimal expression: " << Q.min() << endl;;
 }
