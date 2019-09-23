@@ -149,8 +149,9 @@ for y,fil in enumerate(files):
     else:
         M[y,0] = 0     # no slope known
 
-    M[y,1] = (y+1)*0.05 # p, the flip probability.
+    M[y,1] = 0.1 # p, the flip probability.
     M[y,2] = np.mean(D) # mean generations, in 10K
+    print ('Mean generations to evolve for {0} is {1}'.format(lbls[y], M[y,2]))
 
 a1.legend(lbls,frameon=False)
 
