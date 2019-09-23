@@ -61,7 +61,7 @@ int main (int argc, char** argv)
     map<unsigned int, unsigned int> canalvalues;
     double complexity = 0.0;
 
-    unsigned int ntrials = 100000;
+    unsigned int ntrials = 10000;
 
     double numBasins = 0.0;
     double meanAttractorLen = 0.0;
