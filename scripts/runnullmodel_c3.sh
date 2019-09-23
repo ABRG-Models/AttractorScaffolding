@@ -20,8 +20,7 @@ cat <<EOF > configs/runnull_c3.json
 }
 EOF
 
-# Run several evolve_js in parallel.
-./${HN}/sim/evolve_j configs/runnull_c3.json & # Repeat 3 contexts with more generations
+./${HN}/sim/evolve configs/runnull_c3.json &
 
 wait
 popd

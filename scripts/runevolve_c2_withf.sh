@@ -18,15 +18,15 @@ cat <<EOF > configs/runevolve_c2.json
 }
 EOF
 
-# Run several evolve_js in parallel.
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.03 &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.05 &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.10 &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.15 &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.20 &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.3  &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.4  &
-./${HN}/sim/evolve-j_withf configs/runevolve_c2.json 0.5  &
+# Run several evolves in parallel.
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.03 &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.05 &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.10 &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.15 &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.20 &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.3  &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.4  &
+./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.5  &
 
 wait
 popd

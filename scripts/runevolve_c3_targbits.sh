@@ -19,7 +19,7 @@ cat <<EOF > configs/runevolve_c3_targbits_4ham.json
     "target":  [ "10000", "00000", "00010" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c3_targbits_4ham.json &
+./${HN}/sim/evolve configs/runevolve_c3_targbits_4ham.json &
 
 # Total of 6 hamming bits difference between targets
 cat <<EOF > configs/runevolve_c3_targbits_6ham.json
@@ -32,7 +32,7 @@ cat <<EOF > configs/runevolve_c3_targbits_6ham.json
     "target":  [ "10000", "00100", "00010" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c3_targbits_6ham.json &
+./${HN}/sim/evolve configs/runevolve_c3_targbits_6ham.json &
 
 # Total of 8 hamming bits difference between targets
 cat <<EOF > configs/runevolve_c3_targbits_8ham.json
@@ -45,7 +45,7 @@ cat <<EOF > configs/runevolve_c3_targbits_8ham.json
     "target":  [ "10000", "00100", "00111" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c3_targbits_8ham.json &
+./${HN}/sim/evolve configs/runevolve_c3_targbits_8ham.json &
 
 
 # Total of 10 hamming bits difference between targets
@@ -59,7 +59,7 @@ cat <<EOF > configs/runevolve_c3_targbits_10ham.json
     "target":  [ "10101", "01010", "00101" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c3_targbits_10ham.json &
+./${HN}/sim/evolve configs/runevolve_c3_targbits_10ham.json &
 
 # Total of 12 hamming bits difference between targets
 cat <<EOF > configs/runevolve_c3_targbits_12ham.json
@@ -72,7 +72,7 @@ cat <<EOF > configs/runevolve_c3_targbits_12ham.json
     "target":  [ "10100", "01010", "00101" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c3_targbits_12ham.json &
+./${HN}/sim/evolve configs/runevolve_c3_targbits_12ham.json &
 
 wait
 popd

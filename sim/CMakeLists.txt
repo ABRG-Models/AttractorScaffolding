@@ -2,11 +2,6 @@
 # but always with N_Genes=5. Operates in the "drift" case, where the
 # evolution of a new genome of equal fitness to the old one DOES
 # replace the old one.
-add_executable(evolve evolve.cpp)
-target_compile_definitions(evolve PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4)
-
-add_executable(evolve6 evolve.cpp)
-target_compile_definitions(evolve6 PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 N_Genes=6)
 
 # The main evolve program compiled to use json parameter config file
 if (EXISTS ${JSONLIBLINK})
@@ -14,43 +9,22 @@ if (EXISTS ${JSONLIBLINK})
   # Have libjson.a/dylib; assume we have json/json.h in include path somewhere...
   message(INFO "We have JSON library to link against; compiling evolve_json and friends.")
 
-  add_executable(evolve_j evolve_json.cpp)
-  target_compile_definitions(evolve_j PUBLIC USE_FITNESS_4 N_Genes=5)
-  target_link_libraries(evolve_j ${JSONLIBLINK})
+  add_executable(evolve evolve.cpp)
+  target_compile_definitions(evolve PUBLIC USE_FITNESS_4 N_Genes=5)
+  target_link_libraries(evolve ${JSONLIBLINK})
 
-  add_executable(evolve_j_withf evolve_json.cpp)
-  target_compile_definitions(evolve_j_withf PUBLIC USE_FITNESS_4 N_Genes=5 RECORD_ALL_FITNESS)
-  target_link_libraries(evolve_j_withf ${JSONLIBLINK})
+  add_executable(evolve_withf evolve.cpp)
+  target_compile_definitions(evolve_withf PUBLIC USE_FITNESS_4 N_Genes=5 RECORD_ALL_FITNESS)
+  target_link_libraries(evolve_withf ${JSONLIBLINK})
 
-  add_executable(evolve6_j evolve_json.cpp)
-  target_compile_definitions(evolve6_j PUBLIC USE_FITNESS_4 N_Genes=6)
-  target_link_libraries(evolve6_j ${JSONLIBLINK})
+  add_executable(evolve6 evolve.cpp)
+  target_compile_definitions(evolve6 PUBLIC USE_FITNESS_4 N_Genes=6)
+  target_link_libraries(evolve6 ${JSONLIBLINK})
 
-  add_executable(evolve6_j_withf evolve_json.cpp)
-  target_compile_definitions(evolve6_j_withf PUBLIC USE_FITNESS_4 N_Genes=6 RECORD_ALL_FITNESS)
-  target_link_libraries(evolve6_j_withf ${JSONLIBLINK})
+  add_executable(evolve6_withf evolve.cpp)
+  target_compile_definitions(evolve6_withf PUBLIC USE_FITNESS_4 N_Genes=6 RECORD_ALL_FITNESS)
+  target_link_libraries(evolve6_withf ${JSONLIBLINK})
 endif()
-
-# The main evolve program operating in the "nodrift" case, where the
-# evolution of a new genome of equal fitness to the old one does NOT
-# replace the old one.
-add_executable(evolve_nodrift evolve.cpp)
-target_compile_definitions(evolve_nodrift PUBLIC USE_FITNESS_4)
-
-add_executable(evolve_nodrift_n6 evolve.cpp)
-target_compile_definitions(evolve_nodrift_n6 PUBLIC N_Genes=6 USE_FITNESS_4)
-
-add_executable(evolve_nodrift_n7 evolve.cpp)
-target_compile_definitions(evolve_nodrift_n7 PUBLIC N_Genes=7 USE_FITNESS_4)
-
-# Like the evolve programs, but saving every fitness value at every
-# generation. When fitness reaches 1, start from a new random genome
-# and create a new file to save the data into. Again, N_Genes=5.
-add_executable(evolve_withf evolve.cpp)
-target_compile_definitions(evolve_withf PUBLIC STIPULATE_DRIFT_CASE USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=10000)
-# And nodrift version of the above:
-add_executable(evolve_nodrift_withf evolve.cpp)
-target_compile_definitions(evolve_nodrift_withf PUBLIC USE_FITNESS_4 RECORD_ALL_FITNESS N_Generations=100000)
 
 # This is essentially a debugging/example program, which sets up a
 # random genome, and evolves it one generation only.

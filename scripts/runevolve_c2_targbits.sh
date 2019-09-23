@@ -19,7 +19,7 @@ cat <<EOF > configs/runevolve_c2_targbits_5ham.json
     "target":  [ "10101", "01010" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c2_targbits_5ham.json &
+./${HN}/sim/evolve configs/runevolve_c2_targbits_5ham.json &
 
 # 4 bits
 cat <<EOF > configs/runevolve_c2_targbits_4ham.json
@@ -32,7 +32,7 @@ cat <<EOF > configs/runevolve_c2_targbits_4ham.json
     "target":  [ "10101", "11010" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c2_targbits_4ham.json &
+./${HN}/sim/evolve configs/runevolve_c2_targbits_4ham.json &
 
 # 3 bits
 cat <<EOF > configs/runevolve_c2_targbits_3ham.json
@@ -45,7 +45,7 @@ cat <<EOF > configs/runevolve_c2_targbits_3ham.json
     "target":  [ "10101", "11110" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c2_targbits_3ham.json &
+./${HN}/sim/evolve configs/runevolve_c2_targbits_3ham.json &
 
 # 2 bits
 cat <<EOF > configs/runevolve_c2_targbits_2ham.json
@@ -58,7 +58,7 @@ cat <<EOF > configs/runevolve_c2_targbits_2ham.json
     "target":  [ "10101", "11111" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c2_targbits_2ham.json &
+./${HN}/sim/evolve configs/runevolve_c2_targbits_2ham.json &
 
 # 1 bits
 cat <<EOF > configs/runevolve_c2_targbits_1ham.json
@@ -71,7 +71,7 @@ cat <<EOF > configs/runevolve_c2_targbits_1ham.json
     "target":  [ "10101", "10111" ]
 }
 EOF
-./${HN}/sim/evolve_j configs/runevolve_c2_targbits_1ham.json &
+./${HN}/sim/evolve configs/runevolve_c2_targbits_1ham.json &
 
 
 wait

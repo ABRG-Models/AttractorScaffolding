@@ -9,12 +9,10 @@ source script_common.sh
 echo "Using build directory ${HN} for executables"
 
 NCPU=`nproc`
-#NCPU=32
-
-NGEN=100000000000
-#NGEN=9999999 # for debug
+NGEN=200000000000
 NGEN_PERPROC=$((NGEN / NCPU))
 echo "N gen per process: ${NGEN_PERPROC}"
+
 for i in $(seq 1 ${NCPU}); do
 
     mkdir -p ./data/null/${i}
@@ -30,7 +28,7 @@ for i in $(seq 1 ${NCPU}); do
 }
 EOF
 
-    sleep 1 && ./${HN}/sim/evolve_j configs/runnull_c4_${i}.json &
+    sleep 1 && ./${HN}/sim/evolve configs/runnull_c4_${i}.json &
 done
 
 wait
