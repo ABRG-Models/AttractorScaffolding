@@ -46,6 +46,7 @@ print ('c4randommean: {0}'.format(c4randommean))
 
 print ('min gens to evolve: {0}, {1}, {2} (c2, c3, c4)'.format(np.min(M2[:,2]),np.min(M3[:,2]),np.min(M4[:,2])))
 a1 = f1.add_subplot (1,1,1)
+a2 = a1.twinx()
 
 ctxt = np.array([2,3,4])
 speedup = np.array([0,0,0])
@@ -57,10 +58,14 @@ pmin2 = M2[np.where(np.min(M2[:,2]) == M2[:,2]),1][0][0]
 pmin3 = M3[np.where(np.min(M3[:,2]) == M3[:,2]),1][0][0]
 pmin4 = M4[np.where(np.min(M4[:,2]) == M4[:,2]),1][0][0]
 
-a1.plot(ctxt, np.log10(speedup), marker='o', linestyle='--', color=col.royalblue, markersize=12)
+lns1=a1.plot(ctxt, np.log10(speedup), marker='o', linestyle='--', color=col.royalblue, markersize=12, label='max speedup vs. random')
 
 rmean = np.array([c2randommean, c3randommean, c4randommean])
-a1.plot(ctxt, np.log10(rmean), marker='o', linestyle='--', color=col.crimson, markersize=12)
+lns2=a2.plot(ctxt, np.log10(rmean), marker='o', linestyle='--', color=col.crimson, markersize=12, label='mean random genomes to f=1')
+
+lns = lns1+lns2
+labs = [l.get_label() for l in lns]
+a1.legend(lns, labs, loc='upper left')
 
 addtext = False
 if addtext:
@@ -82,7 +87,14 @@ if addtext:
 
 a1.set_xlabel('Contexts')
 a1.set_ylabel('log$_{10}$(Speedup)')
+a2.set_ylabel('log$_{10}$(Random genomes)')
 a1.set_xticks([2,3,4])
+
+a1.set_ylim([1,8])
+a2.set_ylim([4,11])
+
+[i.set_color(col.royalblue) for i in a1.get_yticklabels()]
+[i.set_color(col.crimson) for i in a2.get_yticklabels()]
 
 f1.tight_layout()
 plt.savefig ('figures/speedup.png')
