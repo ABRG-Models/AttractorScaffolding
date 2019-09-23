@@ -106,7 +106,7 @@ def compute_slopes (files, nf):
         print ('M[y,2] is {0}'.format(M[y,2]))
     return M
 
-compute = False
+compute = True
 if compute:
     M2 = compute_slopes (filesc2, nfc2)
     M3 = compute_slopes (filesc3, nfc3)

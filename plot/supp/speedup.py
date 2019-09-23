@@ -17,7 +17,7 @@ matplotlib.rc('font', **fnt)
 
 f1 = plt.figure(figsize=(10,8)) # Figure object
 
-print ('Be sure to run evolve_mean_vs_p.py with compute=True first')
+print ('Be sure to run evospeed_mean_vs_p.py with compute=True first')
 M2 = np.load ('tmp/M2.npy')
 M3 = np.load ('tmp/M3.npy')
 M4 = np.load ('tmp/M4.npy')
@@ -58,6 +58,9 @@ pmin3 = M3[np.where(np.min(M3[:,2]) == M3[:,2]),1][0][0]
 pmin4 = M4[np.where(np.min(M4[:,2]) == M4[:,2]),1][0][0]
 
 a1.plot(ctxt, np.log10(speedup), marker='o', linestyle='--', color=col.royalblue, markersize=12)
+
+rmean = np.array([c2randommean, c3randommean, c4randommean])
+a1.plot(ctxt, np.log10(rmean), marker='o', linestyle='--', color=col.crimson, markersize=12)
 
 addtext = False
 if addtext:
