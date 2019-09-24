@@ -56,6 +56,30 @@ contexttag = 'nc2_I16-0_T21-10'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(5, pp_))
 
+#
+# p = 0.5
+#
+pp=0.5
+# 1 Hamming
+contexttag = 'nc2_I16-0_T21-23'
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+# 2 Hamming
+contexttag = 'nc2_I16-0_T21-31'
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+# 3 Hamming
+contexttag = 'nc2_I16-0_T21-30'
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+# 4 Hamming
+contexttag = 'nc2_I16-0_T21-26'
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+# 5 Hamming
+contexttag = 'nc2_I16-0_T21-10'
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+
+lbls.append ('p=.5')
+
+
+
 mkr=['o','s','v','^','h',  'o','s','v','^','h']
 ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
 
@@ -89,6 +113,8 @@ nbins_g = 25
 lines = []
 fcount = 0
 
+numgraphs = 5
+
 # Plot one point only for each set; this is what will give us the
 # legend looking sensible, with both a point and a line. This is a
 # dirty hack! Complain to matplotlib legend developers.
@@ -101,8 +127,10 @@ for y,fil in enumerate(files):
     bins = np.linspace(1,0.5*np.max(D),nbins)
     h,b = np.histogram (D, bins)
     # Plot points
-    colo = plt.cm.brg((fcount*0.5)/len(files))
-    pp = a1.plot(b[0]/scale,np.log(h)[0],'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    colo = plt.cm.brg((fcount*0.5)/numgraphs)
+    ppp = a1.plot(b[0]/scale,np.log(h)[0],'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    if fcount > 4:
+        break
 
 fcount = 0
 # Plot points proper
@@ -116,15 +144,17 @@ for y,fil in enumerate(files):
     bins = np.linspace(1,0.5*np.max(D),nbins)
     h,b = np.histogram (D, bins)
     # Plot points
-    colo = plt.cm.brg((fcount*0.5)/len(files))
-    pp = a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
+    colo = plt.cm.brg((fcount*0.5)/numgraphs)
+    ppp = a1.plot(b[:-1]/scale,np.log(h),'.',color=colo,marker=mkr[y],markersize=ms[y])
+    if fcount > 4:
+        break
 
 # Plot the best fit lines.
 fcount = 0
 printlines = 1
 for y,fil in enumerate(files):
-    print ('Processing best fit for file: {0}'.format(fil))
     fcount = fcount+1
+    print ('Processing best fit for file: {0} ({1})'.format(fil, fcount))
     nbins = nbins_g
     D = readDataset (fil)
     if D.size == 0:
@@ -141,17 +171,26 @@ for y,fil in enumerate(files):
 
         # Slope is fit[0], Record for a later graph.
         M[y,0] = fit[0]     # slope
-        if printlines:
-            print ('Plotting file {0}'.format(fil))
-            colo = plt.cm.brg((fcount*0.5)/len(files))
+        if printlines and fcount < 6:
+            colo = plt.cm.brg((fcount*0.5)/numgraphs)
             ll = a1.plot(bx,fit_fn(bx),'-',linewidth=2,color=colo)
+        if printlines and fcount == 6:
+            ll = a1.plot(bx,fit_fn(bx),'--',linewidth=2,color=col.lightsteelblue)
 
     else:
         M[y,0] = 0     # no slope known
 
-    M[y,1] = 0.1 # p, the flip probability.
+    if fcount < 6:
+        M[y,1] = 0.1 # p, the flip probability.
+    else:
+        M[y,1] = 0.5 # p, the flip probability.
+
     M[y,2] = np.mean(D) # mean generations, in 10K
-    print ('Mean generations to evolve for {0} is {1}'.format(lbls[y], M[y,2]))
+
+    if fcount > 5:
+        break
+
+# Last thing, plot fit for all the p=0.5 lines.
 
 a1.legend(lbls,frameon=False)
 
@@ -168,6 +207,8 @@ slope_fit_fn = np.poly1d (slope_fit)
 f1.tight_layout()
 plt.savefig ('figures/2ctxt_targbits_p0.1.png')
 plt.savefig ('figures/2ctxt_targbits_p0.1.svg')
+
+#print ('{0}'.format(files))
 
 plt.show()
 

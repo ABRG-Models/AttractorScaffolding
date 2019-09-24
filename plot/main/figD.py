@@ -110,8 +110,8 @@ a1.legend(lbls,frameon=False)
 
 a1.set_ylabel(r'log (evolutions)',fontsize=fs)
 a1.set_xlabel('1000 generations',fontsize=fs)
-a1.set_ylim([0,10])
-a1.set_xlim([-5,200])
+##a1.set_ylim([0,10])
+##a1.set_xlim([-5,200])
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
@@ -120,8 +120,8 @@ slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
 
-plt.savefig ('figures/figDcommon.png')
-plt.savefig ('figures/figDcommon.svg')
+plt.savefig ('figures/figD.png')
+plt.savefig ('figures/figD.svg')
 
 plt.show()
 
