@@ -73,6 +73,10 @@ int main (int argc, char** argv)
         return -1;
     }
 
+    // Header
+
+    fout << "canalyzingness,QMcomplexity,numBasins,meanAttractorLen,bias" << endl;
+
     array<genosect_t, N_Genes > genome;
     for (unsigned int i = 0; i < ntrials; ++i) {
         random_genome (genome);
