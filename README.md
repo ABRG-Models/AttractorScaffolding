@@ -3,7 +3,8 @@
 This implementation of the Boolean network model is written in C++,
 writing out data in text files (comma separated values) into the
 directory data/. It has some python scripts for data visualisation in
-the subdirectory plot/.
+the subdirectory plot/ and scripts to run multiple instances of the
+model in the subdirectory scripts/.
 
 The code is flexible enough to specify 3, 4, 5 or 6 genes for the 'k=n'
 network in which every gene receives input from every other gene,
@@ -39,7 +40,7 @@ hostname command on your computer.
 
 ## Prerequisites:
 
-cmake, a c++ compiler and the library mpir are required. On Ubuntu or Debian:
+cmake, a c++ compiler and the libraries mpir and jsoncpp are required. On Ubuntu or Debian:
 
 ```bash
 sudo apt install cmake build-essential
@@ -62,6 +63,17 @@ sudo make install
 sudo ldconfig # To ensure your system's dynamic linker can find the new libraries
 ```
 
+I compiled jsoncpp like this:
+```sh
+git clone https://github.com/open-source-parsers/jsoncpp.git
+cd jsoncpp
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
 ## Compiling
 
 You should create a sub-directory called build (or alternatively with
@@ -82,16 +94,16 @@ compiled in build/sim/
 To reproduce the essential result of this work, first run:
 
 ```
-./scripts/runevolve.sh
+cd ./scripts/
+./runevolve_c2.sh
 ```
 
 This will generate data files in data/. These can then be plotted with
-plot/plot_figD.py and plot/plot_evospeed.py:
+plot/main/fig4.py.
 
 ```
-cd plot
-python plot_figD.py
-python plot_evospeed.py
+cd plot/main
+python fig4.py
 ```
 
 The result of exhaustively searching the n=3 gene system can be
