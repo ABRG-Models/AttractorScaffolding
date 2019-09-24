@@ -39,6 +39,7 @@ maxgens='5000000000'
 filesc4 = []
 # I reset p for 4 contexts to omit the 0.5 data, as it didn't run long enough.
 p4 = [0.03, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4]
+p4 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.4]
 for pp in p4:
     filesc4.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 # Manually add the p=0.5 data point
@@ -63,7 +64,7 @@ scale = 1.
 
 f1 = plt.figure(figsize=(8,8)) # Figure object
 
-compute = False
+compute = True
 if compute:
     M2 = ca.A.compute_means (filesc2, p)
     M3 = ca.A.compute_means (filesc3, p)
