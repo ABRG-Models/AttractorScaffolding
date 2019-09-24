@@ -58,11 +58,6 @@ if use_absfastest:
     pmin4 = M4[np.where(np.min(M4[:,1]) == M4[:,1]),0][0][0]
 else:
     # Time to solution for p=0.05:
-    print ('{0}'.format(np.where(M2[:,0]==0.05)[0][0] ) )
-    print ('{0}'.format(np.where(M3[:,0]==0.05)[0][0] ) )
-    print ('{0}'.format(np.where(M4[:,0]==0.05)[0][0] ) )
-    m2i = np.where(M2[:,0]==0.05)[0][0]
-    print ('{0}'.format(M2[m2i, 1]))
     timetosoln = np.array([M2[np.where(M2[:,0]==0.05)[0][0] ,1],
                            M3[np.where(M3[:,0]==0.05)[0][0] ,1],
                            M4[np.where(M4[:,0]==0.05)[0][0] ,1]])

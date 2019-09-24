@@ -104,16 +104,16 @@ expfit4 = np.exp (means_fit4[1]) * np.exp (means_fit4[0]*expx4)
 a3 = f1.add_subplot (1,1,1)
 #print ('{0} vs. {1}'.format(np.shape(M2[:,2]),  np.shape(M2[:,3])))
 #a3.errorbar (M2[:,0], M2[:,1], yerr=2*M2[:,2], marker='o', linestyle='None', color=col.crimson, markersize=2)
-a3.plot (M2[:,0], M2[:,1], marker='o', linestyle='None', color=col.crimson, markersize=10)
-a3.plot (expx2, expfit2, marker='None', linestyle='-', color=col.crimson, markersize=10)
+a3.plot (M2[:,0], M2[:,1], marker='o', linestyle='None',  color=col.mediumblue, markersize=10)
+a3.plot (expx2, expfit2, marker='None', linestyle='-', color=col.mediumblue, markersize=10)
 
-#a3.errorbar (M3[:,0], 2*M3[:,1], yerr=2*M3[:,2], marker='o', linestyle='None', color=col.royalblue, markersize=2)
-a3.plot (M3[:,0], M3[:,1], marker='s', linestyle='None', color=col.royalblue, markersize=10)
-a3.plot (expx3, expfit3, marker='None', linestyle='-', color=col.royalblue, markersize=10)
+#a3.errorbar (M3[:,0], 2*M3[:,1], yerr=2*M3[:,2], marker='o', linestyle='None', color=col.darkorchid3, markersize=2)
+a3.plot (M3[:,0], M3[:,1], marker='s', linestyle='None', color=col.darkorchid3, markersize=10)
+a3.plot (expx3, expfit3, marker='None', linestyle='-', color=col.darkorchid3, markersize=10)
 
-#a3.errorbar (M4[:,0], 2*M4[:,1], yerr=2*M4[:,2], marker='o', linestyle='None', color=col.turquoise3, markersize=2)
-a3.plot (M4[:,0], M4[:,1], marker='^', linestyle='None', color=col.turquoise3, markersize=10)
-a3.plot (expx4, expfit4, marker='None', linestyle='-', color=col.turquoise3, markersize=10)
+#a3.errorbar (M4[:,0], 2*M4[:,1], yerr=2*M4[:,2], marker='o', linestyle='None', color=col.firebrick1, markersize=2)
+a3.plot (M4[:,0], M4[:,1], marker='^', linestyle='None', color=col.firebrick1, markersize=10)
+a3.plot (expx4, expfit4, marker='None', linestyle='-', color=col.firebrick1, markersize=10)
 
 # Plot a point showing the mean number of f=1 genomes when randomly sampling
 # 2 contexts: 62115 / 6.2e4
@@ -121,9 +121,9 @@ a3.plot (expx4, expfit4, marker='None', linestyle='-', color=col.turquoise3, mar
 # 4 contexts: ?
 plot_nulls = False
 if plot_nulls:
-    a3.plot ([0,0.5], [c2randommean,c2randommean], marker='None', linestyle='-', color=col.crimson)
-    a3.plot ([0,0.5], [c3randommean,c3randommean], marker='None', linestyle='-', color=col.royalblue)
-    a3.plot ([0,0.5], [c4randommean,c4randommean], marker='None', linestyle='-', color=col.turquoise3)
+    a3.plot ([0,0.5], [c2randommean,c2randommean], marker='None', linestyle='-', color=col.mediumblue)
+    a3.plot ([0,0.5], [c3randommean,c3randommean], marker='None', linestyle='-', color=col.darkorchid3)
+    a3.plot ([0,0.5], [c4randommean,c4randommean], marker='None', linestyle='-', color=col.firebrick1)
 
 a3.legend(['2 contexts',
            'Fit: {0:.1f} e$^{{{1:.1f}p}}$'.format(np.exp(means_fit2[1]), means_fit2[0]),
@@ -133,7 +133,7 @@ a3.legend(['2 contexts',
            'Fit: {0:.1f} e$^{{{1:.1f}p}}$'.format(np.exp(means_fit4[1]), means_fit4[0])], frameon=False, fontsize=16)
 
 a3.set_xlabel('p')
-a3.set_ylabel('1000 x $\mu(p)$ ')
+a3.set_ylabel('1000 x $\mu$(p) ')
 a3.set_ylim([0,1e5])
 a3.set_yticklabels([0, 20, 40, 60, 80, 100])
 f1.tight_layout()
