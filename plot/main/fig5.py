@@ -34,27 +34,27 @@ pp_='.1'
 # 1 Hamming
 contexttag = 'nc2_I16-0_T21-23'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-lbls.append ('p={1}, h={0}'.format(1, pp_))
+lbls.append ('$p={1}$, $h={0}$'.format(1, pp_))
 
 # 2 Hamming
 contexttag = 'nc2_I16-0_T21-31'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-lbls.append ('p={1}, h={0}'.format(2, pp_))
+lbls.append ('$p={1}$, $h={0}$'.format(2, pp_))
 
 # 3 Hamming
 contexttag = 'nc2_I16-0_T21-30'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-lbls.append ('p={1}, h={0}'.format(3, pp_))
+lbls.append ('$p={1}$, $h={0}$'.format(3, pp_))
 
 # 4 Hamming
 contexttag = 'nc2_I16-0_T21-26'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-lbls.append ('p={1}, h={0}'.format(4, pp_))
+lbls.append ('$p={1}$, $h={0}$'.format(4, pp_))
 
 # 5 Hamming
 contexttag = 'nc2_I16-0_T21-10'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
-lbls.append ('p={1}, h={0}'.format(5, pp_))
+lbls.append ('$p={1}$, $h={0}$'.format(5, pp_))
 
 #
 # p = 0.5
@@ -76,7 +76,7 @@ files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, cont
 contexttag = 'nc2_I16-0_T21-10'
 files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
-lbls.append ('p=.5')
+lbls.append ('$p=.5$')
 
 
 
@@ -128,9 +128,10 @@ for y,fil in enumerate(files):
     h,b = np.histogram (D, bins)
     # Plot points
     colo = plt.cm.brg((fcount*0.5)/numgraphs)
-    ppp = a1.plot(b[0]/scale,np.log(h)[0],'.-',color=colo,marker=mkr[y],markersize=ms[y])
+    ppp = a1.plot(b[0]/scale,np.log(h)[0],'.-',linewidth=2,color=colo,marker=mkr[y],markersize=ms[y])
     if fcount > 4:
         break
+ppp = a1.plot(b[0]/scale,np.log(h)[0],'--',linewidth=2,color=col.black,marker='None')
 
 fcount = 0
 # Plot points proper
@@ -175,7 +176,7 @@ for y,fil in enumerate(files):
             colo = plt.cm.brg((fcount*0.5)/numgraphs)
             ll = a1.plot(bx,fit_fn(bx),'-',linewidth=2,color=colo)
         if printlines and fcount == 6:
-            ll = a1.plot(bx,fit_fn(bx),'--',linewidth=2,color=col.lightsteelblue)
+            ll = a1.plot(bx,fit_fn(bx),'--',linewidth=2,color=col.black )
 
     else:
         M[y,0] = 0     # no slope known
@@ -186,7 +187,7 @@ for y,fil in enumerate(files):
         M[y,1] = 0.5 # p, the flip probability.
 
     M[y,2] = np.mean(D) # mean generations, in 10K
-
+    print ('Mean generations to f=1 for p={1}: {0} (fcount {2})'.format(M[y,2],M[y,1],fcount))
     if fcount > 5:
         break
 
@@ -197,18 +198,17 @@ a1.legend(lbls,frameon=False)
 a1.set_ylabel(r'log (evolutions)',fontsize=fs)
 a1.set_xlabel('1000 generations',fontsize=fs)
 a1.set_ylim([0,10])
-a1.set_xlim([-3,28])
+a1.set_xlim([-1,28])
 a1.set_axisbelow(True)
 
 # Slope vs p fit. Fit line to most of the points.
 slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
 slope_fit_fn = np.poly1d (slope_fit)
 
+a1.set_aspect(np.diff(a1.get_xlim())/np.diff(a1.get_ylim()))
 f1.tight_layout()
-plt.savefig ('figures/2ctxt_targbits_p0.1.png')
-plt.savefig ('figures/2ctxt_targbits_p0.1.svg')
 
-#print ('{0}'.format(files))
+plt.savefig ('figures/fig5.pdf')
 
 plt.show()
 

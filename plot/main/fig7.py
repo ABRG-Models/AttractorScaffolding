@@ -75,12 +75,12 @@ speedup[1] = c3randommean/timetosoln[1]
 speedup[2] = c4randommean/timetosoln[2]
 
 if use_absfastest:
-    lns1=a1.plot(ctxt, np.log(timetosoln), marker='^', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$a = \mu$ (p=.04 or .03)')
+    lns1=a1.plot(ctxt, np.log(timetosoln), marker='^', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$a = \mu (p=.04 or .03)$')
 else:
-    lns1=a1.plot(ctxt, np.log(timetosoln), marker='^', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$a = \mu$ (p=.05)')
+    lns1=a1.plot(ctxt, np.log(timetosoln), marker='^', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$a = \mu (p=.05)$')
 
 rmean = np.array([c2randommean, c3randommean, c4randommean])
-lns2=a1.plot(ctxt, np.log(rmean), marker='s', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$b = \mu$ (p=.5)')
+lns2=a1.plot(ctxt, np.log(rmean), marker='s', linestyle='-', linewidth=2, color=col.black, markersize=12, label='$b = \mu (p=.50)$')
 
 
 lns3=a1.plot(ctxt, np.log(speedup), marker='o', linestyle='-', linewidth=4, color=col.black, markersize=12, label='$b/a$')
@@ -93,14 +93,16 @@ a1.set_xlabel('contexts ($X$)')
 a1.set_ylabel('log(generations)')
 #a2.set_ylabel('log$_{10}$(Random genomes)')
 a1.set_xticks([2,3,4])
-a1.set_yticks([5, 10, 15, 20])
-#a1.set_ylim([1,8])
+a1.set_yticks([5, 10, 15, 20, 25])
+a1.set_ylim([3,27])
 #a2.set_ylim([4,11])
 
 #[i.set_color(col.royalblue) for i in a1.get_yticklabels()]
 #[i.set_color(col.crimson) for i in a2.get_yticklabels()]
 
+a1.set_aspect(np.diff(a1.get_xlim())/np.diff(a1.get_ylim()))
 f1.tight_layout()
-plt.savefig ('figures/speedup.png')
+
+plt.savefig ('figures/fig7.pdf')
 
 plt.show()

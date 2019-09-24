@@ -36,7 +36,7 @@ for pp in p:
 # Make labels
 lbls = []
 for pp in p:
-    lbls.append ('p=.{0}'.format(int(round(10*pp))))
+    lbls.append ('$p=.{0}$'.format(int(round(10*pp))))
 
 mkr=['o','s','v','^','h',  'o','s','v','^','h']
 ms= [ 9,  9,  9,  9,  9,    9,  9,  9,  9,  9 ]
@@ -90,10 +90,9 @@ a1.legend(lbls,frameon=False)
 a1.set_ylabel(r'log (fitness increments)',fontsize=fs)
 a1.set_xlabel('log (generations)',fontsize=fs)
 a1.set_axisbelow(True)
-
+a1.set_aspect(np.diff(a1.get_xlim())/np.diff(a1.get_ylim()))
 f1.tight_layout()
-plt.savefig ('figures/fitinc_loglog.png')
-plt.savefig ('figures/fitinc_loglog.svg')
+plt.savefig ('figures/figS1.pdf')
 
 plt.show()
 

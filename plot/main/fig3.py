@@ -129,7 +129,6 @@ if plot_states:
     f1.legend()
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
-plt.savefig ('figures/figC.png')
-plt.savefig ('figures/figC.svg')
+plt.savefig ('figures/fig3.pdf')
 
 plt.show()
