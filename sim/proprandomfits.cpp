@@ -50,10 +50,13 @@ using namespace std;
 // Define a macro for evaluating the fitness to avoid writing it out twice
 #define EVALUATE_FITNESS(genome_) {                                     \
         double f = evaluate_fitness (genome_);                          \
+        unsigned int c = canalyzingness (genome_);                      \
         if (f > 0.0) {                                                  \
             ++numfit;                                                   \
+            if (c) { ++numfit_and_canalysing; }                         \
             if (f == 1.0) {                                             \
                 ++numperfect;                                           \
+                if (c) { ++numperfect_and_canalysing; }                 \
             }                                                           \
         }                                                               \
         if (g%1000000 == 0) {                                           \
@@ -80,7 +83,9 @@ int main (int argc, char** argv)
 
     // To store the results of this program
     unsigned long long int numfit = 0;
+    unsigned long long int numfit_and_canalysing = 0;
     unsigned long long int numperfect = 0;
+    unsigned long long int numperfect_and_canalysing = 0;
 
     // Compute the dimensionality of the genome space
     unsigned long long int N = (N_Genes * (1ULL << N_Ins));
@@ -171,6 +176,8 @@ int main (int argc, char** argv)
     cout << ntrials << "," << numfit << "," << numperfect << endl;
 
     LOG ("For " << N_Genes << " genes, there were " << numfit << " fit genomes out of " << ntrials << " of which " << numperfect << " had F=1");
+    LOG ("Of the f=1 genomes, " << numperfect_and_canalysing << " were canalysing in at least one of the genome sections");
+    LOG ("Of the f>0 genomes, " << numfit_and_canalysing << " were canalysing in at least one of the genome sections");
     LOG ("That's " << (double)numfit / ntrials << " and "<< (double)numperfect / ntrials << " as proportions.");
     LOG ("That's " << (100.0 * (double)numfit / ntrials) << "% and " << (100.0 * (double)numperfect / ntrials) << "%.");
     return 0;
