@@ -126,11 +126,15 @@ if len(files) == 0:
 specialfile=files[sfnum]
 print ('Special file: {0}'.format(specialfile))
 A, B = readDataset(specialfile)
-f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy, label='{0}'.format(sfnum))
+a1 = f1.plot (A[:,0]/FromValue,A[:,1],'-',linewidth=5, color=col.navy, label='{0}'.format(sfnum))
 if plot_states:
     f1.legend()
 f1.set_xlabel(str(FromValue) + ' generations');
 f1.set_ylabel('fitness');
+
+f1.set_aspect(np.diff(f1.get_xlim())/np.diff(f1.get_ylim()))
+F1.tight_layout()
+
 plt.savefig ('figures/fig3.pdf')
 
 plt.show()
