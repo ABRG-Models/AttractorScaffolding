@@ -18,16 +18,6 @@ cat <<EOF > configs/runevolve_c2.json
 }
 EOF
 
-# Run several evolves in parallel.
-./${HN}/sim/evolve configs/runevolve_c2.json 0.03 &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.05 &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.10 &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.15 &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.20 &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.3  &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.4  &
-./${HN}/sim/evolve configs/runevolve_c2.json 0.5  &
-
 # Extra:
 ./${HN}/sim/evolve configs/runevolve_c2.json 0.02 &
 ./${HN}/sim/evolve configs/runevolve_c2.json 0.04 &

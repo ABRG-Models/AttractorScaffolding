@@ -37,7 +37,7 @@ import sebcolour
 col = sebcolour.Colour
 
 # Font size for plotting
-fs=16
+fs=20
 
 # Set a default fontsize for matplotlib:
 fnt = {'family' : 'DejaVu Sans',
@@ -47,7 +47,7 @@ matplotlib.rc('font', **fnt)
 
 scale = 1000.
 
-f1 = plt.figure(figsize=(10,8)) # Figure object
+f1 = plt.figure(figsize=(8,8)) # Figure object
 
 # Global choice of nbins
 nbins_g = 50

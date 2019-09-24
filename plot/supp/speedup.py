@@ -9,13 +9,13 @@ import sebcolour
 col = sebcolour.Colour
 
 # Font size for plotting
-fs=16
+fs=20
 fnt = {'family' : 'DejaVu Sans',
        'weight' : 'regular',
        'size'   : fs}
 matplotlib.rc('font', **fnt)
 
-f1 = plt.figure(figsize=(10,8)) # Figure object
+f1 = plt.figure(figsize=(8,8)) # Figure object
 
 print ('Be sure to run evospeed_mean_vs_p.py with compute=True first')
 M2 = np.load ('tmp/M2.npy')
