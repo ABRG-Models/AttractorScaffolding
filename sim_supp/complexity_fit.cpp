@@ -112,8 +112,12 @@ int main (int argc, char** argv)
         fout << nb << ",";
         numBasins += static_cast<double>(nb);
         double mal = ab.meanAttractorLength();
-        fout << mal << endl;
+        fout << mal << ",";
         meanAttractorLen += mal;
+
+        // Bias - set bits vs unset bits
+        double b = bias (genome);
+        fout << b << endl;
     }
     complexity /= (double)N_Genes;
     complexity /= (double)ntrials;

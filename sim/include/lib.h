@@ -1150,4 +1150,18 @@ canalyzingness (const array<genosect_t, N_Genes>& g1)
     return canal;
 }
 
+/*!
+ * Compute the bias; the proportion of set bits in the genome.
+ */
+double
+bias (const array<genosect_t, N_Genes>& g1)
+{
+    unsigned int bits = 0;
+    for (unsigned int i = 0; i < N_Genes; ++i) {
+        for (unsigned int j = 0; j < (0x1 << N_Genes); ++j) {
+            bits += ((g1[i] >> j) & 0x1) ? 1 : 0;
+        }
+    }
+    return (double)bits/(double)(N_Genes*(1<<N_Genes));
+}
 #endif // __LIB_H__
