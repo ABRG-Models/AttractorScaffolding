@@ -18,6 +18,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <limits>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -130,8 +131,15 @@ int main (int argc, char** argv)
     pOn = pOnCmd > -1.0f ? pOnCmd : root.get ("pOn", 0.5).asFloat();
 
     // How many generations in total to evolve for (counting f=1 genomes as you go)
-    const unsigned long long int nGenerations =
+    unsigned long long int nGenerations =
         static_cast<unsigned long long int>(root.get ("nGenerations", N_Generations).asUInt64());
+
+    // If set to >0, then when this number of fit genomes have been found, finish
+    // then. In this case, set nGenerations to unsigned long long int max
+    const unsigned int finishAfterNFit = root.get ("finishAfterNFit", 0).asUInt();
+    if (finishAfterNFit > 0) {
+        nGenerations = numeric_limits<unsigned long long int>::max();
+    }
 
     // How often to output a progress message on stdout
     const unsigned int nGenView = root.get ("nGenView", N_Generations/100).asUInt();
@@ -221,7 +229,7 @@ int main (int argc, char** argv)
     // development, this should be exactly 1.
     double fitness_threshold = async_devel ? async_threshold : 1.0;
 
-    while (gen < nGenerations) {
+    while (gen < nGenerations && (finishAfterNFit==0 || f1count < finishAfterNFit)) {
 
         // At the start of the loop, and every time fitness of 1.0 is achieved, generate a random
         // genome starting point.
@@ -370,9 +378,13 @@ int main (int argc, char** argv)
     stringstream pathss1;
     pathss1 << pathss.str();
 
-    pathss << FF_NAME << "_" << nGenerations << "_gens_" << pOn << ".csv";
-
-    pathss1 << FF_NAME << "_" << nGenerations << "_gensplus_" << pOn << ".csv";
+    if (finishAfterNFit == 0) {
+        pathss << FF_NAME << "_" << nGenerations << "_gens_" << pOn << ".csv";
+        pathss1 << FF_NAME << "_" << nGenerations << "_gensplus_" << pOn << ".csv";
+    } else {
+        pathss << FF_NAME << "_" << finishAfterNFit << "_fits_" << pOn << ".csv";
+        pathss1 << FF_NAME << "_" << finishAfterNFit << "_fitsplus_" << pOn << ".csv";
+    }
 
     f.open (pathss.str().c_str(), ios::out|ios::trunc);
     if (!f.is_open()) {
@@ -436,7 +448,14 @@ int main (int argc, char** argv)
                 if (i) { pathss2 << "-"; }
                 pathss2 << (unsigned int)targets[i];
             }
-            pathss2 << "_" << FF_NAME << "_" << nGenerations <<  "_fitness_" << pOn
+
+            pathss2 << "_" << FF_NAME;
+            if (finishAfterNFit == 0) {
+                pathss2 << "_" << nGenerations;
+            } else {
+                pathss2 << "_" << finishAfterNFit << "_fits_";
+            }
+            pathss2 <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
             f.open (pathss2.str().c_str());
             if (!f.is_open()) {
