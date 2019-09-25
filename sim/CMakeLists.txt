@@ -45,15 +45,20 @@ target_compile_definitions(evolve_fit_genome6 PUBLIC USE_FITNESS_4 N_Genes=6)
 # Find the proportion of random genomes with F=1, F>0; fitness function 4
 add_executable(proprandom3 proprandomfits.cpp)
 target_compile_definitions(proprandom3 PUBLIC N_Genes=3 USE_FITNESS_4)
+# Squash a warning which I've verified is not an error:
+target_compile_options(proprandom3 PRIVATE -Wno-shift-count-overflow)
 target_link_libraries(proprandom3 facto)
 add_executable(proprandom4 proprandomfits.cpp)
 target_compile_definitions(proprandom4 PUBLIC N_Genes=4 USE_FITNESS_4)
+target_compile_options(proprandom4 PRIVATE -Wno-shift-count-overflow)
 target_link_libraries(proprandom4 facto)
 add_executable(proprandom5 proprandomfits.cpp)
 target_compile_definitions(proprandom5 PUBLIC N_Genes=5 USE_FITNESS_4)
+target_compile_options(proprandom5 PRIVATE -Wno-shift-count-overflow)
 target_link_libraries(proprandom5 facto)
 add_executable(proprandom6 proprandomfits.cpp)
 target_compile_definitions(proprandom6 PUBLIC N_Genes=6 USE_FITNESS_4)
+target_compile_options(proprandom6 PRIVATE -Wno-shift-count-overflow)
 target_link_libraries(proprandom6 facto)
 
 # Show the fitness of the selected genome for the paper
