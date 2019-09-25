@@ -74,7 +74,9 @@ int main (int argc, char** argv)
         cerr << "Failed to open output file." << endl;
         return -1;
     }
-    // Header: canalyzingness,QMcomplexity,numBasins,meanAttractorLen
+
+    // Header
+    fout << "canalyzingness,QMcomplexity,numBasins,meanAttractorLen,bias" << endl;
 
     for (unsigned int i = 0; i < ntrials; ++i) {
         //cout << "+" << flush;
