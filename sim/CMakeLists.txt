@@ -60,13 +60,10 @@ target_link_libraries(proprandom6 facto)
 add_executable(showselected showselected.cpp)
 target_compile_definitions(showselected PUBLIC USE_FITNESS_4)
 
-# This accepts a string version of the genome (in 1s and 0s) and
-# displays the genome in tabular form.
-add_executable(str2genome str2genome.cpp)
-add_executable(str2genome6 str2genome.cpp)
-target_compile_definitions(str2genome6 PUBLIC N_Genes=6)
+# Analyse complexity of random genomes
+add_executable(complexity_random complexity_random.cpp)
+target_compile_definitions(complexity_random PUBLIC N_Genes=5)
 
-# The opposite of str2genome.
-add_executable(genome2str genome2str.cpp)
-add_executable(genome2str6 genome2str.cpp)
-target_compile_definitions(genome2str6 PUBLIC N_Genes=6)
+# Analyse complexity of fit genomes
+add_executable(complexity_fit complexity_fit.cpp)
+target_compile_definitions(complexity_fit PUBLIC N_Genes=5 USE_FITNESS_4)

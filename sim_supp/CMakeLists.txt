@@ -53,14 +53,6 @@ add_executable(mutation6 mutation.cpp)
 target_compile_definitions(mutation6 PUBLIC N_Genes=6 USE_FITNESS_4)
 target_link_libraries(mutation6 facto)
 
-# Analyse complexity of random genomes
-add_executable(complexity_random complexity_random.cpp)
-target_compile_definitions(complexity_random PUBLIC N_Genes=5)
-
-# Analyse complexity of fit genomes
-add_executable(complexity_fit complexity_fit.cpp)
-target_compile_definitions(complexity_fit PUBLIC N_Genes=5 USE_FITNESS_4)
-
 # The null model.
 add_executable(nullmodel nullmodel.cpp)
 target_compile_definitions(nullmodel PUBLIC N_Genes=5 USE_FITNESS_4)
@@ -132,3 +124,14 @@ target_compile_definitions(estimate_fitness_dist_ff7 PUBLIC N_Genes=5 N_Genomes=
 
 add_executable(estimate_fitness_dist_ff8 estimate_fitness_dist.cpp)
 target_compile_definitions(estimate_fitness_dist_ff8 PUBLIC N_Genes=5 N_Genomes=10000000 USE_FITNESS_8)
+
+# This accepts a string version of the genome (in 1s and 0s) and
+# displays the genome in tabular form.
+add_executable(str2genome str2genome.cpp)
+add_executable(str2genome6 str2genome.cpp)
+target_compile_definitions(str2genome6 PUBLIC N_Genes=6)
+
+# The opposite of str2genome.
+add_executable(genome2str genome2str.cpp)
+add_executable(genome2str6 genome2str.cpp)
+target_compile_definitions(genome2str6 PUBLIC N_Genes=6)

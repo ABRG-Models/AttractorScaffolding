@@ -7,8 +7,8 @@
 source script_common.sh
 echo "Using build directory ${HN} for executables"
 
-./${HN}/sim_supp/complexity_random &
-./${HN}/sim_supp/complexity_fit &
+./${HN}/sim/complexity_random &
+./${HN}/sim/complexity_fit &
 
 wait
 

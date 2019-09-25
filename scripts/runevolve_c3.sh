@@ -27,6 +27,14 @@ EOF
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.3  &
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.4  &
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.5  &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.02 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.04 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.07 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.12 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.17 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.25 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.35 &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.45 &
 
 wait
 popd

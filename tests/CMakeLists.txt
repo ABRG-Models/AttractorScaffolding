@@ -21,3 +21,6 @@ add_test(test_thousand test_thousand)
 
 add_executable(state2string2state state2string2state.cpp)
 add_test(state2string2state state2string2state)
+
+add_executable(quine quine.cpp)
+add_test(quine quine)

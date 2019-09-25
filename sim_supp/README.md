@@ -1,7 +1,10 @@
 # Simulation code - supplementary analysis
 
-This directory contains addition simulation code which was used to
-make additional analysis of the system reported in the paper.
+This directory contains simulation code which was used to make
+additional analyses of the system reported in the paper, as well as
+some systems (differing in that they used alternative fitness
+functions; see sim/include/fitness.h) that were investigated, but not
+reported on.
 
 ## Supplementary programs
 
@@ -182,4 +185,21 @@ N_Genes> and then evaluate the fitness. If no genome is provided on
 the command line, generate a random one.
 
 * Compiles into **showfitness**
+* Results on command line.
+
+### genome2str.cpp
+
+Convert from genome_id format
+(e.g. 5039a8e4-a090a0eb-56cfd0a8-9c9ccdbb-60b214b) to 1s and 0s
+format.
+
+* Compiles into **genome2str** (and **genome2str6** for ngenes=6)
+* Results on command line
+
+### str2genome.cpp
+
+Opposite of genome2str.cpp. Takes an input in 1's and 0s format and
+outputs in aaaaaaaa-bbbbbbbb-... format.
+
+* Compiles into **str2genome** (and **str2genome6** for ngenes=6)
 * Results on command line.

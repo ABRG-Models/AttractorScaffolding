@@ -25,8 +25,17 @@ EOF
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.15 &
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.20 &
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.3  &
-./${HN}/sim/evolve configs/runevolve_c4.json 0.4  &
-./${HN}/sim/evolve configs/runevolve_c4.json 0.5  &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.02 &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.04 &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.07 &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.12 &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.17 &
+./${HN}/sim/evolve configs/runevolve_c4.json 0.25 &
+# These provide poor statistical data
+#./${HN}/sim/evolve configs/runevolve_c4.json 0.35 &
+#./${HN}/sim/evolve configs/runevolve_c4.json 0.4  &
+#./${HN}/sim/evolve configs/runevolve_c4.json 0.45 &
+#./${HN}/sim/evolve configs/runevolve_c4.json 0.5  &
 
 wait
 popd
