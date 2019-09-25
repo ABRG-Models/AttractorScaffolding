@@ -8,6 +8,8 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
+import sys
+sys.path.insert(0,'../include')
 import sebcolour
 col = sebcolour.Colour
 from scipy import stats
@@ -16,7 +18,7 @@ from scipy import stats
 
 def doPlot (ff, f1):
 
-    D = np.loadtxt('../data/fitness_dist_{0}_n10000000.csv'.format(ff), delimiter=',')
+    D = np.loadtxt('../../data/fitness_dist_{0}_n10000000.csv'.format(ff), delimiter=',')
 
     # Prepare data for the histograms
 
@@ -43,13 +45,14 @@ matplotlib.rc('font', **fnt)
 F1 = plt.figure (figsize=(9,16))
 f1 = F1.add_subplot(4,1,1)
 doPlot ('ff4', f1)
-f2 = F1.add_subplot(4,1,2)
-doPlot ('ff5', f2)
-f3 = F1.add_subplot(4,1,3)
-doPlot ('ff6', f3)
-f4 = F1.add_subplot(4,1,4)
-doPlot ('ff8', f4)
+# Other fitness distributions are possible:
+#f2 = F1.add_subplot(4,1,2)
+#doPlot ('ff5', f2)
+#f3 = F1.add_subplot(4,1,3)
+#doPlot ('ff6', f3)
+#f4 = F1.add_subplot(4,1,4)
+#doPlot ('ff8', f4)
 F1.tight_layout()
-plt.savefig ('png/fitness_dists.png')
+plt.savefig ('figures/fitness_dists.png')
 
 plt.show()

@@ -1,10 +1,12 @@
+#
+# Run ./build/sim_supp/nullmodel_withf to generate data for this script
+#
+
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
-import sebcolour
-col = sebcolour.Colour
 
 # Read csv files with gen/fitness data in
 def readDataset (filepath):
@@ -35,5 +37,5 @@ fnt = {'family' : 'DejaVu Sans',
 matplotlib.rc('font', **fnt)
 
 FF_NAME = 'ff4'
-A = readDataset('../data/null_withf_a21_p10_'+FF_NAME+'_100000_fitness_0.csv')
+A = readDataset('../../data/null_withf_a21_p10_'+FF_NAME+'_100000_fitness_0.csv')
 np.save ('nullstats_A'+FF_NAME, A)

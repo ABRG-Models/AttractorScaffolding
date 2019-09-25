@@ -1,9 +1,14 @@
+#
+# This script pertains to an earlier fitness function. To generate the
+# h5_m.csv file, run scrupts/supp/runh5.sh
+#
 import numpy as np
 import matplotlib
 matplotlib.use('TkAgg',warn=False, force=True)
 from matplotlib import pyplot as plt
 import pylab as pl
 import sys
+sys.path.insert(0,'../include')
 import csv
 
 # Read csv files.
@@ -47,7 +52,7 @@ matplotlib.rc('font', **fnt)
 
 scale = 10000.
 
-m_h = readDataset("../data/h5_m.csv")
+m_h = readDataset("../../data/h5_m.csv")
 
 plot_log = False
 

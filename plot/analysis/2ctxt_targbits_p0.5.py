@@ -166,7 +166,6 @@ slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
 plt.savefig ('figures/2ctxt_targbits_p0.5.png')
-plt.savefig ('figures/2ctxt_targbits_p0.5.svg')
 
 plt.show()
 

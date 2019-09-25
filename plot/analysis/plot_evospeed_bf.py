@@ -1,12 +1,17 @@
+#
+# Run scripts/supp/runevolve_bybits.sh to generate data for this plot.
+#
+
 import numpy as np
 import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert(0,'../include')
 import csv
 
 # Change this to choose which to plot.
-driftnodrift = 'nodrift' # 'nodrift' or 'drift'
+driftnodrift = 'drift' # 'nodrift' or 'drift'
 ff='ff4'
 
 # Read csv files.
@@ -22,28 +27,24 @@ def readDataset (filepath):
 
 if driftnodrift == 'drift':
     filetag = ''
-    files = ['../data/evolveb_a21_p10_'+ff+'_100000000_gens_4.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_5.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_6.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_8.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_10.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_12.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_14.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_16.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_18.csv',
-             '../data/evolveb_a21_p10_'+ff+'_100000000_gens_20.csv']
+    files = ['../../data/evolveb_a21_p10_'+ff+'_100000000_gens_4.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_5.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_6.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_8.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_10.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_12.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_16.csv',
+             '../../data/evolveb_a21_p10_'+ff+'_100000000_gens_20.csv']
 else:
     filetag = '_nodrift'
-    files = ['../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_4.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_5.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_6.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_8.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_10.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_12.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_14.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_16.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_18.csv',
-             '../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_20.csv']
+    files = ['../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_4.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_5.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_6.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_8.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_10.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_12.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_16.csv',
+             '../../data/evolveb_nodrift_a21_p10_'+ff+'_100000000_gens_20.csv']
 
 
 lbls = ['p=0.10',
@@ -197,7 +198,7 @@ a3.set_xlim([0,0.55])
 a3.set_ylim([0,80000])
 
 f1.tight_layout()
-plt.savefig ('png/evolution' + filetag + '_'+ff+'.png')
+plt.savefig ('figures/evolution' + filetag + '_'+ff+'.png')
 
 plt.show()
 

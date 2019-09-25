@@ -105,7 +105,6 @@ a1.set_axisbelow(True)
 
 f1.tight_layout()
 plt.savefig ('figures/figDlognorm.png')
-plt.savefig ('figures/figDlognorm.svg')
 
 plt.show()
 

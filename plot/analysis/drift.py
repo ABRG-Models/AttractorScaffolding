@@ -109,7 +109,7 @@ a1.set_xlabel('10K generations',fontsize=fs)
 a1.set_axisbelow(True)
 #print (M)
 f1.tight_layout()
-plt.savefig ('png/distribution_drift_histo_ff4.png')
+plt.savefig ('figures/distribution_drift_histo_ff4.png')
 
 # Slope vs p fit. Fit line to most of the points.
 slope_fit = np.polyfit (M[1:,1], M[1:,0], 1)
@@ -126,7 +126,7 @@ a2.set_ylabel('Slope of best fit line')
 a2.set_xlim([0,0.55])
 a2.set_ylim([-1.8,0])
 f2.tight_layout()
-plt.savefig ('png/distribution_drift_slope_vs_p_ff4.png')
+plt.savefig ('figures/distribution_drift_slope_vs_p_ff4.png')
 
 # Mean vs p fit. Fit exponential to the mean number of gens, excluding
 # the first point.
@@ -148,7 +148,7 @@ a3.set_ylabel('Mean generations to happen upon $f=1$ (x10K)')
 a3.set_xlim([0,0.55])
 a3.set_ylim([0,7.5])
 f3.tight_layout()
-plt.savefig ('png/distribution_drift_mean_vs_p_ff4.png')
+plt.savefig ('figures/distribution_drift_mean_vs_p_ff4.png')
 
 plt.show()
 

@@ -184,7 +184,7 @@ a3.set_xlim([0,0.62])
 #a3.set_ylim([0,180000])
 
 f1.tight_layout()
-plt.savefig ('figures/evospeed' + filetag + '_'+contexttag+'_'+ff+'.svg')
+plt.savefig ('figures/evospeed' + filetag + '_'+contexttag+'_'+ff+'.png')
 
 plt.show()
 

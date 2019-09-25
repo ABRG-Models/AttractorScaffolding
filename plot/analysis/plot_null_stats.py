@@ -3,6 +3,8 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import csv
+import sys
+sys.path.insert(0, '../include')
 import sebcolour
 col = sebcolour.Colour
 
@@ -109,7 +111,7 @@ f4.set_ylim([0,0.2])
 
 #f1.set_xlim([-1, 0.01])
 F1.tight_layout()
-plt.savefig ('png/null_model_stats_' + FF_NAME + '.png')
+plt.savefig ('figures/null_model_stats_' + FF_NAME + '.png')
 
 F2 = plt.figure (figsize=(12,8))
 # For each unique value in A[:,2] (number of limit cycles), do a
@@ -142,5 +144,5 @@ for lc in lcs:
     a1[gcount].set_title('LC size {0}'.format(lc))
     gcount = gcount + 1
 
-plt.savefig ('png/null_model_stats_perLC_' + FF_NAME + '.png')
+plt.savefig ('figures/null_model_stats_perLC_' + FF_NAME + '.png')
 plt.show()

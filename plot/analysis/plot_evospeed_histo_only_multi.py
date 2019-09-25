@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert(0,'../include')
 import csv
 
 # Read csv files.
@@ -30,7 +31,7 @@ def doPlot (plottype, ff):
 
     p = [0.1, 0.2, 0.3, 0.4, 0.5]
 
-    directry = 'data'
+    directry = '../../data'
     contexttag = 'nc2_I16-0_T21-10'
     maxgens='100000000'
 
@@ -39,7 +40,7 @@ def doPlot (plottype, ff):
     filetag = ''
     for pp in p:
         print ('Append file for p={0}'.format(pp))
-        files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+        files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 
     # Make labels
     lbls = []
@@ -163,12 +164,12 @@ def doPlot (plottype, ff):
     ax2.set_ylabel('log$_{10}$ (F=1 evolutions)',fontsize=fs)
     ax2.set_xlabel('log$_{10}$ (generations to evolve)',fontsize=fs)
     ax2.legend(('p=0.05','p=0.3','p=0.5'))
-    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'_format2.png')
+    plt.savefig ('figures/evolution_histos_' + plottype + filetag + '_'+ff+'_format2.png')
 
     # rect=[left bottom right top]
     f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
     f1.text (0.5, 0.9, graphtag, fontsize=20)
-    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'.png')
+    plt.savefig ('figures/evolution_histos_' + plottype + filetag + '_'+ff+'.png')
 
     return M
 

@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert(0, '../include')
 import csv
 
 # Change this to choose which to plot.
@@ -20,7 +21,7 @@ def readDataset (filepath):
     # Note the -1 as there will be a final, zero line in the array
     return f[:-1,:]
 
-directry = 'data_targbits'
+directry = '../../data/targbits'
 maxgens='100000000'
 
 # Make file names
@@ -30,51 +31,51 @@ lbls = []
 # 4 Hamming
 pp=0.05
 contexttag = 'nc3_I8-4-1_T16-0-2'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(4, pp))
 pp=0.1
 contexttag = 'nc3_I8-4-1_T16-0-2'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(4, pp))
 
 # 6 Hamming
 pp=0.05
 contexttag = 'nc3_I8-4-1_T16-4-2'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(6, pp))
 pp=0.1
 contexttag = 'nc3_I8-4-1_T16-4-2'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(6, pp))
 
 # 8 Hamming
 pp=0.05
 contexttag = 'nc3_I8-4-1_T16-4-7'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(8, pp))
 pp=0.1
 contexttag = 'nc3_I8-4-1_T16-4-7'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(8, pp))
 
 # 10 Hamming
 pp=0.05
 contexttag = 'nc3_I8-4-1_T21-10-5'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(10, pp))
 pp=0.1
 contexttag = 'nc3_I8-4-1_T21-10-5'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(10, pp))
 
 # 12 Hamming
 pp=0.05
 contexttag = 'nc3_I16-4-1_T20-10-5'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(12, pp))
 pp=0.1
 contexttag = 'nc3_I16-4-1_T20-10-5'
-files.append ('../{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
+files.append ('{4}/evolve_{3}_{0}_{1}_gens_{2}.csv'.format(ff, maxgens, pp, contexttag, directry))
 lbls.append ('p={1}, h={0}'.format(12, pp))
 
 mkr=['.','o',
@@ -207,7 +208,7 @@ slope_fit = np.polyfit (M[1:,1], M[1:,0]/scale, 1)
 slope_fit_fn = np.poly1d (slope_fit)
 
 f1.tight_layout()
-plt.savefig ('png/3ctxt_targbits.svg')
+plt.savefig ('figures/3ctxt_targbits.png')
 
 plt.show()
 

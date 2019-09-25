@@ -88,6 +88,5 @@ a1.set_axisbelow(True)
 
 f1.tight_layout()
 plt.savefig ('figures/fitinc.png')
-plt.savefig ('figures/fitinc.svg')
 
 plt.show()

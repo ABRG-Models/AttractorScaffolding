@@ -18,6 +18,7 @@ for gui in gui_env:
 print ("Using: {0}".format(matplotlib.get_backend()))
 
 import sys
+sys.path.insert(0,'../include')
 import csv
 
 # Read the fitness vs. Hamming mutation distance data
@@ -25,7 +26,7 @@ def readDataset (genes, ff_name):
     m = np.zeros([1,8])
     rn = 0 # rownum - accumulates through all 10 files that are read
     for i in range(1,11):
-        filepath = '../data/mutations{0}_n{1:1d}_{2:02d}.csv'.format(ff_name,genes,i)
+        filepath = '../../data/mutations{0}_n{1:1d}_{2:02d}.csv'.format(ff_name,genes,i)
         with open (filepath, 'r') as csvfile:
             rdr = csv.DictReader (csvfile)
             for row in rdr:
@@ -138,9 +139,9 @@ def readhm (filepath):
     return f[:-1,:]
 
 # Read h(m) data
-h4_m = readhm ("../data/h4_m.csv")
-h5_m = readhm ("../data/h5_m.csv")
-h6_m = readhm ("../data/h6_m.csv")
+h4_m = readhm ("../../data/h4_m.csv")
+h5_m = readhm ("../../data/h5_m.csv")
+h6_m = readhm ("../../data/h6_m.csv")
 
 # Set recompute to False to switch off bootstrap computation of stderrs
 recompute=True
@@ -272,9 +273,9 @@ plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 f1.tight_layout()
 
 if logplot:
-    plt.savefig('png/smooth_fit_log_ff4.png')
+    plt.savefig('figures/smooth_fit_log_ff4.png')
 else:
-    plt.savefig('png/smooth_fit_ff4.png')
+    plt.savefig('figures/smooth_fit_ff4.png')
 
 #
 # Second figure produced by this script is "Fitness increases.." current Fig. 6.
@@ -339,8 +340,8 @@ plt.legend(('$n=4$','$n=5$','$n=6$'),frameon=False)
 f2.tight_layout()
 
 if logplot:
-    plt.savefig('png/fitness_increases_gradually_log_ff4.png')
+    plt.savefig('figures/fitness_increases_gradually_log_ff4.png')
 else:
-    plt.savefig('png/fitness_increases_gradually_ff4.png')
+    plt.savefig('figures/fitness_increases_gradually_ff4.png')
 
 plt.show()

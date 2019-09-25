@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use ('TKAgg', warn=False, force=True)
 import matplotlib.pyplot as plt
 import sys
+sys.path.insert(0, '../include')
 import csv
 
 # Read csv files.
@@ -27,30 +28,21 @@ def doPlot (driftnodrift, plottype, ff):
     else:
         filetag = '_nodrift'
     # Make files from directory listing
-    p = Path('../data')
+    p = Path('../../data')
     ##files = list(p.glob('*evolve'+filetag+'_a21_p10_ff4_100000000_gens_*.csv')) # order is wrong
-    files = [#'../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_2.csv',
-             #'../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_3.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_4.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_5.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_6.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_8.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_10.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_12.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_14.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_16.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_18.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_20.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_22.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_24.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_26.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_28.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_30.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_32.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_34.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_36.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_38.csv',
-             '../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_40.csv']
+    files = ['../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_4.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_5.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_6.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_8.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_10.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_12.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_16.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_20.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_24.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_28.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_32.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_36.csv',
+             '../../data/evolveb'+filetag+'_a21_p10_'+ff+'_100000000_gens_40.csv']
 
     if plottype == 'loglog1':
         graphtag = driftnodrift + ', log/log (log hist bins)'
@@ -69,19 +61,12 @@ def doPlot (driftnodrift, plottype, ff):
             'bf=8',
             'bf=10',
             'bf=12',
-            'bf=14',
             'bf=16',
-            'bf=18',
             'bf=20',
-            'bf=22',
             'bf=24',
-            'bf=26',
             'bf=28',
-            'bf=30',
             'bf=32',
-            'bf=34',
             'bf=36',
-            'bf=38',
             'bf=40']
 
     # num files
@@ -216,23 +201,22 @@ def doPlot (driftnodrift, plottype, ff):
     ax2.legend(lbls, fontsize=10)
     f2.suptitle (driftnodrift);
     #f2.tight_layout()
-    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'_format2_fb.png')
+    plt.savefig ('figures/evolution_histos_' + plottype + filetag + '_'+ff+'_format2_fb.png')
 
     # rect=[left bottom right top]
-    f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
+    #f1.tight_layout(rect=[0.01,0.01,0.99,0.9])
     f1.text (0.5, 0.9, graphtag, fontsize=20)
-    plt.savefig ('png/evolution_histos_' + plottype + filetag + '_'+ff+'_fb.png')
+    plt.savefig ('figures/evolution_histos_' + plottype + filetag + '_'+ff+'_fb.png')
 
     return M
 
 # Change this to choose which to plot.
-driftnodrift = 'nodrift' # 'nodrift' or 'drift'
+driftnodrift = 'drift' # 'nodrift' or 'drift'
 fitf = 'ff4'
 #doPlot ('nodrift', '', fitf)
 #doPlot ('drift', '', fitf)
 #M1 = doPlot ('nodrift', 'log', fitf)
 #doPlot ('drift', 'log', fitf)
-M2 = doPlot ('nodrift', 'loglog1', fitf)
 M3 = doPlot ('drift', 'loglog1', fitf)
 #doPlot ('drift', 'loglog', fitf)
 
