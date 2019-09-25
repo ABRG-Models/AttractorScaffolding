@@ -1,4 +1,4 @@
-# Implementation of the model described in the paper 'Self-organization can guide natural selection'
+# Implementation of the model described in the paper 'Limit cycle dynamics can guide the evolution of gene regulatory networks towards point attractors'
 
 This implementation of the Boolean network model is written in C++,
 writing out data in text files (comma separated values) into the
