@@ -7,11 +7,11 @@
 source script_common.sh
 echo "Using build directory ${HN} for executables"
 
-cat <<EOF > configs/runevolve_c2.json
+cat <<EOF > configs/runevolve_c2_withf.json
 {
-    "save_gensplus":     false,
+    "save_gensplus":     true,
     "logdir":        "./data",
-    "nGenerations":  100000000,
+    "nGenerations":   1000000,
     "pOn":                0.05,
     "initial": [ "10000", "00000" ],
     "target":  [ "10101", "01010" ]
@@ -19,14 +19,15 @@ cat <<EOF > configs/runevolve_c2.json
 EOF
 
 # Run several evolves in parallel.
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.03 &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.05 &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.10 &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.15 &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.20 &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.3  &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.4  &
-./${HN}/sim/evolve_withf configs/runevolve_c2.json 0.5  &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.02 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.03 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.05 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.10 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.15 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.20 &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.3  &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.4  &
+./${HN}/sim/evolve_withf configs/runevolve_c2_withf.json 0.5  &
 
 wait
 popd
