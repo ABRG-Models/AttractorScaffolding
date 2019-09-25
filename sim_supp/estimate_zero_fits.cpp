@@ -42,7 +42,12 @@ using namespace std;
 int main (int argc, char** argv)
 {
     // Seed the RNG
-    srand(5);
+    unsigned int seed = 5;
+    srand(seed);
+    // Set up the Mersenne Twister RNG
+    rngDataInit (&rd);
+    zigset (&rd, DUMMYARG);
+    rd.seed = seed;
 
     // Initialise masks
     masks_init();
