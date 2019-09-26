@@ -9,13 +9,17 @@ import sebanalysis as sa
 class A:
     # Read csv files.
     def readDataset (filepath):
+        print ('Called')
         f = np.zeros([1,1])
         with open (filepath, 'r') as csvfile:
-                rdr = csv.reader (csvfile)
-                for row in rdr:
-                    f[-1] = float(row[0])
-                    f = np.append(f, np.zeros([1,1]), 0)
+            print ('Reader...')
+            rdr = csv.reader (csvfile)
+            print ('Read.')
+            for row in rdr:
+                f[-1] = float(row[0])
+                f = np.append(f, np.zeros([1,1]), 0)
         # Note the -1 as there will be a final, zero line in the array
+        print ('Rtn')
         return f[:-1,:]
 
     # Compute the slope of the log of linearly spaced bins of the data
@@ -28,7 +32,7 @@ class A:
     def compute_slopes (files, p, scale=1, nbins=50):
         nf = len(files)
         S = np.zeros([nf,2]) # Slopes
-        M = np.zeros([nf,3]) # Mean/stderr of mean
+        M = np.zeros([nf,5]) # Mean/stderr of mean plus ninety five percent ci
         H = [] # Histogram counts
         B = [] # Histogram bins
         FF = []
@@ -60,7 +64,9 @@ class A:
 
             S[y,1] = p[y] # p, the flip probability.
             M[y,0] = p[y] # p, the flip probability.
-            M[y,1], M[y,2] = sa.Analysis.bootstrap_mean (D)
+            M[y,1], M[y,2], ninetyfive = sa.Analysis.bootstrap_mean (D)
+            M[y,3]=ninetyfive[0]
+            M[y,4]=ninetyfive[1]
             H.append(h)
             B.append(b)
             print ('mean/stderrmean is {0} ({1})'.format(M[y,1], M[y,2]))
@@ -72,8 +78,9 @@ class A:
     # @files: The raw data filenames to process; evolve_nc2_I16-0_T21-10_ff4_100000000_gens_0.03.csv, etc
     # @p: The list of probability values for @files
     def compute_means (files, p):
+        print ('Called')
         nf = len(files)
-        M = np.zeros([nf,3])
+        M = np.zeros([nf,5])
         for y,fil in enumerate(files):
             print ('Processing file: {0}'.format(fil))
             D = A.readDataset (fil)
@@ -84,6 +91,8 @@ class A:
             print ('mean of D is {0}, max/min: {1}/{2}'.format(np.mean(D),np.max(D),np.min(D)))
 
             M[y,0] = p[y] # p, the flip probability.
-            M[y,1], M[y,2] = sa.Analysis.bootstrap_mean (D)
+            M[y,1], M[y,2], ci = sa.Analysis.bootstrap_mean (D)
+            M[y,3] = ci[0]
+            M[y,4] = ci[1]
             print ('mean/stderrmean is {0} ({1})'.format(M[y,1], M[y,2]))
         return M
