@@ -34,7 +34,7 @@ EOF
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.35 &
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.4  &
 ./${HN}/sim/evolve configs/runevolve_c3.json 0.45 &
-./${HN}/sim/evolve configs/runevolve_c3.json 0.5  &
+./${HN}/sim/evolve configs/runevolve_c3.json 0.5  & # circa 20 hrs of processing
 wait
 popd
 

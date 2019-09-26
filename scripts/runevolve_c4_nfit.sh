@@ -22,7 +22,7 @@ cat <<EOF > configs/runevolve_c4_slow1.json
 {
     "save_gensplus":       false,
     "logdir":           "./data",
-    "finishAfterNFit":       400,
+    "finishAfterNFit":        80,
     "pOn":                  0.05,
     "initial": [ "10000", "00100", "00001", "01000" ],
     "target":  [ "10100", "01010", "00101", "01001" ]
@@ -33,7 +33,7 @@ cat <<EOF > configs/runevolve_c4_slow2.json
 {
     "save_gensplus":       false,
     "logdir":           "./data",
-    "finishAfterNFit":     30,
+    "finishAfterNFit":     12,
     "pOn":                  0.05,
     "initial": [ "10000", "00100", "00001", "01000" ],
     "target":  [ "10100", "01010", "00101", "01001" ]
@@ -53,15 +53,17 @@ EOF
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.20 &
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.25 &
 ./${HN}/sim/evolve configs/runevolve_c4.json 0.3  &
-./${HN}/sim/evolve configs/runevolve_c4.json 0.35 &
-# These provide poor statistical data
+./${HN}/sim/evolve configs/runevolve_c4.json 0.35 & # 60 hrs
 
-# slow
+# 1000: 12 days. ~80 would be 1 day
 ./${HN}/sim/evolve configs/runevolve_c4_slow1.json 0.4  &
-./${HN}/sim/evolve configs/runevolve_c4_slow1.json 0.45 &
 
-# Crazy slow. 50 hits could take all day
-./${HN}/sim/evolve configs/runevolve_c4_slow2.json 0.5  &
+# 1000: ~90 days(!) ~12 would be 1 day
+./${HN}/sim/evolve configs/runevolve_c4_slow2.json 0.45 &
+
+# Crazy slow.
+#./${HN}/sim/evolve configs/runevolve_c4_slow2.json 0.5  & # 30: ~20 days in a single thread.
+# Did p=0.5 using runnullmodel_c4.sh
 
 wait
 popd
