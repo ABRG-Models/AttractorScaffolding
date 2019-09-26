@@ -101,28 +101,27 @@ expfit4 = np.exp (means_fit4[1]) * np.exp (means_fit4[0]*expx4)
 
 # Mean vs p
 a3 = f1.add_subplot (1,1,1)
-#print ('{0} vs. {1}'.format(np.shape(M2[:,2]),  np.shape(M2[:,3])))
+
+# Colours from the colour map
+colo2 = plt.cm.brg(0)
+colo3 = plt.cm.brg(0.25)
+colo4 = plt.cm.brg(0.5)
+
 theyerr2 = np.vstack((M2[:,1]-M2[:,3],M2[:,4]-M2[:,1]))
-print ('errminus: {0} values: {1} errplus: {2}'.format(M2[:,3],M2[:,1],M2[:,4]))
-print ('yerr shape {0}'.format(np.shape(theyerr2)))
-a3.errorbar (M2[:,0], M2[:,1], yerr=theyerr2, marker='.', linestyle='None', color=col.mediumblue, markersize=1, capsize=4.5)
-a3.plot (M2[:,0], M2[:,1], marker='o', linestyle='None',  color=col.mediumblue, markersize=10)
-#a3.fill_between(M2[:,0], M2[:,3], M2[:,4], alpha=0.5, edgecolor=col.blue4, facecolor=col.royalblue2)
+a3.errorbar (M2[:,0], M2[:,1], yerr=theyerr2, marker='.', linestyle='None', color=colo2, markersize=1, capsize=4.5)
+a3.plot (M2[:,0], M2[:,1], marker='o', linestyle='None',  color=colo2, markersize=8)
 
 theyerr3 = np.vstack((M3[:,1]-M3[:,3],M3[:,4]-M3[:,1]))
-a3.errorbar (M3[:,0], M3[:,1], yerr=theyerr3, marker='s', linestyle='None', color=col.darkorchid3, markersize=10, capsize=4.5)
-# Fill-between:
-a3.plot (M3[:,0], M3[:,1], marker='s', linestyle='None', color=col.darkorchid3, markersize=10)
-#a3.fill_between(M3[:,0], M3[:,3], M3[:,4], alpha=0.5, edgecolor=col.darkorchid2, facecolor=col.darkorchid1)
+a3.errorbar (M3[:,0], M3[:,1], yerr=theyerr3, marker='.', linestyle='None', color=colo3, markersize=1, capsize=4.5)
+a3.plot (M3[:,0], M3[:,1], marker='s', linestyle='None', color=colo3, markersize=8)
 
 theyerr4 = np.vstack((M4[:,1]-M4[:,3],M4[:,4]-M4[:,1]))
-a3.errorbar (M4[:,0], M4[:,1], yerr=theyerr4, marker='^', linestyle='None', color=col.firebrick1, markersize=10, capsize=4.5)
-a3.plot (M4[:,0], M4[:,1], marker='^', linestyle='None', color=col.red, markersize=10)
-#a3.fill_between(M4[:,0], M4[:,3], M4[:,4], alpha=0.5, edgecolor=col.firebrick3, facecolor=col.firebrick1)
+a3.errorbar (M4[:,0], M4[:,1], yerr=theyerr4, marker='.', linestyle='None', color=colo4, markersize=1, capsize=4.5)
+a3.plot (M4[:,0], M4[:,1], marker='^', linestyle='None', color=colo4, markersize=8)
 
-a3.plot (expx2, expfit2, marker='None', linestyle='-', color=col.mediumblue, markersize=10)
-a3.plot (expx3, expfit3, marker='None', linestyle='-', color=col.darkorchid3, markersize=10)
-a3.plot (expx4, expfit4, marker='None', linestyle='-', color=col.red, markersize=10)
+a3.plot (expx2, expfit2, marker='None', linestyle='-', linewidth=2, color=colo2)
+a3.plot (expx3, expfit3, marker='None', linestyle='-', linewidth=2, color=colo3)
+a3.plot (expx4, expfit4, marker='None', linestyle='-', linewidth=2, color=colo4)
 
 # Plot a point showing the mean number of f=1 genomes when randomly sampling
 # 2 contexts: 62115 / 6.2e4
@@ -130,9 +129,9 @@ a3.plot (expx4, expfit4, marker='None', linestyle='-', color=col.red, markersize
 # 4 contexts: ?
 plot_nulls = False
 if plot_nulls:
-    a3.plot ([0,0.5], [c2randommean,c2randommean], marker='None', linestyle='-', color=col.mediumblue)
-    a3.plot ([0,0.5], [c3randommean,c3randommean], marker='None', linestyle='-', color=col.darkorchid3)
-    a3.plot ([0,0.5], [c4randommean,c4randommean], marker='None', linestyle='-', color=col.firebrick1)
+    a3.plot ([0,0.5], [c2randommean,c2randommean], marker='None', linestyle='-', color=colo2)
+    a3.plot ([0,0.5], [c3randommean,c3randommean], marker='None', linestyle='-', color=colo3)
+    a3.plot ([0,0.5], [c4randommean,c4randommean], marker='None', linestyle='-', color=colo4)
 
 a3.legend(['$X=2$','$X=3$','$X=4$'],frameon=False)
 
