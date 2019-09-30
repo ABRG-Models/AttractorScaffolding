@@ -13,8 +13,8 @@ ff='ff4'
 
 expfitstartidx = 3 # index of 0.05 in p, below
 p2 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
-p3 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45]
-p4 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3]
+p3 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+p4 = [0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.35]
 
 maxgens=1000 # now dummy
 
@@ -39,9 +39,11 @@ contexttag = 'nc4_I16-4-1-8_T20-10-5-9'
 filesc4 = []
 for pp in p4:
     filesc4.append ('{2}/evolve_{1}_ff4_1000_fits_{0}.csv'.format(pp, contexttag, directry))
-# Manually add the p=0.5 data point
-#filesc4.append ('{4}/evolve_{3}_{0}_200000000000_gens_{2}.csv'.format(ff, maxgens, 0.5, contexttag, directry))
-#p4.append(0.5)
+# Manually add p=0.5 for X=4:
+add_control_X4 = 0
+if add_control_X4:
+    p4.append (0.5)
+    filesc4.append ('{0}/evolve_nc4_I16-4-1-8_T20-10-5-9_ff4_200000000000_gens_0.5.csv'.format(directry))
 
 nfc4 = len(filesc4)
 
