@@ -179,6 +179,9 @@ int main (int argc, char** argv)
     const bool async_devel = root.get ("async_devel", false).asBool();
     const double async_threshold = root.get ("async_threshold", 0.95).asDouble();
 
+    // Should we append data to the given file, rather than overwriting?
+    const bool append_data = root.get ("append_data", false).asBool();
+
     // Done getting params
     LOG ("pOn: " << pOn);
     LOG ("Initial states:");
@@ -386,14 +389,22 @@ int main (int argc, char** argv)
         pathss1 << FF_NAME << "_" << finishAfterNFit << "_fitsplus_" << pOn << ".csv";
     }
 
-    f.open (pathss.str().c_str(), ios::out|ios::trunc);
+    if (append_data == true) {
+        f.open (pathss.str().c_str(), ios::out|ios::app);
+    } else {
+        f.open (pathss.str().c_str(), ios::out|ios::trunc);
+    }
     if (!f.is_open()) {
         cerr << "Error opening " << pathss.str() << endl;
         return 1;
     }
 
     if (save_gensplus) {
-        f1.open(pathss1.str().c_str(), ios::out|ios::trunc);
+        if (append_data == true) {
+            f1.open(pathss1.str().c_str(), ios::out|ios::app);
+        } else {
+            f1.open(pathss1.str().c_str(), ios::out|ios::trunc);
+        }
         if (!f1.is_open()) {
             cerr << "Error opening " << pathss1.str() << endl;
             return 1;
@@ -439,14 +450,14 @@ int main (int argc, char** argv)
                 pathss2 << "_async";
             }
             pathss2 << "_I";
-            for (unsigned int i = 0; i < nContexts; ++i) {
-                if (i) { pathss2 << "-"; }
-                pathss2 << (unsigned int)initials[i];
+            for (unsigned int ii = 0; ii < nContexts; ++ii) {
+                if (ii) { pathss2 << "-"; }
+                pathss2 << (unsigned int)initials[ii];
             }
             pathss2 << "_T";
-            for (unsigned int i = 0; i < nContexts; ++i) {
-                if (i) { pathss2 << "-"; }
-                pathss2 << (unsigned int)targets[i];
+            for (unsigned int ii = 0; ii < nContexts; ++ii) {
+                if (ii) { pathss2 << "-"; }
+                pathss2 << (unsigned int)targets[ii];
             }
 
             pathss2 << "_" << FF_NAME;
@@ -457,7 +468,11 @@ int main (int argc, char** argv)
             }
             pathss2 <<  "_fitness_" << pOn
                     << "_genome_" << genome_id(netinfo[i].back().ab.genome) << ".csv";
-            f.open (pathss2.str().c_str());
+            if (append_data == true) {
+                f.open (pathss2.str().c_str(), ios::out|ios::app);
+            } else {
+                f.open (pathss2.str().c_str(), ios::out|ios::trunc);
+            }
             if (!f.is_open()) {
                 cerr << "Error opening " << pathss2.str() << endl;
                 return 1;
