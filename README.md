@@ -6,11 +6,8 @@ The paper associated with this code repository considers a system of
 Boolean gene regulator networks. I'll include a short summary of the
 system which this code implements.
 
-Testing images:
 
-![Figure 1](/paper/figures/Fig1.pdf)
-
-![Figure 1 again](/paper/figures/Fig1.jpg)
+![Figure 1](/paper/figures/Fig1.jpg)
 
 ## The code
 
