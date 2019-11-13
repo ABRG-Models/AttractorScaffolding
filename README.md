@@ -1,5 +1,19 @@
 # Implementation of the model described in the paper 'Limit cycle dynamics can guide the evolution of gene regulatory networks towards point attractors'
 
+## A summary of the paper
+
+The paper associated with this code repository considers a system of
+Boolean gene regulator networks. I'll include a short summary of the
+system which this code implements.
+
+Testing images:
+
+![Figure 1](/paper/figures/Fig1.pdf)
+
+![Figure 1 again](/paper/figures/Fig1.jpg)
+
+## The code
+
 This implementation of the Boolean network model is written in C++,
 writing out data in text files (comma separated values) into the
 directory data/. It has some python scripts for data visualisation in
