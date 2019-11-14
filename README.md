@@ -1,8 +1,17 @@
 # Implementation of the model described in the paper 'Limit cycle dynamics can guide the evolution of gene regulatory networks towards point attractors'
 
+This code repository is related to a paper published in Scientific
+Reports linked here:
+
+https://www.nature.com/articles/s41598-019-53251-w
+
+This README contains a short introduction to the science, and some
+instructions on how to compile and run the code in the
+repository.
+
 ## A quick introduction to the gene networks described in the paper
 
-Note: The figures here (and their captions) are reproduced from the
+**Note:** The figures here (and their captions) are reproduced from the
 paper under the terms of the Creative Commons 4.0 license and are
 attributable to the authors of the paper.
 
