@@ -1,13 +1,75 @@
 # Implementation of the model described in the paper 'Limit cycle dynamics can guide the evolution of gene regulatory networks towards point attractors'
 
-## A summary of the paper
+## An easy-reading summary of the paper
 
 The paper associated with this code repository considers a system of
-Boolean gene regulator networks. I'll include a short summary of the
-system which this code implements.
-
+Boolean gene networks. Consider a system of 5 genes, labelled a to e,
+which interact with each other in a region of biological tissue.  Each
+gene can be expressed (1) or not expressed (0). The instantaneous
+state of all 5 genes can be represented as a 5 bit number with 32
+possible values. Because the genes interact, the state of the system a
+small time into the future is dependent on the current state. The
+figure below illustrates; each gene receives inputs i to v from the
+current time step. A table can be created, and randomly populated so
+that each of the genes has its state a short time in the future
+(i.e. the next timestep of a simulation) specified. The randomly
+populated number, which is created by arranging all the coloured
+columns in a line to give a 5x32=160 bit number is what we refer to as
+the 'genome' in the paper.
 
 ![Figure 1](/paper/figures/Fig1.jpg)
+
+** Figure 1 The gene interaction network. **
+
+So, in the example in the figure, if all the genes are in the 'not
+expressed' (0) state, then at the next time step, gene a will be 'not
+expressing', gene b will be 'expressing' and so on. If we have some
+pre-specified starting state (For example, [00001]) and some required
+target state (say [10101]), then we can compute the states that the
+system will progress through and see if it achieves the target
+state. We regard as fully fit a genome which progresses from the
+initial state [00001] to the target state in some variable number of
+steps, but which then in a single step cycles back on itself - that
+is, the state [10101] leads directly to [10101] as a 'stable point
+attractor'.
+
+![Figure 2](/paper/figures/Fig2.jpg)
+
+** Figure 2 The attractor landscape. **
+
+The attractor landscape specified by the genome in the table in Fig. 1
+is shown in Fig. 2. Each dot in the figure represents a single gene
+expression state and indicates how the system develops over
+time. Here, the initial state [10000] follows a path through 5
+intermediate states to finally end up on the stable point attractor
+[10101], which cycles back on itself. The same genome also takes a
+starting state of [00000] to the state [01010].
+
+Up to this point, I've referred to 5 genes interacting within a
+'single context'; that is all in roughly the same spatial location.
+This work relates the genes a-e to a specific set
+of genes which are important in the arealization of the mammalian
+neocortex. These genes (Fgf8, Pax6, Emx2, Sp8 and Coup-tf1) produce
+specific patterns of expression; Fgf8 is initially expressed at the
+anterior part of the cortical plate, and initiates a cascade of
+interactions which result in anterior to posterior *or* posterior to
+anterior gradients of expression. We divided space up into only two
+compartments, anterior and posterior and asked how easy is it to find
+the genome which takes the anterior state [10000] to [10101] and the
+posterior initial state [00000] to [01010]. The anterior and posterior
+target states represent a spatial gradient in expression for all 5 genes.
+By random search, this is difficult. Approximately 1 in every 60000
+genomes achieves this, where we define the desired, stable target
+states as having fitness 1, and anything else fitness 0.
+
+The paper describes a mechanism by which an evolutionary search of the
+genome space can be sped up. It does this by allowing genomes which do
+not fulfil the required target states perfectly to nevertheless have
+fitness > 0 as long as they express the desired gene expressions for
+some proportion of the time. By this mechanism, a search of the genome
+which flips a few bits on each evolutionary generation can find 'paths
+up to the peaks in the fitness landscape' and accelerates this simple,
+2 context (anterior and posterior) system by 70 times.
 
 ## The code
 
