@@ -1,6 +1,10 @@
 # Implementation of the model described in the paper 'Limit cycle dynamics can guide the evolution of gene regulatory networks towards point attractors'
 
-## An easy-reading summary of the paper
+## A quick introduction to the gene networks described in the paper
+
+Note: The figures here (and their captions) are reproduced from the
+paper under the terms of the Creative Commons 4.0 license and are
+attributable to the authors of the paper.
 
 The paper associated with this code repository considers a system of
 Boolean gene networks. Consider a system of 5 genes, labelled a to e,
@@ -14,28 +18,42 @@ current time step. A table can be created, and randomly populated so
 that each of the genes has its state a short time in the future
 (i.e. the next timestep of a simulation) specified. The randomly
 populated number, which is created by arranging all the coloured
-columns in a line to give a 5x32=160 bit number is what we refer to as
-the 'genome' in the paper.
+columns in Fig. 1 into a line to give a 160 bit number, is what we
+refer to as the 'genome' in the paper.
 
 ![Figure 1](/paper/figures/Fig1.jpg)
 
-** Figure 1 The gene interaction network. **
+**Figure 1** Gene interaction network. A network of n=5 interacting
+genes, shown labelled a-e, each with inputs labelled i-v. The truth
+table determines the expression level of each gene in response to
+each of the 2^n=32 possible patterns of gene expression. The coloured
+elements thus constitute a 'genome' of N=n2^n=160 bits, which in this
+case specifies a maximally fit network (f=1).
 
-So, in the example in the figure, if all the genes are in the 'not
-expressed' (0) state, then at the next time step, gene a will be 'not
-expressing', gene b will be 'expressing' and so on. If we have some
-pre-specified starting state (For example, [00001]) and some required
-target state (say [10101]), then we can compute the states that the
-system will progress through and see if it achieves the target
-state. We regard as fully fit a genome which progresses from the
-initial state [00001] to the target state in some variable number of
-steps, but which then in a single step cycles back on itself - that
-is, the state [10101] leads directly to [10101] as a 'stable point
-attractor'.
+Referring to the example in Fig. 1, if all the genes are in the 'not
+expressed' (0) state (look at the first row of the 'input' table),
+then at the next time step, gene a (red) will be 'not expressing' or
+0, gene b (yellow) will be 'expressing' or 1, and so on. If we have
+some pre-specified starting state (For example, [00001]) and some
+required target state (say [10101]), then we can compute the states
+that the system will progress through and see if the intial state maps
+to the target state. We regard as fully fit (fitness=1) a genome which
+progresses from the initial state [00001] to the target state (in any
+number of steps) and which then cycles back on itself - that is, the
+state [10101] leads directly to [10101] as a 'stable point attractor'.
 
 ![Figure 2](/paper/figures/Fig2.jpg)
 
-** Figure 2 The attractor landscape. **
+**Figure 2** The attractor landscape. The developmental dynamics of the
+network that is specified by the genome in Fig. 1 reveals five
+attractors (four point attractors and one with a limit cycle of
+length two). Every possible gene expression pattern is represented
+by one dot, and the transitions between states are represented by
+arrows. Initial states [10000] and [00000] map to target states
+[10101] and [01010] as point attractors. The blue path corresponds
+to the development of the network in the anterior context and the
+red path corresponds to the development of the network in the
+posterior context.
 
 The attractor landscape specified by the genome in the table in Fig. 1
 is shown in Fig. 2. Each dot in the figure represents a single gene
@@ -46,30 +64,37 @@ intermediate states to finally end up on the stable point attractor
 starting state of [00000] to the state [01010].
 
 Up to this point, I've referred to 5 genes interacting within a
-'single context'; that is all in roughly the same spatial location.
-This work relates the genes a-e to a specific set
-of genes which are important in the arealization of the mammalian
+'single context'; meaning that the genes are in the same spatial
+location.  This work relates the genes a-e to a specific set of genes
+which are known to be important in the arealization of the mammalian
 neocortex. These genes (Fgf8, Pax6, Emx2, Sp8 and Coup-tf1) produce
 specific patterns of expression; Fgf8 is initially expressed at the
 anterior part of the cortical plate, and initiates a cascade of
 interactions which result in anterior to posterior *or* posterior to
-anterior gradients of expression. We divided space up into only two
-compartments, anterior and posterior and asked how easy is it to find
-the genome which takes the anterior state [10000] to [10101] and the
-posterior initial state [00000] to [01010]. The anterior and posterior
-target states represent a spatial gradient in expression for all 5 genes.
-By random search, this is difficult. Approximately 1 in every 60000
+anterior gradients of expression for each of the 5 genes. We divided
+space up into only two compartments, anterior and posterior and asked
+how easy is it to find the genome which takes the anterior state
+[10000] to the anterior target [10101] and the posterior initial state
+[00000] to the target [01010]. The anterior and posterior target
+states represent a spatial gradient in expression for all 5 genes. By
+random search, this is difficult. Approximately 1 in every 60000
 genomes achieves this, where we define the desired, stable target
 states as having fitness 1, and anything else fitness 0.
 
 The paper describes a mechanism by which an evolutionary search of the
-genome space can be sped up. It does this by allowing genomes which do
-not fulfil the required target states perfectly to nevertheless have
-fitness > 0 as long as they express the desired gene expressions for
-some proportion of the time. By this mechanism, a search of the genome
-which flips a few bits on each evolutionary generation can find 'paths
-up to the peaks in the fitness landscape' and accelerates this simple,
-2 context (anterior and posterior) system by 70 times.
+genome space can be sped up compared with a random search. It does
+this by allowing genomes which do not fulfil the required target
+states perfectly to nevertheless have fitness > 0 as long as they
+express the desired gene expressions for some proportion of
+developmental time. By this mechanism, a search of the genome which
+flips a few bits on each evolutionary generation can find 'paths up to
+the peaks in the fitness landscape' and accelerates this simple, 2
+context (anterior and posterior) system by 70 times. Furthermore, we
+show that this speed-up is maintained even as the number of spatial
+contexts increases. If we divide space up into a larger number of
+compartments, the difficulty of the random search increases
+exponentially, but the effectiveness of attractor scaffolding also
+increases exponentially!
 
 ## The code
 
