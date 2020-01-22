@@ -12,6 +12,9 @@ target_link_libraries(facs facto)
 add_executable(binomial binomial.cpp)
 target_link_libraries(binomial facto)
 
+add_executable(pascals pascals.cpp)
+target_link_libraries(pascals facto)
+
 add_executable(factorial factorial.cpp)
 target_link_libraries(factorial facto)
 
