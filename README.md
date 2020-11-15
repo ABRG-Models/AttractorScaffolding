@@ -51,7 +51,7 @@ progresses from the initial state [00001] to the target state (in any
 number of steps) and which then cycles back on itself - that is, the
 state [10101] leads directly to [10101] as a 'stable point attractor'.
 
-**Note:** You'll see that the input row [10101] does *not* map
+:warning: **Note:** In Fig. 1, you'll see that the input row [10101] does *not* map
   directly to the output row [10101]. This looks like an error, but
   it's not.  Refer to the connectivity pattern in the left side of the
   figure (the pentagon). Each gene 'sees' an input pattern which
