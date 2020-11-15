@@ -54,16 +54,21 @@ state [10101] leads directly to [10101] as a 'stable point attractor'.
 **Note:** You'll see that the input row [10101] does *not* map
   directly to the output row [10101]. This looks like an error, but
   it's not.  Refer to the connectivity pattern in the left side of the
-  figure - the pentagon. Each gene 'sees' an input pattern which
-  starts with its *own* expression for input i and then receives the
-  inputs clockwise around the pentagon. When the expression
-  pattern is [10101], then the input pattern seen by a is [10101], but
-  b sees [01011], c sees [10110], d sees [01101] and e sees
-  [11010]. To determine the expression at the next step, these five
-  rows have to be collected together to get the output: a=1, b=0, c=1,
-  c=0, e=1. I slightly regret choosing the arrangement of the inputs
-  in this way, as it makes the input/output table harder to read as a
-  human. It did, however, make more sense in the code.
+  figure (the pentagon). Each gene 'sees' an input pattern which
+  starts with its *own* expression as input i. It then receives the
+  inputs clockwise around the pentagon; For example, b sees the state
+  of b as input i, the state of c as its input ii, d is input iii, e
+  maps to iv and finally, the state of a is b's input v. When the
+  expression pattern is [10101], then the input pattern seen by *a* is
+  [10101], but b sees [01011], c sees [10110], d sees [01101] and e
+  sees [11010]. To determine the system's expression at the next time
+  step, you have to consult *five* rows of the input/output table to
+  determine the output: [10101] for a (red) is 1, [01011] for b
+  (yellow) is 0, [10110] for c (green) is 1, [01101] for d (blue) is
+  0, [11010] for e (purple) is 1. I slightly regret choosing the
+  arrangement of the inputs in this way, as it makes the input/output
+  table harder to read as a human. The reason I did so was that it
+  made sense in the code.
 
 ![Figure 2](/paper/figures/Fig2.jpg)
 
