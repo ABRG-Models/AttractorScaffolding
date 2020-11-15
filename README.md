@@ -65,10 +65,12 @@ state [10101] leads directly to [10101] as a 'stable point attractor'.
   step, you have to consult *five* rows of the input/output table to
   determine the output: [10101] for a (red) is 1, [01011] for b
   (yellow) is 0, [10110] for c (green) is 1, [01101] for d (blue) is
-  0, [11010] for e (purple) is 1. I slightly regret choosing the
-  arrangement of the inputs in this way, as it makes the input/output
-  table harder to read as a human. The reason I did so was that it
-  made sense in the code.
+  0, [11010] for e (purple) is 1: [10101]! Thus, the state [10101]
+  does indeed map directly back to itself. I do slightly regret
+  choosing the arrangement of the inputs in this way, as it makes the
+  input/output table harder to read as a human. The reason I did so
+  was that it led to a neater pattern in the code and a more efficient
+  program.
 
 ![Figure 2](/paper/figures/Fig2.jpg)
 
