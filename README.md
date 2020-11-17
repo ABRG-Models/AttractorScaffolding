@@ -51,7 +51,7 @@ progresses from the initial state [00001] to the target state (in any
 number of steps) and which then cycles back on itself - that is, the
 state [10101] leads directly to [10101] as a 'stable point attractor'.
 
-:warning: **Note:** In Fig. 1, you'll see that the input row [10101] does *not* map
+:warning: In Fig. 1, you'll see that the input row [10101] does *not* map
   directly to the output row [10101]. This looks like an error, but
   it's not.  Refer to the connectivity pattern in the left side of the
   figure (the pentagon). Each gene 'sees' an input pattern which
@@ -66,11 +66,11 @@ state [10101] leads directly to [10101] as a 'stable point attractor'.
   determine the output: [10101] for a (red) is 1, [01011] for b
   (yellow) is 0, [10110] for c (green) is 1, [01101] for d (blue) is
   0, [11010] for e (purple) is 1: [10101]! Thus, the state [10101]
-  does indeed map directly back to itself. I do slightly regret
-  choosing the arrangement of the inputs in this way, as it makes the
-  input/output table harder to read as a human. The reason I did so
-  was that it led to a neater pattern in the code and a more efficient
-  program.
+  does indeed map directly back to itself. Although it is possible
+  to 'wire' the pentagon diagram so that a single row in the table 
+  can conveniently be used to read the next state of the system, this
+  convenience disappears as soon as we study a system for which the
+  number of inputs to each gene is less than n.
 
 ![Figure 2](/paper/figures/Fig2.jpg)
 
