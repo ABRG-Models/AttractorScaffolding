@@ -12,6 +12,10 @@ if (EXISTS ${JSONLIBLINK})
   add_executable(evolve evolve.cpp)
   target_compile_definitions(evolve PUBLIC USE_FITNESS_4 N_Genes=5)
   target_link_libraries(evolve ${JSONLIBLINK})
+  # This was on my Macbook Air, so may be helpful:
+  #if(APPLE)
+  #  target_compile_options(evolve PUBLIC "-mavx")
+  #endif()
 
   add_executable(evolve_withf evolve.cpp)
   target_compile_definitions(evolve_withf PUBLIC USE_FITNESS_4 N_Genes=5 RECORD_ALL_FITNESS)
